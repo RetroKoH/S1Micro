@@ -16,7 +16,7 @@ ptr_FlapDoor:		dc.l FlapDoor
 ptr_Signpost:		dc.l Signpost
 ptr_TitleSonic:		dc.l TitleSonic
 ptr_PSBTM:		dc.l PSBTM
-ptr_Obj10:		dc.l Obj10		; $10
+ptr_Obj10:		dc.l NullObject		; $10
 ptr_Bridge:		dc.l Bridge
 ptr_SpinningLight:	dc.l SpinningLight
 ptr_LavaMaker:		dc.l LavaMaker
@@ -25,18 +25,18 @@ ptr_SwingingPlatform:	dc.l SwingingPlatform
 ptr_Harpoon:		dc.l Harpoon
 ptr_Helix:		dc.l Helix
 ptr_BasicPlatform:	dc.l BasicPlatform	; $18
-ptr_Obj19:		dc.l Obj19
+ptr_Obj19:		dc.l NullObject
 ptr_CollapseLedge:	dc.l CollapseLedge
 ptr_WaterSurface:	dc.l WaterSurface
 ptr_Scenery:		dc.l Scenery
-ptr_MagicSwitch:	dc.l MagicSwitch
+ptr_Obj1D:	dc.l NullObject
 ptr_BallHog:		dc.l BallHog
 ptr_Crabmeat:		dc.l Crabmeat
 ptr_Cannonball:		dc.l Cannonball		; $20
 ptr_HUD:		dc.l HUD
 ptr_BuzzBomber:		dc.l BuzzBomber
 ptr_Missile:		dc.l Missile
-ptr_MissileDissolve:	dc.l MissileDissolve
+ptr_Obj24:	dc.l NullObject
 ptr_Rings:		dc.l Rings
 ptr_Monitor:		dc.l Monitor
 ptr_ExplosionItem:	dc.l ExplosionItem
@@ -74,7 +74,7 @@ ptr_MarbleBrick:	dc.l MarbleBrick
 ptr_Bumper:		dc.l Bumper
 ptr_BossBall:		dc.l BossBall		; $48
 ptr_WaterSound:		dc.l WaterSound
-ptr_VanishSonic:	dc.l VanishSonic
+ptr_Obj4A:	dc.l NullObject
 ptr_GiantRing:		dc.l GiantRing
 ptr_GeyserMaker:	dc.l GeyserMaker
 ptr_LavaGeyser:		dc.l LavaGeyser
@@ -173,14 +173,14 @@ id_Obj19:		equ ((ptr_Obj19-Obj_Index)/4)+1
 id_CollapseLedge:	equ ((ptr_CollapseLedge-Obj_Index)/4)+1
 id_WaterSurface:	equ ((ptr_WaterSurface-Obj_Index)/4)+1
 id_Scenery:		equ ((ptr_Scenery-Obj_Index)/4)+1
-id_MagicSwitch:		equ ((ptr_MagicSwitch-Obj_Index)/4)+1
+id_Obj1D:		equ ((ptr_Obj1D-Obj_Index)/4)+1
 id_BallHog:		equ ((ptr_BallHog-Obj_Index)/4)+1
 id_Crabmeat:		equ ((ptr_Crabmeat-Obj_Index)/4)+1
 id_Cannonball:		equ ((ptr_Cannonball-Obj_Index)/4)+1		; $20
 id_HUD:			equ ((ptr_HUD-Obj_Index)/4)+1
 id_BuzzBomber:		equ ((ptr_BuzzBomber-Obj_Index)/4)+1
 id_Missile:		equ ((ptr_Missile-Obj_Index)/4)+1
-id_MissileDissolve:	equ ((ptr_MissileDissolve-Obj_Index)/4)+1
+id_Obj24:	equ ((ptr_Obj24-Obj_Index)/4)+1
 id_Rings:		equ ((ptr_Rings-Obj_Index)/4)+1
 id_Monitor:		equ ((ptr_Monitor-Obj_Index)/4)+1
 id_ExplosionItem:	equ ((ptr_ExplosionItem-Obj_Index)/4)+1
@@ -218,7 +218,7 @@ id_MarbleBrick:		equ ((ptr_MarbleBrick-Obj_Index)/4)+1
 id_Bumper:		equ ((ptr_Bumper-Obj_Index)/4)+1
 id_BossBall:		equ ((ptr_BossBall-Obj_Index)/4)+1		; $48
 id_WaterSound:		equ ((ptr_WaterSound-Obj_Index)/4)+1
-id_VanishSonic:		equ ((ptr_VanishSonic-Obj_Index)/4)+1
+id_Obj4A:		equ ((ptr_Obj4A-Obj_Index)/4)+1
 id_GiantRing:		equ ((ptr_GiantRing-Obj_Index)/4)+1
 id_GeyserMaker:		equ ((ptr_GeyserMaker-Obj_Index)/4)+1
 id_LavaGeyser:		equ ((ptr_LavaGeyser-Obj_Index)/4)+1

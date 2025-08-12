@@ -1,5 +1,6 @@
 ; ---------------------------------------------------------------------------
 ; Subroutine to load level boundaries and start locations
+; ???NOTE??? Need to compare which version of this subroutine is smaller
 ; ---------------------------------------------------------------------------
 
 ; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
@@ -7,20 +8,15 @@
 
 LevelSizeLoad:
 		moveq	#0,d0
-		move.b	d0,(v_unused7).w
-		move.b	d0,(v_unused8).w
-		move.b	d0,(v_unused9).w
-		move.b	d0,(v_unused10).w
-		move.b	d0,(v_dle_routine).w
+		move.b	d0,(v_dle_routine).w		; ???NOTE??? Should I clear this or use d0?
 		move.w	(v_zone).w,d0
 		lsl.b	#6,d0
 		lsr.w	#4,d0
 		move.w	d0,d1
 		add.w	d0,d0
 		add.w	d1,d0
-		lea	LevelSizeArray(pc,d0.w),a0 ; load level boundaries
-		move.w	(a0)+,d0
-		move.w	d0,(v_unused11).w
+		lea	LevelSizeArray(pc,d0.w),a0		; load level boundaries
+		move.w	(a0)+,d0					; ???NOTE??? These two bytes go unused. Can I find a way to truncate things?
 		move.l	(a0)+,d0
 		move.l	d0,(v_limitleft2).w
 		move.l	d0,(v_limitleft1).w
@@ -30,13 +26,16 @@ LevelSizeLoad:
 		move.w	(v_limitleft2).w,d0
 		addi.w	#$240,d0
 		move.w	d0,(v_limitleft3).w
-		move.w	#$1010,(v_fg_xblock).w ; and v_fg_yblock
+		move.w	#$1010,(v_fg_xblock).w		; and v_fg_yblock
 		move.w	(a0)+,d0
 		move.w	d0,(v_lookshift).w
 		bra.w	LevSz_ChkLamp
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Level size array
+;
+; ???NOTE??? Removing the Unused and Redundant values leaves each section at 8 bytes.
+; We can make this whole section smaller in size.
 ; ---------------------------------------------------------------------------
 LevelSizeArray:
 		;    |----------------------------------------Unused

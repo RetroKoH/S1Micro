@@ -11,29 +11,6 @@ MoveSonicInDemo:
 		rts	
 ; ===========================================================================
 
-; This is an unused subroutine for recording a demo
-
-DemoRecorder:
-		; This was likely intended for a deveveloper cartridge that used RAM instead of ROM.
-		lea	(EndOfRom).l,a1 ; Write past the end of the ROM.
-		move.w	(v_btnpushtime1).w,d0
-		adda.w	d0,a1
-		move.b	(v_jpadhold1).w,d0
-		cmp.b	(a1),d0
-		bne.s	.next
-		addq.b	#1,1(a1)
-		cmpi.b	#$FF,1(a1)
-		beq.s	.next
-		rts	
-
-.next:
-		move.b	d0,2(a1)
-		move.b	#0,3(a1)
-		addq.w	#2,(v_btnpushtime1).w
-		andi.w	#$3FF,(v_btnpushtime1).w
-		rts	
-; ===========================================================================
-
 MDemo_On:
 		tst.b	(v_jpadhold1).w	; is start button pressed?
 		bpl.s	.dontquit	; if not, branch
@@ -105,11 +82,3 @@ DemoEndDataPtr:	dc.l Demo_EndGHZ1	; demos run during the credits
 		dc.l Demo_EndSBZ1
 		dc.l Demo_EndSBZ2
 		dc.l Demo_EndGHZ2
-
-; Stray demo data is present here. It involves Sonic slowly running
-; right, jumping once, then running at full speed for a few seconds.
-; Interestingly, this lines up with our knowledge of the fabled
-; Tokyo Game Show prototype.
-; See it in action: https://youtu.be/S8_IAfQbUu0
-Demo_Unused:	binclude	"demodata/Unused Demo.bin"
-		even

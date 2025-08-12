@@ -159,11 +159,4 @@ Bas_Action:	; Routine 2
 
 .right:
 		cmp.w	d2,d0
-		rts	
-; ===========================================================================
-; unused crap
-		bsr.w	SpeedToPos
-		bsr.w	DisplaySprite
-		tst.b	obRender(a0)
-		bpl.w	DeleteObject
-		rts	
+		rts

@@ -795,10 +795,9 @@ VBla_0C:
 		bsr.w	sub_1642
 		rts	
 ; ===========================================================================
-
+; ???NOTE???: Unused V-Blank. I assume I can remove this?
 VBla_0E:
 		bsr.w	sub_106E
-		addq.b	#1,(v_vbla_0e_counter).w ; Unused besides this one write...
 		move.b	#$E,(v_vbla_routine).w
 		rts	
 ; ===========================================================================
@@ -2156,12 +2155,12 @@ Tit_LoadText:
 		move.w	(a5)+,(a6)
 		dbf	d1,Tit_LoadText	; load level select font
 
-		move.b	#0,(v_lastlamp).w ; clear lamppost counter
-		move.w	#0,(v_debuguse).w ; disable debug item placement mode
-		move.w	#0,(f_demo).w	; disable debug mode
-		move.w	#0,(v_unused2).w ; unused variable
-		move.w	#(id_GHZ<<8),(v_zone).w	; set level to GHZ (00)
-		move.w	#0,(v_pcyc_time).w ; disable palette cycling
+		moveq	#0,d0
+		move.b	d0,(v_lastlamp).w ; clear lamppost counter
+		move.w	d0,(v_debuguse).w ; disable debug item placement mode
+		move.w	d0,(f_demo).w	; disable debug mode
+		move.w	d0,(v_zone).w	; set level to GHZ (00)
+		move.w	d0,(v_pcyc_time).w ; disable palette cycling
 		bsr.w	LevelSizeLoad
 		bsr.w	DeformLayers
 		lea	(v_16x16).w,a1
@@ -2912,11 +2911,10 @@ Level_SkipClr:
 		move.b	d0,(v_shield).w	; clear shield
 		move.b	d0,(v_invinc).w	; clear invincibility
 		move.b	d0,(v_shoes).w	; clear speed shoes
-		move.b	d0,(v_unused1).w
 		move.w	d0,(v_debuguse).w
 		move.w	d0,(f_restart).w
 		move.w	d0,(v_framecount).w
-		bsr.w	OscillateNumInit
+		bsr.w	OscillateNumInit	; ???NOTE??? Does this use d0?
 		move.b	#1,(f_scorecount).w ; update score counter
 		move.b	#1,(f_ringcount).w ; update rings counter
 		move.b	#1,(f_timecount).w ; update time counter
@@ -3908,11 +3906,10 @@ End_LoadSonic:
 		move.b	d0,(v_shield).w
 		move.b	d0,(v_invinc).w
 		move.b	d0,(v_shoes).w
-		move.b	d0,(v_unused1).w
 		move.w	d0,(v_debuguse).w
 		move.w	d0,(f_restart).w
 		move.w	d0,(v_framecount).w
-		bsr.w	OscillateNumInit
+		bsr.w	OscillateNumInit	; ???NOTE??? Does this use d0?
 		move.b	#1,(f_scorecount).w
 		move.b	#1,(f_ringcount).w
 		move.b	#0,(f_timecount).w
@@ -4561,44 +4558,6 @@ locret_6A80:
 
 ; ===========================================================================
 
-; Abandoned unused scroll block code.
-; This would have drawn a scroll block that started at 208 pixels down, and was 48 pixels long.
-		tst.b	(a2)
-		beq.s	locret_6AD6
-		bclr	#2,(a2)
-		beq.s	loc_6AAC
-		; Draw new tiles on the left
-		move.w	#224-16,d4	; Note that full screen coverage is normally 224+16+16. This is exactly three blocks less.
-		move.w	4(a3),d1
-		andi.w	#-16,d1
-		sub.w	d1,d4
-		move.w	d4,-(sp)
-		moveq	#-16,d5
-		bsr.w	Calc_VRAM_Pos_Unknown
-		move.w	(sp)+,d4
-		moveq	#-16,d5
-		moveq	#3-1,d6	; Draw only three rows
-		bsr.w	DrawBlocks_TB_2
-
-loc_6AAC:
-		bclr	#3,(a2)
-		beq.s	locret_6AD6
-		; Draw new tiles on the right
-		move.w	#224-16,d4
-		move.w	4(a3),d1
-		andi.w	#-16,d1
-		sub.w	d1,d4
-		move.w	d4,-(sp)
-		move.w	#320,d5
-		bsr.w	Calc_VRAM_Pos_Unknown
-		move.w	(sp)+,d4
-		move.w	#320,d5
-		moveq	#3-1,d6
-		bsr.w	DrawBlocks_TB_2
-
-locret_6AD6:
-		rts	
-
 		else
 
 			tst.b	(a2)
@@ -4952,31 +4911,7 @@ DrawFlipXY:
 ; End of function DrawBlocks
 
 ; ===========================================================================
-; unused garbage
-		if Revision=0
-; This is interesting. It draws a block, but not before
-; incrementing its palette lines by 1. This may have been
-; a debug function to discolour mirrored tiles, to test
-; if they're loading properly.
-		rts	
-		move.l	d0,(a5)
-		move.w	#$2000,d5
-		move.w	(a1)+,d4
-		add.w	d5,d4
-		move.w	d4,(a6)
-		move.w	(a1)+,d4
-		add.w	d5,d4
-		move.w	d4,(a6)
-		add.l	d7,d0
-		move.l	d0,(a5)
-		move.w	(a1)+,d4
-		add.w	d5,d4
-		move.w	d4,(a6)
-		move.w	(a1)+,d4
-		add.w	d5,d4
-		move.w	d4,(a6)
-		rts
-		endif
+
 
 ; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
 
@@ -5516,7 +5451,6 @@ Map_Hel:	include	"_maps/Spiked Pole Helix.asm"
 Map_Plat_GHZ:	include	"_maps/Platforms (GHZ).asm"
 Map_Plat_SYZ:	include	"_maps/Platforms (SYZ).asm"
 Map_Plat_SLZ:	include	"_maps/Platforms (SLZ).asm"
-		include	"_incObj/19.asm"
 Map_GBall:	include	"_maps/GHZ Ball.asm"
 		include	"_incObj/1A Collapsing Ledge (part 1).asm"
 		include	"_incObj/53 Collapsing Floors.asm"
@@ -5630,8 +5564,6 @@ Map_CFlo:	include	"_maps/Collapsing Floors.asm"
 
 		include	"_incObj/1C Scenery.asm"
 Map_Scen:	include	"_maps/Scenery.asm"
-
-		include	"_incObj/1D Unused Switch.asm"
 
 		include	"_incObj/2A SBZ Small Door.asm"
 		include	"_anim/SBZ Small Door.asm"
@@ -7072,23 +7004,6 @@ loc_12EA6:
 		include	"_incObj/Sonic JumpDirection.asm"
 
 ; ===========================================================================
-; ---------------------------------------------------------------------------
-; Unused subroutine to squash Sonic
-; ---------------------------------------------------------------------------
-		move.b	obAngle(a0),d0
-		addi.b	#$20,d0
-		andi.b	#$C0,d0
-		bne.s	locret_13302
-		bsr.w	Sonic_DontRunOnWalls
-		tst.w	d1
-		bpl.s	locret_13302
-		move.w	#0,obInertia(a0) ; stop Sonic moving
-		move.w	#0,obVelX(a0)
-		move.w	#0,obVelY(a0)
-		move.b	#id_Warp3,obAnim(a0) ; use "warping" animation
-
-locret_13302:
-		rts	
 
 		include	"_incObj/Sonic LevelBound.asm"
 		include	"_incObj/Sonic Roll.asm"
@@ -7150,7 +7065,6 @@ ResumeMusic:
 Map_Drown:	include	"_maps/Drowning Countdown.asm"
 
 		include	"_incObj/38 Shield and Invincibility.asm"
-		include	"_incObj/4A Special Stage Entry (Unused).asm"
 		include	"_incObj/03 Collision Switcher.asm"
 		include	"_incObj/08 Water Splash.asm"
 		include	"_anim/Shield and Invincibility.asm"
@@ -8417,8 +8331,6 @@ Map_SS_Down:	include	"_maps/SS DOWN Block.asm"
 		include	"_maps/SS Chaos Emeralds.asm"
 
 		include	"_incObj/09 Sonic in Special Stage.asm"
-
-		include	"_incObj/10.asm"
 
 		include	"_inc/AnimateLevelGfx.asm"
 

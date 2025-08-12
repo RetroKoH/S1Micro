@@ -58,7 +58,6 @@ Cbal_ChkExplode:
 		bpl.s	Cbal_Animate	; if time is > 0, branch
 
 Cbal_Explode:
-		_move.b	#id_MissileDissolve,obID(a0)
 		_move.b	#id_ExplosionBomb,obID(a0)	; change object to an explosion ($3F)
 		move.b	#0,obRoutine(a0) ; reset routine counter
 		bra.w	ExplosionBomb	; jump to explosion code
@@ -71,16 +70,8 @@ Cbal_Animate:
 		bchg	#0,obFrame(a0)	; change frame
 
 Cbal_Display:
-	if ~~FixBugs
-		; Moved to prevent a display-and-delete bug.
-		bsr.w	DisplaySprite
-	endif
 		move.w	(v_limitbtm2).w,d0
 		addi.w	#$E0,d0
 		cmp.w	obY(a0),d0	; has object fallen off the level?
 		blo.w	DeleteObject	; if yes, branch
-	if FixBugs
 		bra.w	DisplaySprite
-	else
-		rts	
-	endif

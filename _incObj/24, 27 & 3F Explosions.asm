@@ -1,43 +1,4 @@
 ; ---------------------------------------------------------------------------
-; Object 24 - buzz bomber missile vanishing (unused?)
-; ---------------------------------------------------------------------------
-
-MissileDissolve:
-		moveq	#0,d0
-		move.b	obRoutine(a0),d0
-		move.w	MDis_Index(pc,d0.w),d1
-		jmp	MDis_Index(pc,d1.w)
-; ===========================================================================
-MDis_Index:	dc.w MDis_Main-MDis_Index
-		dc.w MDis_Animate-MDis_Index
-; ===========================================================================
-
-MDis_Main:	; Routine 0
-		addq.b	#2,obRoutine(a0)
-		move.l	#Map_MisDissolve,obMap(a0)
-		move.w	#make_art_tile(ArtTile_Missile_Disolve,0,0),obGfx(a0)
-		move.b	#4,obRender(a0)
-		move.b	#1,obPriority(a0)
-		move.b	#0,obColType(a0)
-		move.b	#$C,obActWid(a0)
-		move.b	#9,obTimeFrame(a0)
-		move.b	#0,obFrame(a0)
-		move.w	#sfx_A5,d0
-		jsr	(QueueSound2).l		 ; play sound
-
-MDis_Animate:	; Routine 2
-		subq.b	#1,obTimeFrame(a0) ; subtract 1 from frame duration
-		bpl.s	.display
-		move.b	#9,obTimeFrame(a0) ; set frame duration to 9 frames
-		addq.b	#1,obFrame(a0)	; next frame
-		cmpi.b	#4,obFrame(a0)	; has animation completed?
-		beq.w	DeleteObject	; if yes, branch
-
-.display:
-		bra.w	DisplaySprite
-; ===========================================================================
-
-; ---------------------------------------------------------------------------
 ; Object 27 - explosion from a destroyed enemy or monitor
 ; ---------------------------------------------------------------------------
 
