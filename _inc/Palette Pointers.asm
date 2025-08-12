@@ -11,32 +11,29 @@ PalPointers:
 
 ; palette address, RAM address, colours
 
-ptr_Pal_SegaBG:		palp	0,Pal_SegaBG		; 0 - Sega logo
-ptr_Pal_Title:		palp	0,Pal_Title		; 1 - title screen
-ptr_Pal_LevelSel:	palp	0,Pal_LevelSel		; 2 - level select
-ptr_Pal_Sonic:		palp	0,Pal_Sonic		; 3 - Sonic
+ptr_Pal_Title:		palp	0,Pal_Title		; 0 - title screen
+ptr_Pal_LevelSel:	palp	0,Pal_LevelSel		; 1 - level select
+ptr_Pal_Sonic:		palp	0,Pal_Sonic		; 2 - Sonic
 Pal_Levels:
-ptr_Pal_GHZ:		palp	1,Pal_GHZ		; 4 - GHZ
-ptr_Pal_LZ:		palp	1,Pal_LZ		; 5 - LZ
-ptr_Pal_MZ:		palp	1,Pal_MZ		; 6 - MZ
-ptr_Pal_SLZ:		palp	1,Pal_SLZ		; 7 - SLZ
-ptr_Pal_SYZ:		palp	1,Pal_SYZ		; 8 - SYZ
-ptr_Pal_SBZ1:		palp	1,Pal_SBZ1		; 9 - SBZ1
+ptr_Pal_GHZ:		palp	1,Pal_GHZ		; 3 - GHZ
+ptr_Pal_LZ:		palp	1,Pal_LZ		; 4 - LZ
+ptr_Pal_MZ:		palp	1,Pal_MZ		; 5 - MZ
+ptr_Pal_SLZ:		palp	1,Pal_SLZ		; 6 - SLZ
+ptr_Pal_SYZ:		palp	1,Pal_SYZ		; 7 - SYZ
+ptr_Pal_SBZ1:		palp	1,Pal_SBZ1		; 8 - SBZ1
 			zonewarning Pal_Levels,8
-ptr_Pal_Special:	palp	0,Pal_Special		; $A (10) - special stage
-ptr_Pal_LZWater:	palp	0,Pal_LZWater		; $B (11) - LZ underwater
-ptr_Pal_SBZ3:		palp	1,Pal_SBZ3		; $C (12) - SBZ3
-ptr_Pal_SBZ3Water:	palp	0,Pal_SBZ3Water		; $D (13) - SBZ3 underwater
-ptr_Pal_SBZ2:		palp	1,Pal_SBZ2		; $E (14) - SBZ2
-ptr_Pal_LZSonWater:	palp	0,Pal_LZSonWater	; $F (15) - LZ Sonic underwater
-ptr_Pal_SBZ3SonWat:	palp	0,Pal_SBZ3SonWat	; $10 (16) - SBZ3 Sonic underwater
-ptr_Pal_SSResult:	palp	0,Pal_SSResult		; $11 (17) - special stage results
-ptr_Pal_Continue:	palp	0,Pal_Continue		; $12 (18) - special stage results continue
-ptr_Pal_Ending:		palp	0,Pal_Ending		; $13 (19) - ending sequence
+ptr_Pal_Special:	palp	0,Pal_Special		; $9 - special stage
+ptr_Pal_LZWater:	palp	0,Pal_LZWater		; $A (10) - LZ underwater
+ptr_Pal_SBZ3:		palp	1,Pal_SBZ3		; $B (11) - SBZ3
+ptr_Pal_SBZ3Water:	palp	0,Pal_SBZ3Water		; $C (12) - SBZ3 underwater
+ptr_Pal_SBZ2:		palp	1,Pal_SBZ2		; $D (13) - SBZ2
+ptr_Pal_LZSonWater:	palp	0,Pal_LZSonWater	; $E (14) - LZ Sonic underwater
+ptr_Pal_SBZ3SonWat:	palp	0,Pal_SBZ3SonWat	; $F (15) - SBZ3 Sonic underwater
+ptr_Pal_SSResult:	palp	0,Pal_SSResult		; $10 (16) - special stage results
+ptr_Pal_Continue:	palp	0,Pal_Continue		; $11 (17) - special stage results continue
+ptr_Pal_Ending:		palp	0,Pal_Ending		; $12 (18) - ending sequence
 			even
 
-
-palid_SegaBG:		equ (ptr_Pal_SegaBG-PalPointers)/8
 palid_Title:		equ (ptr_Pal_Title-PalPointers)/8
 palid_LevelSel:		equ (ptr_Pal_LevelSel-PalPointers)/8
 palid_Sonic:		equ (ptr_Pal_Sonic-PalPointers)/8

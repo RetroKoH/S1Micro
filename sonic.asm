@@ -1972,7 +1972,6 @@ __LABEL__:	binclude	path
 __LABEL___end:
 	endm
 
-Pal_SegaBG:	bincludePalette	"palette/Sega Background.bin"
 Pal_Title:	bincludePalette	"palette/Title Screen.bin"
 Pal_LevelSel:	bincludePalette	"palette/Level Select.bin"
 Pal_Sonic:	bincludePalette	"palette/Sonic.bin"
@@ -2055,9 +2054,15 @@ GM_Sega:
 			copyTilemap	(v_128x128+$A40)&$FFFFFF,vram_fg+$53A,3,2 ; hide "TM" with a white rectangle
 		endif
 
+; ???NOTE??? Can I find a quick, lightweight way to directly load the colors?
 .loadpal:
-		moveq	#palid_SegaBG,d0
-		bsr.w	PalLoad	; load Sega logo palette
+		lea		(v_palette_fading).l,a3
+		moveq	#$3F,d7
+
+.loop:
+		move.w	#cWhite,(a3)+	; move data to RAM
+		dbf		d7,.loop
+		bsr.w	PaletteFadeIn
 		move.w	#-$A,(v_pcyc_num).w
 		move.w	#0,(v_pcyc_time).w
 		move.w	#0,(v_pal_buffer+$12).w
@@ -8457,21 +8462,12 @@ Art_LivesNums:	binclude	"artunc/Lives Counter Numbers.bin" ; 8x8 pixel numbers o
 		include	"_inc/LevelHeaders.asm"
 		include	"_inc/Pattern Load Cues.asm"
 
-		align	$200
-		if Revision=0
-Nem_SegaLogo:	binclude	"artnem/Sega Logo.nem"	; large Sega logo
-		even
-Eni_SegaLogo:	binclude	"tilemaps/Sega Logo.eni" ; large Sega logo (mappings)
-		even
-		else
-		rept $300
-			dc.b	$FF
-		endm
+; Removed $300 bytes of padding, along with the align $200
 Nem_SegaLogo:	binclude	"artnem/Sega Logo (JP1).nem" ; large Sega logo
 			even
 Eni_SegaLogo:	binclude	"tilemaps/Sega Logo (JP1).eni" ; large Sega logo (mappings)
 			even
-		endif
+
 Eni_Title:	binclude	"tilemaps/Title Screen.eni" ; title screen foreground (mappings)
 		even
 Nem_TitleFg:	binclude	"artnem/Title Screen Foreground.nem"
@@ -8835,15 +8831,10 @@ Nem_CreditText:	binclude	"artnem/Ending - Credits.nem"
 Nem_EndStH:	binclude	"artnem/Ending - StH Logo.nem"
 		even
 
-		if Revision=0
-		rept $104
-		dc.b $FF			; why?
-		endm
-		else
 		rept $40
 		dc.b $FF
 		endm
-		endif
+
 ; ---------------------------------------------------------------------------
 ; Collision data
 ; ---------------------------------------------------------------------------
@@ -9152,15 +9143,12 @@ ObjPos_End:	binclude	"objpos/ending.bin"
 		even
 ObjPos_Null:	dc.b $FF, $FF, 0, 0, 0,	0
 
-		if Revision=0
-		rept $62A
+
+; Reduced padding from $63C to $80 bytes
+		rept $80
 		dc.b $FF
 		endm
-		else
-		rept $63C
-		dc.b $FF
-		endm
-		endif
+
 
 SoundDriver:	include "s1.sounddriver.asm"
 
