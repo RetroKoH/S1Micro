@@ -259,10 +259,7 @@ PLC_Signpostend:
 ; Pattern load cues - beta special stage warp effect
 ; ---------------------------------------------------------------------------
 PLC_Warp:
-	if Revision=0
-		dc.w ((PLC_Warpend-PLC_Warp-2)/6)-1
-		plcm	Nem_Warp, ArtTile_Warp
-	endif
+
 PLC_Warpend:
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - special stage
@@ -275,21 +272,12 @@ PLC_SpecialStage:	dc.w ((PLC_SpeStageend-PLC_SpecialStage-2)/6)-1
 		plcm	Nem_SSGOAL,     ArtTile_SS_Goal              ; GOAL block
 		plcm	Nem_SSUpDown,   ArtTile_SS_Up_Down           ; UP and DOWN blocks
 		plcm	Nem_SSRBlock,   ArtTile_SS_R_Block           ; R block
-		plcm	Nem_SS1UpBlock, ArtTile_SS_Extra_Life        ; 1UP block
 		plcm	Nem_SSEmStars,  ArtTile_SS_Emerald_Sparkle   ; emerald collection stars
 		plcm	Nem_SSRedWhite, ArtTile_SS_Red_White_Block   ; red and white block
 		plcm	Nem_SSGhost,    ArtTile_SS_Ghost_Block       ; ghost block
-		plcm	Nem_SSWBlock,   ArtTile_SS_W_Block           ; W block
 		plcm	Nem_SSGlass,    ArtTile_SS_Glass             ; glass block
 		plcm	Nem_SSEmerald,  ArtTile_SS_Emerald           ; emeralds
-		plcm	Nem_SSZone1,    ArtTile_SS_Zone_1            ; ZONE 1 block
-		plcm	Nem_SSZone2,    ArtTile_SS_Zone_2            ; ZONE 2 block
-		plcm	Nem_SSZone3,    ArtTile_SS_Zone_3            ; ZONE 3 block
 PLC_SpeStageend:
-		; Unused
-		plcm	Nem_SSZone4,    ArtTile_SS_Zone_4            ; ZONE 4 block
-		plcm	Nem_SSZone5,    ArtTile_SS_Zone_5            ; ZONE 5 block
-		plcm	Nem_SSZone6,    ArtTile_SS_Zone_6            ; ZONE 6 block
 ; ---------------------------------------------------------------------------
 ; Pattern load cues - GHZ animals
 ; ---------------------------------------------------------------------------

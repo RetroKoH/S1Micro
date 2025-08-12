@@ -22,7 +22,7 @@ Van_Main:	; Routine 0
 
 .isempty:
 		addq.b	#2,obRoutine(a0)
-		move.l	#Map_Vanish,obMap(a0)
+		move.l	#Map_Sonic,obMap(a0)
 		move.b	#4,obRender(a0)
 		move.b	#1,obPriority(a0)
 		move.b	#$38,obActWid(a0)
@@ -33,7 +33,7 @@ Van_RmvSonic:	; Routine 2
 		move.w	(v_player+obX).w,obX(a0)
 		move.w	(v_player+obY).w,obY(a0)
 		move.b	(v_player+obStatus).w,obStatus(a0)
-		lea	(Ani_Vanish).l,a1
+		lea	(Ani_Sonic).l,a1
 		jsr	(AnimateSprite).l
 		cmpi.b	#2,obFrame(a0)
 		bne.s	.display
