@@ -3,15 +3,10 @@
 ; ---------------------------------------------------------------------------
 
 Newtron:
-		moveq	#0,d0
 		move.b	obRoutine(a0),d0
-		move.w	Newt_Index(pc,d0.w),d1
-		jmp	Newt_Index(pc,d1.w)
-; ===========================================================================
-Newt_Index:	dc.w Newt_Main-Newt_Index
-		dc.w Newt_Action-Newt_Index
-		dc.w Newt_Delete-Newt_Index
-; ===========================================================================
+		subq.b	#2,d0
+		beq.s	Newt_Action
+		bpl.w	DeleteObject
 
 Newt_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)
@@ -20,9 +15,9 @@ Newt_Main:	; Routine 0
 		move.b	#4,obRender(a0)
 		move.b	#4,obPriority(a0)
 		move.b	#$14,obActWid(a0)
-		move.b	#$10,obHeight(a0)
-		move.b	#8,obWidth(a0)
+		move.w	#$1008,obHeight(a0)			; Height and Width
 
+; ???NOTE??? This can be trimmed down considerably, both here and in Fixed
 Newt_Action:	; Routine 2
 		moveq	#0,d0
 		move.b	ob2ndRout(a0),d0
@@ -32,7 +27,8 @@ Newt_Action:	; Routine 2
 		bsr.w	AnimateSprite
 		bra.w	RememberState
 ; ===========================================================================
-.index:		dc.w .chkdistance-.index
+.index:
+		dc.w .chkdistance-.index
 		dc.w .type00-.index
 		dc.w .matchfloor-.index
 		dc.w .speed-.index
@@ -124,8 +120,7 @@ Newt_Action:	; Routine 2
 ; ===========================================================================
 
 .speed:
-		bsr.w	SpeedToPos
-		rts	
+		bra.w	SpeedToPos
 ; ===========================================================================
 
 .type01:
@@ -158,8 +153,4 @@ Newt_Action:	; Routine 2
 		move.b	#1,obSubtype(a1)
 
 .fail:
-		rts	
-; ===========================================================================
-
-Newt_Delete:	; Routine 4
-		bra.w	DeleteObject
+		rts

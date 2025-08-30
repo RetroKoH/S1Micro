@@ -2,17 +2,11 @@
 ; Object 20 - cannonball that Ball Hog throws (SBZ)
 ; ---------------------------------------------------------------------------
 
-Cannonball:
-		moveq	#0,d0
-		move.b	obRoutine(a0),d0
-		move.w	Cbal_Index(pc,d0.w),d1
-		jmp	Cbal_Index(pc,d1.w)
-; ===========================================================================
-Cbal_Index:	dc.w Cbal_Main-Cbal_Index
-		dc.w Cbal_Bounce-Cbal_Index
-
 cbal_time = objoff_30		; time until the cannonball explodes (2 bytes)
-; ===========================================================================
+
+Cannonball:
+		tst.b	obRoutine(a0)
+		bne.s	Cbal_Bounce
 
 Cbal_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)
@@ -59,7 +53,7 @@ Cbal_ChkExplode:
 
 Cbal_Explode:
 		_move.b	#id_ExplosionBomb,obID(a0)	; change object to an explosion ($3F)
-		move.b	#0,obRoutine(a0) ; reset routine counter
+		clr.b	obRoutine(a0)	; reset routine counter
 		bra.w	ExplosionBomb	; jump to explosion code
 ; ===========================================================================
 

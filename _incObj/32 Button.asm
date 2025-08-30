@@ -4,14 +4,8 @@
 ; ---------------------------------------------------------------------------
 
 Button:
-		moveq	#0,d0
-		move.b	obRoutine(a0),d0
-		move.w	But_Index(pc,d0.w),d1
-		jmp	But_Index(pc,d1.w)
-; ===========================================================================
-But_Index:	dc.w But_Main-But_Index
-		dc.w But_Pressed-But_Index
-; ===========================================================================
+		tst.b	obRoutine(a0)
+		bne.s	But_Pressed
 
 But_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)
@@ -78,21 +72,12 @@ loc_BDDE:
 		bchg	#1,obFrame(a0)
 
 But_Display:
-	if FixBugs
-		; Objects shouldn't call DisplaySprite and DeleteObject on
-		; the same frame or else cause a null-pointer dereference.
 		out_of_range.w	But_Delete
 		bra.w	DisplaySprite
-	else
-		bsr.w	DisplaySprite
-		out_of_range.w	But_Delete
-		rts	
-	endif
 ; ===========================================================================
 
 But_Delete:
-		bsr.w	DeleteObject
-		rts	
+		bra.w	DeleteObject
 
 ; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
 

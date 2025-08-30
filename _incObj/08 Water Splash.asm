@@ -3,15 +3,10 @@
 ; ---------------------------------------------------------------------------
 
 Splash:
-		moveq	#0,d0
 		move.b	obRoutine(a0),d0
-		move.w	Spla_Index(pc,d0.w),d1
-		jmp	Spla_Index(pc,d1.w)
-; ===========================================================================
-Spla_Index:	dc.w Spla_Main-Spla_Index
-		dc.w Spla_Display-Spla_Index
-		dc.w Spla_Delete-Spla_Index
-; ===========================================================================
+		subq.b	#2,d0
+		beq.s	Spla_Display
+		bpl.s	Spla_Delete
 
 Spla_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)

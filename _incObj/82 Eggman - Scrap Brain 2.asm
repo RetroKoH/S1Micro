@@ -2,66 +2,58 @@
 ; Object 82 - Eggman (SBZ2)
 ; ---------------------------------------------------------------------------
 
+ScrapEgg_Create:
+		clr.b	ob2ndRout(a0)
+		addq.b	#2,obRoutine(a0)
+		move.b	#3,obPriority(a0)
+		move.l	#Map_SEgg,obMap(a0)
+		move.w	#make_art_tile(ArtTile_Eggman,0,0),obGfx(a0)
+		move.b	#$84,obRender(a0)
+
 ScrapEggman:
 		moveq	#0,d0
 		move.b	obRoutine(a0),d0
-		move.w	SEgg_Index(pc,d0.w),d1
-		jmp	SEgg_Index(pc,d1.w)
+		jmp	SEgg_Index(pc,d0.w)
 ; ===========================================================================
-SEgg_Index:	dc.w SEgg_Main-SEgg_Index
-		dc.w SEgg_Eggman-SEgg_Index
-		dc.w SEgg_Switch-SEgg_Index
-
-SEgg_ObjData:	dc.b 2,	0, 3		; routine number, animation, priority
-		dc.b 4,	0, 3
+SEgg_Index:
+		bra.s SEgg_Main
+		bra.s SEgg_Eggman
+		bra.w SEgg_Switch
 ; ===========================================================================
 
 SEgg_Main:	; Routine 0
-		lea	SEgg_ObjData(pc),a2
 		move.w	#boss_sbz2_x+$110,obX(a0)
 		move.w	#boss_sbz2_y+$94,obY(a0)
-		move.b	#$F,obColType(a0)
-		move.b	#$10,obColProp(a0)
-		bclr	#0,obStatus(a0)
-		clr.b	ob2ndRout(a0)
-		move.b	(a2)+,obRoutine(a0)
-		move.b	(a2)+,obAnim(a0)
-		move.b	(a2)+,obPriority(a0)
-		move.l	#Map_SEgg,obMap(a0)
-		move.w	#make_art_tile(ArtTile_Eggman,0,0),obGfx(a0)
-		move.b	#4,obRender(a0)
-		bset	#7,obRender(a0)
+		bsr.s	ScrapEgg_Create
 		move.b	#$20,obActWid(a0)
+
 		jsr	(FindNextFreeObj).l
 		bne.s	SEgg_Eggman
 		move.l	a0,objoff_34(a1)
-		move.b	#id_ScrapEggman,obID(a1) ; load switch object
+		_move.b	#id_ScrapEggman,obID(a1) ; load switch object
 		move.w	#boss_sbz2_x+$E0,obX(a1)
 		move.w	#boss_sbz2_y+$AC,obY(a1)
-		clr.b	ob2ndRout(a0)
-		move.b	(a2)+,obRoutine(a1)
-		move.b	(a2)+,obAnim(a1)
-		move.b	(a2)+,obPriority(a1)
-		move.l	#Map_But,obMap(a1)
-		move.w	#make_art_tile(ArtTile_Eggman_Button,0,0),obGfx(a1)
-		move.b	#4,obRender(a1)
-		bset	#7,obRender(a1)
+
+		move.l	a0,-(sp)
+		movea.l	a1,a0
+		bsr.s	ScrapEgg_Create
+		movea.l	(sp)+,a0
+		addq.b	#2,obRoutine(a1)
 		move.b	#$10,obActWid(a1)
-		move.b	#0,obFrame(a1)
 
 SEgg_Eggman:	; Routine 2
 		moveq	#0,d0
 		move.b	ob2ndRout(a0),d0
-		move.w	SEgg_EggIndex(pc,d0.w),d1
-		jsr	SEgg_EggIndex(pc,d1.w)
+		jsr	SEgg_EggIndex(pc,d0.w)
 		lea	Ani_SEgg(pc),a1
 		jsr	(AnimateSprite).l
 		jmp	(DisplaySprite).l
 ; ===========================================================================
-SEgg_EggIndex:	dc.w SEgg_ChkSonic-SEgg_EggIndex
-		dc.w SEgg_PreLeap-SEgg_EggIndex
-		dc.w SEgg_Leap-SEgg_EggIndex
-		dc.w loc_19934-SEgg_EggIndex
+SEgg_EggIndex:
+		bra.s SEgg_ChkSonic
+		bra.s SEgg_PreLeap
+		bra.s SEgg_Leap
+		bra.s loc_19934
 ; ===========================================================================
 
 SEgg_ChkSonic:
@@ -117,14 +109,8 @@ SEgg_FindBlocks:
 		move.w	obVelX(a0),d0
 		or.w	obVelY(a0),d0
 		bne.s	loc_199D0
-
-	if FixBugs
 		lea	(v_lvlobjspace-object_size).w,a1
 		moveq	#(v_lvlobjend-v_lvlobjspace)/object_size-1,d0
-	else
-		lea	(v_objspace).w,a1 ; Nonsensical starting point, since dynamic object allocations begin at v_lvlobjspace.
-		moveq	#(v_objspace_end-(v_objspace+object_size*1))/object_size/2-1,d0	; Nonsensical length, it only covers the first half of object RAM.
-	endif
 		moveq	#object_size,d1
 
 SEgg_FindLoop:
@@ -142,14 +128,8 @@ loc_199D0:
 ; ===========================================================================
 
 SEgg_Switch:	; Routine 4
-		moveq	#0,d0
-		move.b	ob2ndRout(a0),d0
-		move.w	SEgg_SwIndex(pc,d0.w),d0
-		jmp	SEgg_SwIndex(pc,d0.w)
-; ===========================================================================
-SEgg_SwIndex:	dc.w loc_199E6-SEgg_SwIndex
-		dc.w SEgg_SwDisplay-SEgg_SwIndex
-; ===========================================================================
+		tst.b	ob2ndRout(a0)
+		bne.s	SEgg_SwDisplay
 
 loc_199E6:
 		movea.l	objoff_34(a0),a1

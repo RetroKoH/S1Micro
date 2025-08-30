@@ -102,7 +102,7 @@ loc_8402:
 		move.b	#id_Run,obPrevAni(a1) ; restart Sonic's animation
 
 loc_842E:
-		move.b	#0,cflo_collapse_flag(a0)
+		clr.b	cflo_collapse_flag(a0)
 		move.b	#6,obRoutine(a0) ; run "CFlo_Display" routine
 
 locret_843A:
@@ -118,12 +118,11 @@ CFlo_TimeZero:
 ; ===========================================================================
 
 CFlo_Delete:	; Routine 8
-		bsr.w	DeleteObject
-		rts	
+		bra.w	DeleteObject
 ; ===========================================================================
 
 CFlo_Fragment:
-		move.b	#0,cflo_collapse_flag(a0)
+		clr.b	cflo_collapse_flag(a0)
 
 loc_8458:
 		lea	(CFlo_Data2).l,a4

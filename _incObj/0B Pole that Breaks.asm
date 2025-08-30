@@ -2,19 +2,14 @@
 ; Object 0B - pole that breaks (LZ)
 ; ---------------------------------------------------------------------------
 
-Pole:
-		moveq	#0,d0
-		move.b	obRoutine(a0),d0
-		move.w	Pole_Index(pc,d0.w),d1
-		jmp	Pole_Index(pc,d1.w)
-; ===========================================================================
-Pole_Index:	dc.w Pole_Main-Pole_Index
-		dc.w Pole_Action-Pole_Index
-		dc.w Pole_Display-Pole_Index
-
 pole_time = objoff_30		; time between grabbing the pole & breaking
 pole_grabbed = objoff_32		; flag set when Sonic grabs the pole
-; ===========================================================================
+
+Pole:
+		move.b	obRoutine(a0),d0
+		subq.b	#2,d0
+		beq.s	Pole_Action
+		bpl.w	RememberState
 
 Pole_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)
@@ -66,8 +61,8 @@ Pole_Action:	; Routine 2
 		beq.s	Pole_Display	; if not, branch
 
 .release:
-		clr.b	obColType(a0)
 		addq.b	#2,obRoutine(a0) ; goto Pole_Display next
+		clr.b	obColType(a0)
 		clr.b	(f_playerctrl).w
 		clr.b	(f_wtunnelallow).w
 		clr.b	pole_grabbed(a0)
@@ -77,7 +72,7 @@ Pole_Action:	; Routine 2
 .grab:
 		tst.b	obColProp(a0)	; has Sonic touched the pole?
 		beq.s	Pole_Display	; if not, branch
-		lea	(v_player).w,a1
+		lea		(v_player).w,a1
 		move.w	obX(a0),d0
 		addi.w	#$14,d0
 		cmp.w	obX(a1),d0
@@ -96,5 +91,6 @@ Pole_Action:	; Routine 2
 		move.b	#1,(f_wtunnelallow).w ; disable wind tunnel
 		move.b	#1,pole_grabbed(a0) ; begin countdown to breakage
 
-Pole_Display:	; Routine 4
+Pole_Display:
 		bra.w	RememberState
+; ===========================================================================

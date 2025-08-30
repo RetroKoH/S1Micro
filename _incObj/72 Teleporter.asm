@@ -119,19 +119,13 @@ loc_167C2:
 ; ===========================================================================
 
 loc_167DA:
-		move.l	obX(a1),d2
-		move.l	obY(a1),d3
-		move.w	obVelX(a1),d0
-		ext.l	d0
-		asl.l	#8,d0
-		add.l	d0,d2
-		move.w	obVelY(a1),d0
-		ext.l	d0
-		asl.l	#8,d0
-		add.l	d0,d3
-		move.l	d2,obX(a1)
-		move.l	d3,obY(a1)
-		rts	
+	; RHS/DeltaW Optimized Object Movement
+		movem.w	obVelX(a1),d0/d2	; load horizontal speed (d0) and vertical speed (d2)
+		lsl.l	#8,d0				; multiply by $100 (combine ext and asl to become lsl)
+		add.l	d0,obX(a1)			; apply to x-axis position
+		lsl.l	#8,d2				; multiply by $100 (combine ext and asl to become lsl)
+		add.l	d2,obY(a1)			; apply to y-axis position
+		rts
 ; ===========================================================================
 
 loc_16800:

@@ -2,18 +2,12 @@
 ; Object 5D - fans (SLZ)
 ; ---------------------------------------------------------------------------
 
-Fan:
-		moveq	#0,d0
-		move.b	obRoutine(a0),d0
-		move.w	Fan_Index(pc,d0.w),d1
-		jmp	Fan_Index(pc,d1.w)
-; ===========================================================================
-Fan_Index:	dc.w Fan_Main-Fan_Index
-		dc.w Fan_Delay-Fan_Index
-
 fan_time = objoff_30		; time between switching on/off
 fan_switch = objoff_32		; on/off switch
-; ===========================================================================
+
+Fan:
+		tst.b	obRoutine(a0)
+		bne.s	Fan_Delay
 
 Fan_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)
@@ -77,11 +71,11 @@ Fan_Delay:	; Routine 2
 .animate:
 		subq.b	#1,obTimeFrame(a0)
 		bpl.s	.chkdel
-		move.b	#0,obTimeFrame(a0)
+		clr.b	obTimeFrame(a0)
 		addq.b	#1,obAniFrame(a0)
 		cmpi.b	#3,obAniFrame(a0)
 		blo.s	.noreset
-		move.b	#0,obAniFrame(a0) ; reset after 4 frames
+		clr.b	obAniFrame(a0) ; reset after 4 frames
 
 .noreset:
 		moveq	#0,d0
@@ -94,6 +88,5 @@ Fan_Delay:	; Routine 2
 		move.b	d0,obFrame(a0)
 
 .chkdel:
-		bsr.w	DisplaySprite
 		out_of_range.w	DeleteObject
-		rts	
+		bra.w	DisplaySprite

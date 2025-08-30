@@ -2,18 +2,12 @@
 ; Object 1B - water surface (LZ)
 ; ---------------------------------------------------------------------------
 
-WaterSurface:
-		moveq	#0,d0
-		move.b	obRoutine(a0),d0
-		move.w	Surf_Index(pc,d0.w),d1
-		jmp	Surf_Index(pc,d1.w)
-; ===========================================================================
-Surf_Index:	dc.w Surf_Main-Surf_Index
-		dc.w Surf_Action-Surf_Index
-
 surf_origX = objoff_30		; original x-axis position
 surf_freeze = objoff_32		; flag to freeze animation
-; ===========================================================================
+
+WaterSurface:
+		tst.b	obRoutine(a0)
+		bne.s	Surf_Action
 
 Surf_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)
@@ -47,7 +41,7 @@ Surf_Action:	; Routine 2
 .stopped:
 		tst.w	(f_pause).w	; is the game paused?
 		bne.s	.display	; if yes, branch
-		move.b	#0,surf_freeze(a0) ; resume animation
+		clr.b	surf_freeze(a0) ; resume animation
 		subq.b	#3,obFrame(a0)	; use normal frames
 
 .animate:
@@ -57,7 +51,7 @@ Surf_Action:	; Routine 2
 		addq.b	#1,obFrame(a0)
 		cmpi.b	#3,obFrame(a0)
 		blo.s	.display
-		move.b	#0,obFrame(a0)
+		clr.b	obFrame(a0)
 
 .display:
 		bra.w	DisplaySprite

@@ -178,7 +178,7 @@ React_Enemy:
 		neg.w	obVelY(a0)
 		asr	obVelX(a0)
 		asr	obVelY(a0)
-		move.b	#0,obColType(a1)
+		clr.b	obColType(a1)
 		subq.b	#1,obColProp(a1)
 		bne.s	.flagnotclear
 		bset	#7,obStatus(a1)
@@ -207,7 +207,7 @@ React_Enemy:
 .lessthan16:
 		bsr.w	AddPoints
 		_move.b	#id_ExplosionItem,obID(a1) ; change object to explosion
-		move.b	#0,obRoutine(a1)
+		clr.b	obRoutine(a1)
 		tst.w	obVelY(a0)
 		bmi.s	.bouncedown
 		move.w	obY(a0),d0

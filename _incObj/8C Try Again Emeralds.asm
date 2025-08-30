@@ -3,15 +3,8 @@
 ; ---------------------------------------------------------------------------
 
 TryChaos:
-		moveq	#0,d0
-		move.b	obRoutine(a0),d0
-		move.w	TCha_Index(pc,d0.w),d1
-		jsr	TCha_Index(pc,d1.w)
-		jmp	(DisplaySprite).l
-; ===========================================================================
-TCha_Index:	dc.w TCha_Main-TCha_Index
-		dc.w TCha_Move-TCha_Index
-; ===========================================================================
+		tst.b	obRoutine(a0)
+		bne.w	TCha_Move
 
 TCha_Main:	; Routine 0
 		movea.l	a0,a1
@@ -25,7 +18,7 @@ TCha_Main:	; Routine 0
 		addq.b	#2,obRoutine(a1)
 		move.l	#Map_ECha,obMap(a1)
 		move.w	#make_art_tile(ArtTile_Try_Again_Emeralds,0,0),obGfx(a1)
-		move.b	#0,obRender(a1)
+		clr.b	obRender(a1)
 		move.b	#1,obPriority(a1)
 		move.w	#$104,obX(a1)
 		move.w	#$120,objoff_38(a1)

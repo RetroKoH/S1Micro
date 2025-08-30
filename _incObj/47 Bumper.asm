@@ -3,14 +3,8 @@
 ; ---------------------------------------------------------------------------
 
 Bumper:
-		moveq	#0,d0
-		move.b	obRoutine(a0),d0
-		move.w	Bump_Index(pc,d0.w),d1
-		jmp	Bump_Index(pc,d1.w)
-; ===========================================================================
-Bump_Index:	dc.w Bump_Main-Bump_Index
-		dc.w Bump_Hit-Bump_Index
-; ===========================================================================
+		tst.b	obRoutine(a0)
+		bne.s	Bump_Hit
 
 Bump_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)

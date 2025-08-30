@@ -2,20 +2,12 @@
 ; Object 56 - floating blocks (SYZ/SLZ), large doors (LZ)
 ; ---------------------------------------------------------------------------
 
-FloatingBlock:
-		moveq	#0,d0
-		move.b	obRoutine(a0),d0
-		move.w	FBlock_Index(pc,d0.w),d1
-		jmp	FBlock_Index(pc,d1.w)
-; ===========================================================================
-FBlock_Index:	dc.w FBlock_Main-FBlock_Index
-		dc.w FBlock_Action-FBlock_Index
-
 fb_origX = objoff_34		; original x-axis position
 fb_origY = objoff_30		; original y-axis position
 fb_height = objoff_3A		; total object height
 fb_type = objoff_3C		; subtype (2nd digit only)
 
+; ===========================================================================
 FBlock_Var:	; width/2, height/2
 		dc.b  $10, $10	; subtype 0x/8x
 		dc.b  $20, $20	; subtype 1x/9x
@@ -26,6 +18,10 @@ FBlock_Var:	; width/2, height/2
 		dc.b	8, $20	; subtype 6x/Ex
 		dc.b  $40, $10	; subtype 7x/Fx
 ; ===========================================================================
+
+FloatingBlock:
+		tst.b	obRoutine(a0)
+		bne.w	FBlock_Action
 
 FBlock_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)
@@ -53,21 +49,22 @@ FBlock_Main:	; Routine 0
 		move.b	(a2),d0
 		add.w	d0,d0
 		move.w	d0,fb_height(a0)
-		if Revision<>0
-			cmpi.b	#$37,obSubtype(a0)
-			bne.s	.dontdelete
-			cmpi.w	#$1BB8,obX(a0)
-			bne.s	.notatpos
-			tst.b	(f_obj56).w
-			beq.s	.dontdelete
-			jmp	(DeleteObject).l
+
+		cmpi.b	#$37,obSubtype(a0)
+		bne.s	.dontdelete
+		cmpi.w	#$1BB8,obX(a0)
+		bne.s	.notatpos
+		tst.b	(f_obj56).w
+		beq.s	.dontdelete
+		jmp	(DeleteObject).l
+
 .notatpos:
-			clr.b	obSubtype(a0)
-			tst.b	(f_obj56).w
-			bne.s	.dontdelete
-			jmp	(DeleteObject).l
+		clr.b	obSubtype(a0)
+		tst.b	(f_obj56).w
+		bne.s	.dontdelete
+		jmp	(DeleteObject).l
+
 .dontdelete:
-		endif
 		moveq	#0,d0
 		cmpi.b	#id_LZ,(v_zone).w ; check if level is LZ
 		beq.s	.stillnotLZ
@@ -106,12 +103,14 @@ FBlock_Main:	; Routine 0
 
 FBlock_Action:	; Routine 2
 		move.w	obX(a0),-(sp)
-		moveq	#0,d0
-		move.b	obSubtype(a0),d0 ; get object subtype
-		andi.w	#$F,d0		; read only the 2nd digit
+		moveq	#$F,d0				; get last digit of subtype
+		and.b	obSubtype(a0),d0	; SCE optimization
+		beq.s	.type00				; skip if subtype 00 (doesn't move)
 		add.w	d0,d0
-		move.w	.index(pc,d0.w),d1
-		jsr	.index(pc,d1.w)	; move block subroutines
+		move.w	.index-2(pc,d0.w),d1
+		jsr		.index(pc,d1.w)	; move block subroutines
+
+.type00:
 		move.w	(sp)+,d4
 		tst.b	obRender(a0)
 		bpl.s	.chkdel
@@ -125,34 +124,29 @@ FBlock_Action:	; Routine 2
 		bsr.w	SolidObject
 
 .chkdel:
-		if Revision=0
-		out_of_range.w	DeleteObject,fb_origX(a0)
-		bra.w	DisplaySprite
-		else
-			out_of_range.s	.chkdel2,fb_origX(a0)
+		out_of_range.s	.chkdel2,fb_origX(a0)
+
 .display:
-			bra.w	DisplaySprite
+		bra.w	DisplaySprite
+
 .chkdel2:
-			cmpi.b	#$37,obSubtype(a0)
-			bne.s	.delete
-			tst.b	objoff_38(a0)
-			bne.s	.display
+		cmpi.b	#$37,obSubtype(a0)
+		bne.s	.delete
+		tst.b	objoff_38(a0)
+		bne.s	.display
+
 .delete:
-			jmp	(DeleteObject).l
-		endif
+		jmp	(DeleteObject).l
 ; ===========================================================================
-.index:		dc.w .type00-.index, .type01-.index
+
+.index:	
+		dc.w .type01-.index
 		dc.w .type02-.index, .type03-.index
 		dc.w .type04-.index, .type05-.index
 		dc.w .type06-.index, .type07-.index
 		dc.w .type08-.index, .type09-.index
 		dc.w .type0A-.index, .type0B-.index
 		dc.w .type0C-.index, .type0D-.index
-; ===========================================================================
-
-.type00:
-; doesn't move
-		rts	
 ; ===========================================================================
 
 .type01:

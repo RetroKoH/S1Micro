@@ -2,19 +2,13 @@
 ; Object 6A - ground saws and pizza cutters (SBZ)
 ; ---------------------------------------------------------------------------
 
-Saws:
-		moveq	#0,d0
-		move.b	obRoutine(a0),d0
-		move.w	Saw_Index(pc,d0.w),d1
-		jmp	Saw_Index(pc,d1.w)
-; ===========================================================================
-Saw_Index:	dc.w Saw_Main-Saw_Index
-		dc.w Saw_Action-Saw_Index
-
 saw_origX = objoff_3A		; original x-axis position
 saw_origY = objoff_38		; original y-axis position
 saw_here = objoff_3D		; flag set when the ground saw appears
-; ===========================================================================
+
+Saws:
+		tst.b	obRoutine(a0)
+		bne.s	Saw_Action
 
 Saw_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)
@@ -30,24 +24,23 @@ Saw_Main:	; Routine 0
 		move.b	#$A2,obColType(a0)
 
 Saw_Action:	; Routine 2
-		moveq	#0,d0
-		move.b	obSubtype(a0),d0
-		andi.w	#7,d0
+		moveq	#7,d0						; get last digit of subtype (sans bit 3)
+		and.b	obSubtype(a0),d0			; SCE optimization
+		beq.s	.type00						; skip if subtype 00
 		add.w	d0,d0
-		move.w	.index(pc,d0.w),d1
+		move.w	.index-2(pc,d0.w),d1
 		jsr	.index(pc,d1.w)
+
+.type00:
 		out_of_range.s	.delete,saw_origX(a0)
 		jmp	(DisplaySprite).l
 
 .delete:
 		jmp	(DeleteObject).l
 ; ===========================================================================
-.index:		dc.w .type00-.index, .type01-.index, .type02-.index ; pizza cutters
-		dc.w .type03-.index, .type04-.index ; ground saws
-; ===========================================================================
 
-.type00:
-		rts			; doesn't move
+.index:		dc.w .type01-.index, .type02-.index ; pizza cutters
+		dc.w .type03-.index, .type04-.index ; ground saws
 ; ===========================================================================
 
 .type01:

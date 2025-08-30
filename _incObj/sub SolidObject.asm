@@ -298,7 +298,7 @@ Solid_ResetFloor:
 		lsr.w	#object_size_bits,d0
 		andi.w	#$7F,d0
 		move.b	d0,standonobject(a1)	; set object being stood on
-		move.b	#0,obAngle(a1)	; clear Sonic's angle
+		clr.b	obAngle(a1)	; clear Sonic's angle
 		move.w	#0,obVelY(a1)	; stop Sonic
 		move.w	obVelX(a1),obInertia(a1)
 		btst	#1,obStatus(a1)	; is Sonic in the air?

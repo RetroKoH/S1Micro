@@ -3,14 +3,8 @@
 ; ---------------------------------------------------------------------------
 
 Basaran:
-		moveq	#0,d0
-		move.b	obRoutine(a0),d0
-		move.w	Bas_Index(pc,d0.w),d1
-		jmp	Bas_Index(pc,d1.w)
-; ===========================================================================
-Bas_Index:	dc.w Bas_Main-Bas_Index
-		dc.w Bas_Action-Bas_Index
-; ===========================================================================
+		tst.b	obRoutine(a0)
+		bne.s	Bas_Action
 
 Bas_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)
@@ -31,7 +25,8 @@ Bas_Action:	; Routine 2
 		bsr.w	AnimateSprite
 		bra.w	RememberState
 ; ===========================================================================
-.index:		dc.w .dropcheck-.index
+.index:
+		dc.w .dropcheck-.index
 		dc.w .dropfly-.index
 		dc.w .flapsound-.index
 		dc.w .flyup-.index
@@ -70,28 +65,20 @@ Bas_Action:	; Routine 2
 		sub.w	obY(a0),d0
 		bcs.s	.chkdel
 		cmpi.w	#$10,d0		; is basaran close to Sonic vertically?
-		bhs.s	.dropmore	; if not, branch
+		bhs.s	.return	; if not, branch
 		move.w	d1,obVelX(a0)	; make basaran fly horizontally
-		move.w	#0,obVelY(a0)	; stop basaran falling
+		clr.w	obVelY(a0)	; stop basaran falling
 		move.b	#2,obAnim(a0)
 		addq.b	#2,ob2ndRout(a0)
 
-.dropmore:
+.return:
 		rts	
 
 .chkdel:
 		tst.b	obRender(a0)
-	if FixBugs
-		; Objects shouldn't call DisplaySprite and DeleteObject on
-		; the same frame or else cause a null-pointer dereference.
 		bmi.s	.return
 		addq.l	#4,sp
 		bra.w	DeleteObject
-.return:
-	else
-		bpl.w	DeleteObject
-	endif
-		rts	
 ; ===========================================================================
 
 .flapsound:

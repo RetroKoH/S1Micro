@@ -2,18 +2,11 @@
 ; Object 2B - Chopper enemy (GHZ)
 ; ---------------------------------------------------------------------------
 
-Chopper:
-		moveq	#0,d0
-		move.b	obRoutine(a0),d0
-		move.w	Chop_Index(pc,d0.w),d1
-		jsr	Chop_Index(pc,d1.w)
-		bra.w	RememberState
-; ===========================================================================
-Chop_Index:	dc.w Chop_Main-Chop_Index
-		dc.w Chop_ChgSpeed-Chop_Index
-
 chop_origY = objoff_30
-; ===========================================================================
+
+Chopper:
+		tst.b	obRoutine(a0)
+		bne.s	Chop_ChgSpeed
 
 Chop_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)
@@ -42,10 +35,10 @@ Chop_ChgSpeed:	; Routine 2
 		subi.w	#$C0,d0
 		cmp.w	obY(a0),d0
 		bhs.s	.nochg
-		move.b	#0,obAnim(a0)	; use slow animation
+		clr.b	obAnim(a0)	; use slow animation
 		tst.w	obVelY(a0)	; is Chopper at its highest point?
 		bmi.s	.nochg		; if not, branch
 		move.b	#2,obAnim(a0)	; use stationary animation
 
 .nochg:
-		rts
+		bra.w	RememberState

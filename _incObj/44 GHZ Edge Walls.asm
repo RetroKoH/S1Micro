@@ -3,15 +3,10 @@
 ; ---------------------------------------------------------------------------
 
 EdgeWalls:
-		moveq	#0,d0
 		move.b	obRoutine(a0),d0
-		move.w	Edge_Index(pc,d0.w),d1
-		jmp	Edge_Index(pc,d1.w)
-; ===========================================================================
-Edge_Index:	dc.w Edge_Main-Edge_Index
-		dc.w Edge_Solid-Edge_Index
-		dc.w Edge_Display-Edge_Index
-; ===========================================================================
+		subq.b	#2,d0
+		beq.s	Edge_Solid
+		bpl.w	Edge_Display
 
 Edge_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)
@@ -33,13 +28,5 @@ Edge_Solid:	; Routine 2
 		bsr.w	Obj44_SolidWall
 
 Edge_Display:	; Routine 4
-	if FixBugs
-		; Objects shouldn't call DisplaySprite and DeleteObject on
-		; the same frame, or else cause a null-pointer dereference.
 		out_of_range.w	DeleteObject
 		bra.w	DisplaySprite
-	else
-		bsr.w	DisplaySprite
-		out_of_range.w	DeleteObject
-		rts
-	endif

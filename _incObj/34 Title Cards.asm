@@ -2,20 +2,14 @@
 ; Object 34 - zone title cards
 ; ---------------------------------------------------------------------------
 
-TitleCard:
-		moveq	#0,d0
-		move.b	obRoutine(a0),d0
-		move.w	Card_Index(pc,d0.w),d1
-		jmp	Card_Index(pc,d1.w)
-; ===========================================================================
-Card_Index:	dc.w Card_CheckSBZ3-Card_Index
-		dc.w Card_ChkPos-Card_Index
-		dc.w Card_Wait-Card_Index
-		dc.w Card_Wait-Card_Index
-
 card_mainX = objoff_30		; position for card to display on
 card_finalX = objoff_32		; position for card to finish on
-; ===========================================================================
+
+TitleCard:
+		move.b	obRoutine(a0),d0
+		subq.b	#2,d0
+		beq.w	Card_ChkPos
+		bpl.w	Card_Wait
 
 Card_CheckSBZ3:	; Routine 0
 		movea.l	a0,a1
@@ -63,8 +57,8 @@ Card_MakeSprite:
 		move.l	#Map_Card,obMap(a1)
 		move.w	#make_art_tile(ArtTile_Title_Card,0,1),obGfx(a1)
 		move.b	#$78,obActWid(a1)
-		move.b	#0,obRender(a1)
-		move.b	#0,obPriority(a1)
+		clr.b	obRender(a1)
+		clr.b	obPriority(a1)
 		move.w	#60,obTimeFrame(a1) ; set time delay to 1 second
 		lea	object_size(a1),a1	; next object
 		dbf	d1,Card_Loop	; repeat sequence another 3 times
@@ -135,7 +129,8 @@ Card_ChangeArt:
 Card_Delete:
 		bra.w	DeleteObject
 ; ===========================================================================
-Card_ItemData:	dc.w $D0	; y-axis position
+Card_ItemData:
+		dc.w $D0	; y-axis position
 		dc.b 2,	0	; routine number, frame number (changes)
 		dc.w $E4
 		dc.b 2,	6
@@ -149,7 +144,8 @@ Card_ItemData:	dc.w $D0	; y-axis position
 ; 4 bytes per item (YYYY XXXX)
 ; 4 items per level (GREEN HILL, ZONE, ACT X, oval)
 ; ---------------------------------------------------------------------------
-Card_ConData:	dc.w 0,	$120, $FEFC, $13C, $414, $154, $214, $154 ; GHZ
+Card_ConData:
+		dc.w 0,	$120, $FEFC, $13C, $414, $154, $214, $154 ; GHZ
 		dc.w 0,	$120, $FEF4, $134, $40C, $14C, $20C, $14C ; LZ
 		dc.w 0,	$120, $FEE0, $120, $3F8, $138, $1F8, $138 ; MZ
 		dc.w 0,	$120, $FEFC, $13C, $414, $154, $214, $154 ; SLZ

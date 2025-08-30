@@ -2,20 +2,15 @@
 ; Object 7F - chaos emeralds from the special stage results screen
 ; ---------------------------------------------------------------------------
 
-SSRChaos:
-		moveq	#0,d0
-		move.b	obRoutine(a0),d0
-		move.w	SSRC_Index(pc,d0.w),d1
-		jmp	SSRC_Index(pc,d1.w)
-; ===========================================================================
-SSRC_Index:	dc.w SSRC_Main-SSRC_Index
-		dc.w SSRC_Flash-SSRC_Index
-
 ; ---------------------------------------------------------------------------
 ; X-axis positions for chaos emeralds
 ; ---------------------------------------------------------------------------
 SSRC_PosData:	dc.w $110, $128, $F8, $140, $E0, $158
 ; ===========================================================================
+
+SSRChaos:
+		tst.b	obRoutine(a0)
+		bne.s	SSRC_Flash
 
 SSRC_Main:	; Routine 0
 		movea.l	a0,a1
@@ -38,7 +33,7 @@ SSRC_Loop:
 		addq.b	#2,obRoutine(a1)
 		move.l	#Map_SSRC,obMap(a1)
 		move.w	#make_art_tile(ArtTile_SS_Results_Emeralds,0,1),obGfx(a1)
-		move.b	#0,obRender(a1)
+		clr.b	obRender(a1)
 		lea	object_size(a1),a1	; next object
 		dbf	d1,SSRC_Loop	; loop for d1 number of emeralds
 

@@ -2,25 +2,22 @@
 ; Object 36 - spikes
 ; ---------------------------------------------------------------------------
 
-Spikes:
-		moveq	#0,d0
-		move.b	obRoutine(a0),d0
-		move.w	Spik_Index(pc,d0.w),d1
-		jmp	Spik_Index(pc,d1.w)
-; ===========================================================================
-Spik_Index:	dc.w Spik_Main-Spik_Index
-		dc.w Spik_Solid-Spik_Index
-
 spik_origX = objoff_30		; start X position
 spik_origY = objoff_32		; start Y position
 
-Spik_Var:	dc.b 0,	$14		; frame number, object width
+; ===========================================================================
+Spik_Var:
+		dc.b 0,	$14		; frame	number,	object width
 		dc.b 1,	$10
 		dc.b 2,	4
 		dc.b 3,	$1C
 		dc.b 4,	$40
 		dc.b 5,	$10
 ; ===========================================================================
+
+Spikes:
+		tst.b	obRoutine(a0)
+		bne.s	Spik_Solid
 
 Spik_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)
@@ -81,23 +78,17 @@ Spik_Upright:
 Spik_Hurt:
 		tst.b	(v_invinc).w	; is Sonic invincible?
 		bne.s	Spik_Display	; if yes, branch
+		tst.w	flashtime(a0)	; Is Sonic flashing after being hurt?
+		bne.s	Spik_Display	; If so, skip getting hurt
 		move.l	a0,-(sp)
 		movea.l	a0,a2
 		lea	(v_player).w,a0
 		cmpi.b	#4,obRoutine(a0)
 		bhs.s	loc_CF20
-	if Revision<>2
 		move.l	obY(a0),d3
 		move.w	obVelY(a0),d0
 		ext.l	d0
 		asl.l	#8,d0
-	else
-		; This fixes the infamous "spike bug"
-		tst.w	flashtime(a0)	; Is Sonic flashing after being hurt?
-		bne.s	loc_CF20	; If so, skip getting hurt
-		jmp	(loc_E0).l	; This is a copy of the above code that was pushed aside for this
-loc_D5A2:
-	endif
 		sub.l	d0,d3
 		move.l	d3,obY(a0)
 		jsr	(HurtSonic).l
@@ -114,14 +105,10 @@ Spik_Display:
 Spik_Type0x:
 		moveq	#0,d0
 		move.b	obSubtype(a0),d0
-		add.w	d0,d0
-		move.w	Spik_TypeIndex(pc,d0.w),d1
-		jmp	Spik_TypeIndex(pc,d1.w)
-; ===========================================================================
-Spik_TypeIndex:	dc.w Spik_Type00-Spik_TypeIndex
-		dc.w Spik_Type01-Spik_TypeIndex
-		dc.w Spik_Type02-Spik_TypeIndex
-; ===========================================================================
+		subq.b	#1,d0
+		tst.b	d0
+		beq.s	Spik_Type01
+		bpl.s	Spik_Type02
 
 Spik_Type00:
 		rts			; don't move the object
@@ -153,8 +140,7 @@ Spik_Wait:
 		tst.b	obRender(a0)
 		bpl.s	locret_CFE6
 		move.w	#sfx_SpikesMove,d0
-		jsr	(QueueSound2).l	; play "spikes moving" sound
-		bra.s	locret_CFE6
+		jmp	(QueueSound2).l	; play "spikes moving" sound
 ; ===========================================================================
 
 loc_CFA4:
@@ -162,10 +148,9 @@ loc_CFA4:
 		beq.s	loc_CFC6
 		subi.w	#$800,objoff_34(a0)
 		bcc.s	locret_CFE6
-		move.w	#0,objoff_34(a0)
-		move.w	#0,objoff_36(a0)
+		clr.l	objoff_34(a0)		; clear 34-37
 		move.w	#60,objoff_38(a0)	; set time delay to 1 second
-		bra.s	locret_CFE6
+		rts
 ; ===========================================================================
 
 loc_CFC6:

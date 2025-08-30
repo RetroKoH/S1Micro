@@ -2,17 +2,14 @@
 ; Object 51 - smashable green block (MZ)
 ; ---------------------------------------------------------------------------
 
+sonicAniFrame = objoff_32		; Sonic's current animation number
+hitcount = objoff_34		; number of blocks hit + previous stuff
+
 SmashBlock:
-		moveq	#0,d0
 		move.b	obRoutine(a0),d0
-		move.w	Smab_Index(pc,d0.w),d1
-		jsr	Smab_Index(pc,d1.w)
-		bra.w	RememberState
-; ===========================================================================
-Smab_Index:	dc.w Smab_Main-Smab_Index
-		dc.w Smab_Solid-Smab_Index
-		dc.w Smab_Points-Smab_Index
-; ===========================================================================
+		subq.b	#2,d0
+		beq.s	Smab_Solid
+		bpl.w	Smab_Points
 
 Smab_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)
@@ -24,10 +21,6 @@ Smab_Main:	; Routine 0
 		move.b	obSubtype(a0),obFrame(a0)
 
 Smab_Solid:	; Routine 2
-
-sonicAniFrame = objoff_32		; Sonic's current animation number
-.count = objoff_34		; number of blocks hit + previous stuff
-
 		move.w	(v_itembonus).w,objoff_34(a0)
 		move.b	(v_player+obAnim).w,sonicAniFrame(a0) ; load Sonic's animation number
 		move.w	#$1B,d1
@@ -36,19 +29,13 @@ sonicAniFrame = objoff_32		; Sonic's current animation number
 		move.w	obX(a0),d4
 		bsr.w	SolidObject
 		btst	#3,obStatus(a0)	; has Sonic landed on the block?
-		bne.s	.smash		; if yes, branch
-
-.notspinning:
-		rts	
-; ===========================================================================
-
-.smash:
+		bne.w	RememberState	; if not, branch
 		cmpi.b	#id_Roll,sonicAniFrame(a0) ; is Sonic rolling/jumping?
-		bne.s	.notspinning	; if not, branch
-		move.w	.count(a0),(v_itembonus).w
+		bne.w	RememberState	; if not, branch
+
+		move.w	hitcount(a0),(v_itembonus).w
 		bset	#2,obStatus(a1)
-		move.b	#$E,obHeight(a1)
-		move.b	#7,obWidth(a1)
+		move.w	#$E07,obHeight(a1)	; Height and Width
 		move.b	#id_Roll,obAnim(a1) ; make Sonic roll
 		move.w	#-$300,obVelY(a1) ; rebound Sonic
 		bset	#1,obStatus(a1)
@@ -88,20 +75,12 @@ sonicAniFrame = objoff_32		; Sonic's current animation number
 Smab_Points:	; Routine 4
 		bsr.w	SpeedToPos
 		addi.w	#$38,obVelY(a0)
-	if ~~FixBugs
-		; Objects should not call DisplaySprite and DeleteObject on
-		; the same frame or else cause a null-pointer dereference.
-		bsr.w	DisplaySprite
-	endif
 		tst.b	obRender(a0)
 		bpl.w	DeleteObject
-	if FixBugs
 		bra.w	DisplaySprite
-	else
-		rts
-	endif
 ; ===========================================================================
-Smab_Speeds:	dc.w -$200, -$200	; x-speed, y-speed
+Smab_Speeds:
+		dc.w -$200, -$200	; x-speed, y-speed
 		dc.w -$100, -$100
 		dc.w $200, -$200
 		dc.w $100, -$100

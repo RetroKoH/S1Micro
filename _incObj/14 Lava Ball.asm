@@ -2,29 +2,22 @@
 ; Object 14 - lava balls (MZ, SLZ)
 ; ---------------------------------------------------------------------------
 
-LavaBall:
-		moveq	#0,d0
-		move.b	obRoutine(a0),d0
-		move.w	LBall_Index(pc,d0.w),d1
-	if FixBugs
-		jmp	LBall_Index(pc,d1.w)
-	else
-		jsr	LBall_Index(pc,d1.w)
-		bra.w	DisplaySprite
-	endif
 ; ===========================================================================
-LBall_Index:	dc.w LBall_Main-LBall_Index
-		dc.w LBall_Action-LBall_Index
-		dc.w LBall_Delete-LBall_Index
-
-LBall_Speeds:	dc.w -$400, -$500, -$600, -$700, -$200
+LBall_Speeds:
+		dc.w -$400, -$500, -$600, -$700, -$200
 		dc.w $200, -$200, $200,	0
 ; ===========================================================================
 
+LavaBall:
+	; LavaGaming Object Routine Optimization
+		move.b	obRoutine(a0),d0
+		subq.b	#2,d0
+		beq.w	LBall_Action
+		bpl.w	DeleteObject
+
 LBall_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)
-		move.b	#8,obHeight(a0)
-		move.b	#8,obWidth(a0)
+		move.w	#$808,obHeight(a0)				; Height and Width
 		move.l	#Map_Fire,obMap(a0)
 		move.w	#make_art_tile(ArtTile_MZ_Fireball,0,0),obGfx(a0)
 		cmpi.b	#id_SLZ,(v_zone).w	; check if level is SLZ
@@ -52,7 +45,7 @@ LBall_Main:	; Routine 0
 		move.b	#$10,obActWid(a0)
 		move.b	#2,obAnim(a0)	; use horizontal animation
 		move.w	obVelY(a0),obVelX(a0) ; set horizontal speed
-		move.w	#0,obVelY(a0)	; delete vertical speed
+		clr.w	obVelY(a0)	; delete vertical speed
 
 .sound:
 		move.w	#sfx_Fireball,d0
@@ -70,11 +63,7 @@ LBall_Action:	; Routine 2
 
 LBall_ChkDel:
 		out_of_range.w	DeleteObject
-	if FixBugs
 		bra.w	DisplaySprite
-	else
-		rts	
-	endif
 ; ===========================================================================
 LBall_TypeIndex:dc.w LBall_Type00-LBall_TypeIndex, LBall_Type00-LBall_TypeIndex
 		dc.w LBall_Type00-LBall_TypeIndex, LBall_Type00-LBall_TypeIndex
@@ -109,7 +98,7 @@ LBall_Type04:
 		bpl.s	locret_E452
 		move.b	#8,obSubtype(a0)
 		move.b	#1,obAnim(a0)
-		move.w	#0,obVelY(a0)	; stop the object when it touches the ceiling
+		clr.w	obVelY(a0)	; stop the object when it touches the ceiling
 
 locret_E452:
 		rts	
@@ -123,7 +112,7 @@ LBall_Type05:
 		bpl.s	locret_E474
 		move.b	#8,obSubtype(a0)
 		move.b	#1,obAnim(a0)
-		move.w	#0,obVelY(a0)	; stop the object when it touches the floor
+		clr.w	obVelY(a0)	; stop the object when it touches the floor
 
 locret_E474:
 		rts	
@@ -138,7 +127,7 @@ LBall_Type06:
 		bpl.s	locret_E498
 		move.b	#8,obSubtype(a0)
 		move.b	#3,obAnim(a0)
-		move.w	#0,obVelX(a0)	; stop object when it touches a wall
+		clr.w	obVelX(a0)	; stop object when it touches a	wall
 
 locret_E498:
 		rts	
@@ -152,12 +141,9 @@ LBall_Type07:
 		bpl.s	locret_E4BC
 		move.b	#8,obSubtype(a0)
 		move.b	#3,obAnim(a0)
-		move.w	#0,obVelX(a0)	; stop object when it touches a wall
+		clr.w	obVelX(a0)	; stop object when it touches a	wall
 
 locret_E4BC:
-		rts	
-; ===========================================================================
-
 LBall_Type08:
 		rts	
 ; ===========================================================================

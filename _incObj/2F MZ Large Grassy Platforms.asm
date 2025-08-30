@@ -2,25 +2,22 @@
 ; Object 2F - large grass-covered platforms (MZ)
 ; ---------------------------------------------------------------------------
 
-LargeGrass:
-		moveq	#0,d0
-		move.b	obRoutine(a0),d0
-		move.w	LGrass_Index(pc,d0.w),d1
-		jmp	LGrass_Index(pc,d1.w)
-; ===========================================================================
-LGrass_Index:	dc.w LGrass_Main-LGrass_Index
-		dc.w LGrass_Action-LGrass_Index
-
 lgrass_origX = objoff_2A
 lgrass_origY = objoff_2C
 
-LGrass_Data:	dc.w LGrass_Data1-LGrass_Data 	; collision angle data
-		dc.b 0,	$40			; frame number, platform width
+; ===========================================================================
+LGrass_Data:
+		dc.w LGrass_Data1-LGrass_Data 	; collision angle data
+		dc.b 0,	$40			; frame	number,	platform width
 		dc.w LGrass_Data3-LGrass_Data
 		dc.b 1,	$40
 		dc.w LGrass_Data2-LGrass_Data
 		dc.b 2,	$20
 ; ===========================================================================
+
+LargeGrass:
+		tst.b	obRoutine(a0)
+		bne.s	LGrass_Action
 
 LGrass_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)
@@ -82,10 +79,6 @@ loc_AF8E:
 		bsr.w	SolidObject2F
 
 LGrass_Display:
-	if ~~FixBugs
-		; This has been moved to prevent a display-after-free bug.
-		bsr.w	DisplaySprite
-	endif
 		bra.w	LGrass_ChkDel
 
 ; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
@@ -235,12 +228,7 @@ LGrass_ChkDel:
 
 loc_B0C6:
 		out_of_range.w	DeleteObject,lgrass_origX(a0)
-	if FixBugs
-		; This has been moved to prevent a display-after-free bug.
 		bra.w	DisplaySprite
-	else
-		rts	
-	endif
 ; ===========================================================================
 
 LGrass_DelFlames:
@@ -262,16 +250,10 @@ loc_B0F4:
 		movea.w	d0,a1
 		bsr.w	DeleteChild
 		dbf	d2,loc_B0F4
-		move.b	#0,objoff_35(a0)
-		move.b	#0,objoff_34(a0)
+		clr.w	objoff_34(a0)
 
 locret_B116:
-	if FixBugs
-		; This has been moved to prevent a display-after-free bug.
 		bra.w	DisplaySprite
-	else
-		rts	
-	endif
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
 ; Collision data for large moving platforms (MZ)

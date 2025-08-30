@@ -2,20 +2,15 @@
 ; Object 58 - giant spiked balls (SYZ)
 ; ---------------------------------------------------------------------------
 
-BigSpikeBall:
-		moveq	#0,d0
-		move.b	obRoutine(a0),d0
-		move.w	BBall_Index(pc,d0.w),d1
-		jmp	BBall_Index(pc,d1.w)
-; ===========================================================================
-BBall_Index:	dc.w BBall_Main-BBall_Index
-		dc.w BBall_Move-BBall_Index
-
 bball_origX = objoff_3A		; original x-axis position
 bball_origY = objoff_38		; original y-axis position
 bball_radius = objoff_3C	; radius of circle
 bball_speed = objoff_3E		; speed
-; ===========================================================================
+
+
+BigSpikeBall:
+		tst.b	obRoutine(a0)
+		bne.s	BBall_Move
 
 BBall_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)

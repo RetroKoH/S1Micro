@@ -396,7 +396,7 @@ locret_1A190:
 loc_1A192:
 		move.l	#Map_Eggman,obMap(a0)
 		move.w	#make_art_tile(ArtTile_Eggman,0,0),obGfx(a0)
-		move.b	#0,obAnim(a0)
+		clr.b	obAnim(a0)
 		bset	#0,obStatus(a0)
 		jsr	(SpeedToPos).l
 		cmpi.w	#boss_fz_y+$34,obY(a0)
@@ -524,7 +524,7 @@ loc_1A312:
 		bpl.w	BossFinal_Delete
 		bsr.w	BossDefeated
 		move.b	#2,obPriority(a0)
-		move.b	#0,obAnim(a0)
+		clr.b	obAnim(a0)
 		move.l	#Map_FZDamaged,obMap(a0)
 		move.w	#make_art_tile(ArtTile_FZ_Eggman_Fleeing,0,0),obGfx(a0)
 		lea	Ani_FZEgg(pc),a1
@@ -571,7 +571,7 @@ loc_1A3A6:
 ; ===========================================================================
 
 loc_1A3AC:	; Routine $C
-		move.b	#0,obFrame(a0)
+		clr.b	obFrame(a0)
 		bset	#0,obStatus(a0)
 		movea.l	objoff_34(a0),a1
 		cmpi.b	#$C,objoff_34(a1)

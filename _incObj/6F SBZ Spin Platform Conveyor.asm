@@ -1,5 +1,6 @@
 ; ---------------------------------------------------------------------------
 ; Object 6F - spinning platforms that move around a conveyor belt (SBZ)
+; ???NOTE??? Needs an extensive rework (See if this results in less ROM SIZE)
 ; ---------------------------------------------------------------------------
 
 SpinConvey:
@@ -85,7 +86,7 @@ loc_16356:
 loc_1636C:
 		cmpi.w	#8,d1
 		bne.s	loc_16378
-		move.b	#0,obAnim(a0)
+		clr.b	obAnim(a0)
 
 loc_16378:
 		bsr.w	LCon_ChangeDir
@@ -187,7 +188,7 @@ loc_16456:
 loc_16474:
 		cmpi.w	#8,d1
 		bne.s	loc_16480
-		move.b	#0,obAnim(a0)
+		clr.b	obAnim(a0)
 
 loc_16480:
 		bsr.w	LCon_ChangeDir

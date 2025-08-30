@@ -2,18 +2,13 @@
 ; Object 16 - harpoon (LZ)
 ; ---------------------------------------------------------------------------
 
-Harpoon:
-		moveq	#0,d0
-		move.b	obRoutine(a0),d0
-		move.w	Harp_Index(pc,d0.w),d1
-		jmp	Harp_Index(pc,d1.w)
-; ===========================================================================
-Harp_Index:	dc.w Harp_Main-Harp_Index
-		dc.w Harp_Move-Harp_Index
-		dc.w Harp_Wait-Harp_Index
-
 harp_time = objoff_30		; time between stabbing/retracting
-; ===========================================================================
+
+Harpoon:
+		move.b	obRoutine(a0),d0
+		subq.b	#2,d0
+		beq.s	Harp_Move
+		bpl.s	Harp_Wait
 
 Harp_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)

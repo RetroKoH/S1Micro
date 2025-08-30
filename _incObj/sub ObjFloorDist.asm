@@ -43,7 +43,7 @@ ObjFloorDist2:
 		move.b	(v_anglebuffer).w,d3
 		btst	#0,d3
 		beq.s	locret_14E4E
-		move.b	#0,d3
+		moveq	#0,d3
 
 locret_14E4E:
 		rts	

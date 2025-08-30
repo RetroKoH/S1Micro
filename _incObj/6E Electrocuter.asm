@@ -2,17 +2,11 @@
 ; Object 6E - electrocution orbs (SBZ)
 ; ---------------------------------------------------------------------------
 
-Electro:
-		moveq	#0,d0
-		move.b	obRoutine(a0),d0
-		move.w	Elec_Index(pc,d0.w),d1
-		jmp	Elec_Index(pc,d1.w)
-; ===========================================================================
-Elec_Index:	dc.w Elec_Main-Elec_Index
-		dc.w Elec_Shock-Elec_Index
-
 elec_freq = objoff_34		; frequency
-; ===========================================================================
+
+Electro:
+		tst.b	obRoutine(a0)
+		bne.s	Elec_Shock
 
 Elec_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)
@@ -40,7 +34,7 @@ Elec_Shock:	; Routine 2
 .animate:
 		lea	(Ani_Elec).l,a1
 		jsr	(AnimateSprite).l
-		move.b	#0,obColType(a0)
+		clr.b	obColType(a0)
 		cmpi.b	#4,obFrame(a0)	; is 4th frame displayed?
 		bne.s	.display	; if not, branch
 		move.b	#$A4,obColType(a0) ; if yes, make object hurt Sonic

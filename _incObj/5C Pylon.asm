@@ -3,14 +3,8 @@
 ; ---------------------------------------------------------------------------
 
 Pylon:
-		moveq	#0,d0
-		move.b	obRoutine(a0),d0
-		move.w	Pyl_Index(pc,d0.w),d1
-		jmp	Pyl_Index(pc,d1.w)
-; ===========================================================================
-Pyl_Index:	dc.w Pyl_Main-Pyl_Index
-		dc.w Pyl_Display-Pyl_Index
-; ===========================================================================
+		tst.b	obRoutine(a0)
+		bne.s	Pyl_Display
 
 Pyl_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)

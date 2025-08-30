@@ -2,22 +2,15 @@
 ; Object 2D - Burrobot enemy (LZ)
 ; ---------------------------------------------------------------------------
 
-Burrobot:
-		moveq	#0,d0
-		move.b	obRoutine(a0),d0
-		move.w	Burro_Index(pc,d0.w),d1
-		jmp	Burro_Index(pc,d1.w)
-; ===========================================================================
-Burro_Index:	dc.w Burro_Main-Burro_Index
-		dc.w Burro_Action-Burro_Index
-
 burro_timedelay = objoff_30		; time between direction changes
-; ===========================================================================
+
+Burrobot:
+		tst.b	obRoutine(a0)
+		bne.s	Burro_Action
 
 Burro_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)
-		move.b	#$13,obHeight(a0)
-		move.b	#8,obWidth(a0)
+		move.w	#$1308,obHeight(a0)
 		move.l	#Map_Burro,obMap(a0)
 		move.w	#make_art_tile(ArtTile_Burrobot,0,0),obGfx(a0)
 		ori.b	#4,obRender(a0)
@@ -87,8 +80,8 @@ loc_AD84:
 		beq.s	loc_ADA4
 		subq.b	#2,ob2ndRout(a0)
 		move.w	#59,burro_timedelay(a0)
-		move.w	#0,obVelX(a0)
-		move.b	#0,obAnim(a0)
+		clr.w	obVelX(a0)
+		clr.b	obAnim(a0)
 		rts	
 ; ===========================================================================
 
@@ -108,11 +101,11 @@ Burro_Jump:
 		tst.w	d1
 		bpl.s	locret_ADF0
 		add.w	d1,obY(a0)
-		move.w	#0,obVelY(a0)
+		clr.w	obVelY(a0)
 		move.b	#1,obAnim(a0)
 		move.w	#255,burro_timedelay(a0)
 		subq.b	#2,ob2ndRout(a0)
-		bsr.w	Burro_ChkSonic2
+		bra.w	Burro_ChkSonic2
 
 locret_ADF0:
 		rts	

@@ -3,20 +3,15 @@
 ; Object 22 - Buzz Bomber enemy (GHZ, MZ, SYZ)
 ; ---------------------------------------------------------------------------
 
-BuzzBomber:
-		moveq	#0,d0
-		move.b	obRoutine(a0),d0
-		move.w	Buzz_Index(pc,d0.w),d1
-		jmp	Buzz_Index(pc,d1.w)
-; ===========================================================================
-Buzz_Index:	dc.w Buzz_Main-Buzz_Index
-		dc.w Buzz_Action-Buzz_Index
-		dc.w Buzz_Delete-Buzz_Index
-
 buzz_timedelay = objoff_32
 buzz_buzzstatus = objoff_34
 buzz_parent = objoff_3C
-; ===========================================================================
+
+BuzzBomber:
+		move.b	obRoutine(a0),d0
+		subq.b	#2,d0
+		beq.s	Buzz_Action
+		bpl.w	DeleteObject
 
 Buzz_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)
@@ -36,6 +31,7 @@ Buzz_Action:	; Routine 2
 		bsr.w	AnimateSprite
 		bra.w	RememberState
 ; ===========================================================================
+;???NOTE??? Can I optimize this routine?
 .index:		dc.w .move-.index
 		dc.w .chknearsonic-.index
 ; ===========================================================================
@@ -64,13 +60,8 @@ Buzz_Action:	; Routine 2
 		move.w	obX(a0),obX(a1)
 		move.w	obY(a0),obY(a1)
 		addi.w	#$1C,obY(a1)
-		move.w	#$200,obVelY(a1) ; move missile downwards
-		move.w	#$200,obVelX(a1) ; move missile to the right
-	if FixBugs
-		moveq	#$18-4,d0
-	else
-		move.w	#$18,d0
-	endif
+		move.l	#$02000200,obVelX(a1)	; move missile downwards (obVelX), to the right (obVelY)
+		moveq	#20,d0
 		btst	#0,obStatus(a0)	; is Buzz Bomber facing left?
 		bne.s	.noflip2	; if not, branch
 		neg.w	d0
@@ -111,19 +102,18 @@ Buzz_Action:	; Routine 2
 ; ===========================================================================
 
 .chgdirection:
-		move.b	#0,buzz_buzzstatus(a0) ; set Buzz Bomber to "normal"
-		bchg	#0,obStatus(a0)	; change direction
+		clr.b	buzz_buzzstatus(a0)		; set Buzz Bomber to "normal"
+		bchg	#0,obStatus(a0)			; change direction
 		move.w	#59,buzz_timedelay(a0)
 
 .stop:
 		subq.b	#2,ob2ndRout(a0)
-		move.w	#0,obVelX(a0)	; stop Buzz Bomber moving
-		move.b	#0,obAnim(a0)	; use "hovering" animation
+		clr.w	obVelX(a0)		; stop Buzz Bomber moving
+		clr.b	obAnim(a0)		; use "hovering" animation
 
 .keepgoing:
 		rts	
 ; ===========================================================================
 
 Buzz_Delete:	; Routine 4
-		bsr.w	DeleteObject
-		rts	
+		bra.w	DeleteObject

@@ -2,22 +2,15 @@
 ; Object 46 - solid blocks and blocks that fall from the ceiling (MZ)
 ; ---------------------------------------------------------------------------
 
-MarbleBrick:
-		moveq	#0,d0
-		move.b	obRoutine(a0),d0
-		move.w	Brick_Index(pc,d0.w),d1
-		jmp	Brick_Index(pc,d1.w)
-; ===========================================================================
-Brick_Index:	dc.w Brick_Main-Brick_Index
-		dc.w Brick_Action-Brick_Index
-
 brick_origY = objoff_30
-; ===========================================================================
+
+MarbleBrick:
+		tst.b	obRoutine(a0)
+		bne.s	Brick_Action
 
 Brick_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)
-		move.b	#$F,obHeight(a0)
-		move.b	#$F,obWidth(a0)
+		move.w	#$F0F,obHeight(a0)			; Height and Width
 		move.l	#Map_Brick,obMap(a0)
 		move.w	#make_art_tile(ArtTile_Level,2,0),obGfx(a0)
 		move.b	#4,obRender(a0)
@@ -29,12 +22,13 @@ Brick_Main:	; Routine 0
 Brick_Action:	; Routine 2
 		tst.b	obRender(a0)
 		bpl.s	.chkdel
-		moveq	#0,d0
-		move.b	obSubtype(a0),d0 ; get object type
-		andi.w	#7,d0		; read only the 1st digit
+		moveq	#7,d0
+		and.b	obSubtype(a0),d0 ; get object type's 1st digit
+		beq.s	.solid
 		add.w	d0,d0
-		move.w	Brick_TypeIndex(pc,d0.w),d1
-		jsr	Brick_TypeIndex(pc,d1.w)
+		jsr		Brick_TypeIndex-2(pc,d0.w)
+
+.solid:
 		move.w	#$1B,d1
 		move.w	#$10,d2
 		move.w	#$11,d3
@@ -42,24 +36,22 @@ Brick_Action:	; Routine 2
 		bsr.w	SolidObject
 
 .chkdel:
-		if Revision=0
-		bsr.w	DisplaySprite
 		out_of_range.w	DeleteObject
-		rts	
-		else
-			out_of_range.w	DeleteObject
-			bra.w	DisplaySprite
-		endif
+		bra.w	DisplaySprite
 ; ===========================================================================
-Brick_TypeIndex:dc.w Brick_Type00-Brick_TypeIndex
-		dc.w Brick_Type01-Brick_TypeIndex
-		dc.w Brick_Type02-Brick_TypeIndex
-		dc.w Brick_Type03-Brick_TypeIndex
-		dc.w Brick_Type04-Brick_TypeIndex
-; ===========================================================================
+Brick_TypeIndex:
+		bra.s	Brick_Type01
+		bra.s	Brick_Type02
+		bra.s	Brick_Type03
 
-Brick_Type00:
-		rts	
+Brick_Type04:
+		moveq	#0,d0
+		move.b	(v_oscillate+$12).w,d0
+		lsr.w	#3,d0
+		move.w	brick_origY(a0),d1
+		sub.w	d0,d1
+		move.w	d1,obY(a0)	; make the block wobble
+		rts
 ; ===========================================================================
 
 Brick_Type02:
@@ -100,23 +92,9 @@ Brick_Type03:
 		move.b	#4,obSubtype(a0)
 		move.w	(a1),d0
 		andi.w	#$3FF,d0
-		if Revision=0
-		cmpi.w	#$2E8,d0
-		else
-			cmpi.w	#$16A,d0
-		endif
+		cmpi.w	#$16A,d0
 		bcc.s	locret_E8EE
-		move.b	#0,obSubtype(a0)
+		clr.b	obSubtype(a0)
 
 locret_E8EE:
-		rts	
-; ===========================================================================
-
-Brick_Type04:
-		moveq	#0,d0
-		move.b	(v_oscillate+$12).w,d0
-		lsr.w	#3,d0
-		move.w	brick_origY(a0),d1
-		sub.w	d0,d1
-		move.w	d1,obY(a0)	; make the block wobble
-		rts	
+		rts

@@ -2010,10 +2010,6 @@ WaitForVBla:
 
 		include	"_incObj/sub RandomNumber.asm"
 		include	"_incObj/sub CalcSine.asm"
-		if Revision=0
-		include	"_incObj/sub CalcSqrt.asm"
-		else
-		endif
 		include	"_incObj/sub CalcAngle.asm"
 
 ; ---------------------------------------------------------------------------
@@ -3147,7 +3143,7 @@ Sync2:
 		addq.b	#1,(v_ani1_frame).w
 		andi.b	#3,(v_ani1_frame).w
 
-; Used for nothing
+; Used for SYZ Lights
 Sync3:
 		subq.b	#1,(v_ani2_time).w
 		bpl.s	Sync4
@@ -3155,7 +3151,7 @@ Sync3:
 		addq.b	#1,(v_ani2_frame).w
 		cmpi.b	#6,(v_ani2_frame).w
 		blo.s	Sync4
-		move.b	#0,(v_ani2_frame).w
+		clr.b	(v_ani2_frame).w
 
 ; Used for bouncing rings
 Sync4:
@@ -5699,7 +5695,7 @@ loc_8B48:
 
 		include	"_incObj/1E Ball Hog.asm"
 		include	"_incObj/20 Cannonball.asm"
-		include	"_incObj/24, 27 & 3F Explosions.asm"
+		include	"_incObj/27 & 3F Explosions.asm"
 		include	"_anim/Ball Hog.asm"
 Map_Hog:	include	"_maps/Ball Hog.asm"
 Map_MisDissolve:include	"_maps/Buzz Bomber Missile Dissolve.asm"
@@ -6187,7 +6183,6 @@ loc_D37C:
 Obj_Index:
 		include	"_inc/Object Pointers.asm"
 
-		include	"_incObj/sub ObjectFall.asm"
 		include	"_incObj/sub SpeedToPos.asm"
 		include	"_incObj/sub DisplaySprite.asm"
 		include	"_incObj/sub DeleteObject.asm"
@@ -7706,19 +7701,12 @@ locret_178A2:
 
 
 BossMove:
-		move.l	objoff_30(a0),d2
-		move.l	objoff_38(a0),d3
-		move.w	obVelX(a0),d0
-		ext.l	d0
-		asl.l	#8,d0
-		add.l	d0,d2
-		move.w	obVelY(a0),d0
-		ext.l	d0
-		asl.l	#8,d0
-		add.l	d0,d3
-		move.l	d2,objoff_30(a0)
-		move.l	d3,objoff_38(a0)
-		rts	
+		movem.w	obVelX(a0),d0/d2	; load horizontal speed (d0) and vertical speed (d2)
+		lsl.l	#8,d0				; multiply by $100 (combine ext and asl to become lsl)
+		add.l	d0,objoff_30(a0)	; apply to stored x-axis position
+		lsl.l	#8,d2				; multiply by $100 (combine ext and asl to become lsl)
+		add.l	d2,objoff_38(a0)	; apply to stored y-axis position
+		rts
 ; End of function BossMove
 
 ; ===========================================================================
@@ -9057,11 +9045,7 @@ ObjPos_GHZ1:	binclude	"objpos/ghz1.bin"
 		even
 ObjPos_GHZ2:	binclude	"objpos/ghz2.bin"
 		even
-ObjPos_GHZ3:	if Revision=0
-		binclude	"objpos/ghz3.bin"
-		else
-		binclude	"objpos/ghz3 (JP1).bin"
-		endif
+ObjPos_GHZ3:	binclude	"objpos/ghz3.bin"
 		even
 ObjPos_LZ1:	if Revision=0
 		binclude	"objpos/lz1.bin"
@@ -9091,11 +9075,7 @@ ObjPos_LZ3pf1:	binclude	"objpos/lz3pf1.bin"
 		even
 ObjPos_LZ3pf2:	binclude	"objpos/lz3pf2.bin"
 		even
-ObjPos_MZ1:	if Revision=0
-		binclude	"objpos/mz1.bin"
-		else
-		binclude	"objpos/mz1 (JP1).bin"
-		endif
+ObjPos_MZ1:		binclude	"objpos/mz1.bin"
 		even
 ObjPos_MZ2:	binclude	"objpos/mz2.bin"
 		even

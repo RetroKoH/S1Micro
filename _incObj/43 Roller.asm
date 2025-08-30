@@ -3,18 +3,11 @@
 ; ---------------------------------------------------------------------------
 
 Roller:
-		moveq	#0,d0
-		move.b	obRoutine(a0),d0
-		move.w	Roll_Index(pc,d0.w),d1
-		jmp	Roll_Index(pc,d1.w)
-; ===========================================================================
-Roll_Index:	dc.w Roll_Main-Roll_Index
-		dc.w Roll_Action-Roll_Index
-; ===========================================================================
+		tst.b	obRoutine(a0)
+		bne.s	Roll_Action
 
 Roll_Main:	; Routine 0
-		move.b	#$E,obHeight(a0)
-		move.b	#8,obWidth(a0)
+		move.w	#$E08,obHeight(a0)			; Height and Width
 		bsr.w	ObjectFall
 		bsr.w	ObjFloorDist
 		tst.w	d1
@@ -60,7 +53,8 @@ Roll_ChkGone:
 Roll_Delete:
 		bra.w	DeleteObject
 ; ===========================================================================
-Roll_Index2:	dc.w Roll_RollChk-Roll_Index2
+Roll_Index2:
+		dc.w Roll_RollChk-Roll_Index2
 		dc.w Roll_RollNoChk-Roll_Index2
 		dc.w Roll_ChkJump-Roll_Index2
 		dc.w Roll_MatchFloor-Roll_Index2
@@ -131,7 +125,7 @@ Roll_MatchFloor:
 		bpl.s	locret_E150
 		add.w	d1,obY(a0)	; match Roller's position with the floor
 		subq.b	#2,ob2ndRout(a0)
-		move.w	#0,obVelY(a0)
+		clr.w	obVelY(a0)
 
 locret_E150:
 		rts	
@@ -146,7 +140,7 @@ Roll_Stop:
 		subi.w	#$30,d0
 		sub.w	obX(a0),d0
 		bcc.s	locret_E188
-		move.b	#0,obAnim(a0)
+		clr.b	obAnim(a0)
 		move.b	#$E,obColType(a0)
 		clr.w	obVelX(a0)
 		move.w	#120,objoff_30(a0)	; set waiting time to 2 seconds

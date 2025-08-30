@@ -2,25 +2,23 @@
 ; Object 6B - stomper and sliding door (SBZ)
 ; ---------------------------------------------------------------------------
 
-ScrapStomp:
-		moveq	#0,d0
-		move.b	obRoutine(a0),d0
-		move.w	Sto_Index(pc,d0.w),d1
-		jmp	Sto_Index(pc,d1.w)
-; ===========================================================================
-Sto_Index:	dc.w Sto_Main-Sto_Index
-		dc.w Sto_Action-Sto_Index
-
 sto_origX = objoff_34		; original x-axis position
 sto_origY = objoff_30		; original y-axis position
 sto_active = objoff_38		; flag set when a switch is pressed
 
-Sto_Var:	dc.b  $40,  $C,	$80,   1 ; width, height, ????, type number
-		dc.b  $1C, $20,	$38,   3
-		dc.b  $1C, $20,	$40,   4
-		dc.b  $1C, $20,	$60,   4
-		dc.b  $80, $40,	  0,   5
 ; ===========================================================================
+Sto_Var:
+			; width,	height, ????,	type number
+		dc.b  $40,		$C,		$80,	1		; 00
+		dc.b  $1C,		$20,	$38,	3		; 04
+		dc.b  $1C,		$20,	$40,	4		; 08
+		dc.b  $1C,		$20,	$60,	4		; 0C
+		dc.b  $80,		$40,	0,		5		; 10
+; ===========================================================================
+
+ScrapStomp:
+		tst.b	obRoutine(a0)
+		bne.w	Sto_Action
 
 Sto_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)
@@ -92,12 +90,14 @@ Sto_Main:	; Routine 0
 
 Sto_Action:	; Routine 2
 		move.w	obX(a0),-(sp)
-		moveq	#0,d0
-		move.b	obSubtype(a0),d0
-		andi.w	#$F,d0
+		moveq	#$F,d0				; get last digit of subtype
+		and.b	obSubtype(a0),d0	; SCE optimization
+		beq.s	.type00				; skip if subtype 00
 		add.w	d0,d0
 		move.w	.index(pc,d0.w),d1
-		jsr	.index(pc,d1.w)
+		jsr	.index-2(pc,d1.w)
+
+.type00:
 		move.w	(sp)+,d4
 		tst.b	obRender(a0)
 		bpl.s	.chkdel
@@ -127,13 +127,11 @@ Sto_Action:	; Routine 2
 .delete:
 		jmp	(DeleteObject).l
 ; ===========================================================================
-.index:		dc.w .type00-.index, .type01-.index
+; ???NOTE??? Add a handle case for subtype 00 to avoid this section
+.index:
+		dc.w .type01-.index
 		dc.w .type02-.index, .type03-.index
 		dc.w .type04-.index, .type05-.index
-; ===========================================================================
-
-.type00:
-		rts
 ; ===========================================================================
 
 .type01:

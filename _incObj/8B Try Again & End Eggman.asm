@@ -5,14 +5,14 @@
 EndEggman:
 		moveq	#0,d0
 		move.b	obRoutine(a0),d0
-		move.w	EEgg_Index(pc,d0.w),d1
-		jsr	EEgg_Index(pc,d1.w)
+		jsr		EEgg_Index(pc,d0.w)
 		jmp	(DisplaySprite).l
 ; ===========================================================================
-EEgg_Index:	dc.w EEgg_Main-EEgg_Index
-		dc.w EEgg_Animate-EEgg_Index
-		dc.w EEgg_Juggle-EEgg_Index
-		dc.w EEgg_Wait-EEgg_Index
+EEgg_Index:
+		bra.s	EEgg_Main
+		bra.s	EEgg_Animate
+		bra.s	EEgg_Juggle
+		bra.w	EEgg_Wait
 
 eegg_time = objoff_30		; time between juggle motions
 ; ===========================================================================
@@ -23,7 +23,7 @@ EEgg_Main:	; Routine 0
 		move.w	#$F4,obScreenY(a0)
 		move.l	#Map_EEgg,obMap(a0)
 		move.w	#make_art_tile(ArtTile_Try_Again_Eggman,0,0),obGfx(a0)
-		move.b	#0,obRender(a0)
+		clr.b	obRender(a0)
 		move.b	#2,obPriority(a0)
 		move.b	#2,obAnim(a0)	; use "END" animation
 		cmpi.b	#6,(v_emeralds).w ; do you have all 6 emeralds?
@@ -32,7 +32,7 @@ EEgg_Main:	; Routine 0
 		move.b	#id_CreditsText,(v_tryagain).w ; load credits object
 		move.w	#9,(v_creditsnum).w ; use "TRY AGAIN" text
 		move.b	#id_TryChaos,(v_eggmanchaos).w ; load emeralds object on "TRY AGAIN" screen
-		move.b	#0,obAnim(a0)	; use "TRY AGAIN" animation
+		clr.b	obAnim(a0)	; use "TRY AGAIN" animation
 
 EEgg_Animate:	; Routine 2
 		lea	(Ani_EEgg).l,a1

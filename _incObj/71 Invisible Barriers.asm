@@ -3,14 +3,8 @@
 ; ---------------------------------------------------------------------------
 
 Invisibarrier:
-		moveq	#0,d0
-		move.b	obRoutine(a0),d0
-		move.w	Invis_Index(pc,d0.w),d1
-		jmp	Invis_Index(pc,d1.w)
-; ===========================================================================
-Invis_Index:	dc.w Invis_Main-Invis_Index
-		dc.w Invis_Solid-Invis_Index
-; ===========================================================================
+		tst.b	obRoutine(a0)
+		bne.s	Invis_Solid
 
 Invis_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)

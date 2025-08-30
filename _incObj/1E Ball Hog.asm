@@ -2,17 +2,11 @@
 ; Object 1E - Ball Hog enemy (SBZ)
 ; ---------------------------------------------------------------------------
 
-BallHog:
-		moveq	#0,d0
-		move.b	obRoutine(a0),d0
-		move.w	Hog_Index(pc,d0.w),d1
-		jmp	Hog_Index(pc,d1.w)
-; ===========================================================================
-Hog_Index:	dc.w Hog_Main-Hog_Index
-		dc.w Hog_Action-Hog_Index
-
 hog_launchflag = objoff_32		; 0 to launch a cannonball
-; ===========================================================================
+
+BallHog:
+		tst.b	obRoutine(a0)
+		bne.s	Hog_Action
 
 Hog_Main:	; Routine 0
 		move.b	#$13,obHeight(a0)
@@ -28,7 +22,7 @@ Hog_Main:	; Routine 0
 		tst.w	d1
 		bpl.s	.floornotfound
 		add.w	d1,obY(a0)
-		move.w	#0,obVelY(a0)
+		clr.w	obVelY(a0)
 		addq.b	#2,obRoutine(a0)
 
 .floornotfound:
@@ -59,8 +53,7 @@ Hog_Action:	; Routine 2
 		_move.b	#id_Cannonball,obID(a1) ; load cannonball object ($20)
 		move.w	obX(a0),obX(a1)
 		move.w	obY(a0),obY(a1)
-		move.w	#-$100,obVelX(a1) ; cannonball bounces to the left
-		move.w	#0,obVelY(a1)
+		move.l	#$FF000000,obVelX(a1)	; cannonball bounces to the left (-$100) and clear obYVel
 		moveq	#-4,d0
 		btst	#0,obStatus(a0)	; is Ball Hog facing right?
 		beq.s	.noflip		; if not, branch

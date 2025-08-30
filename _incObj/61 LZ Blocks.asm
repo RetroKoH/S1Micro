@@ -2,25 +2,24 @@
 ; Object 61 - blocks (LZ)
 ; ---------------------------------------------------------------------------
 
-LabyrinthBlock:
-		moveq	#0,d0
-		move.b	obRoutine(a0),d0
-		move.w	LBlk_Index(pc,d0.w),d1
-		jmp	LBlk_Index(pc,d1.w)
-; ===========================================================================
-LBlk_Index:	dc.w LBlk_Main-LBlk_Index
-		dc.w LBlk_Action-LBlk_Index
-
-LBlk_Var:	dc.b $10, $10		; width, height
-		dc.b $20, $C
-		dc.b $10, $10
-		dc.b $10, $10
-
 lblk_origX = objoff_34		; original x-axis position
 lblk_origY = objoff_30		; original y-axis position
 lblk_time = objoff_36		; time delay for block movement
 lblk_untouched = objoff_38	; flag block as untouched
+
 ; ===========================================================================
+;???NOTE??? Can I remove half of this???
+
+LBlk_Var:
+		dc.b $10, $10		; width, height
+		dc.b $20, $C
+		dc.b $10, $10
+		dc.b $10, $10
+; ===========================================================================
+
+LabyrinthBlock:
+		tst.b	obRoutine(a0)
+		bne.s	LBlk_Action
 
 LBlk_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)
@@ -48,12 +47,14 @@ LBlk_Main:	; Routine 0
 
 LBlk_Action:	; Routine 2
 		move.w	obX(a0),-(sp)
-		moveq	#0,d0
-		move.b	obSubtype(a0),d0
-		andi.w	#$F,d0
+		moveq	#$F,d0				; get last digit of subtype
+		and.b	obSubtype(a0),d0	; SCE optimization
+		beq.s	.type00				; skip if subtype 00
 		add.w	d0,d0
-		move.w	.index(pc,d0.w),d1
-		jsr	.index(pc,d1.w)
+		move.w	.index-2(pc,d0.w),d1
+		jsr		.index(pc,d1.w)
+
+.type00:
 		move.w	(sp)+,d4
 		tst.b	obRender(a0)
 		bpl.s	.chkdel
@@ -72,14 +73,12 @@ LBlk_Action:	; Routine 2
 		out_of_range.w	DeleteObject,lblk_origX(a0)
 		bra.w	DisplaySprite
 ; ===========================================================================
-.index:		dc.w .type00-.index, .type01-.index
+
+.index:
+		dc.w .type01-.index
 		dc.w .type02-.index, .type03-.index
 		dc.w .type04-.index, .type05-.index
 		dc.w .type06-.index, .type07-.index
-; ===========================================================================
-
-.type00:
-		rts	
 ; ===========================================================================
 
 .type01:

@@ -2,25 +2,22 @@
 ; Object 52 - moving platform blocks (MZ, LZ, SBZ)
 ; ---------------------------------------------------------------------------
 
-MovingBlock:
-		moveq	#0,d0
-		move.b	obRoutine(a0),d0
-		move.w	MBlock_Index(pc,d0.w),d1
-		jmp	MBlock_Index(pc,d1.w)
-; ===========================================================================
-MBlock_Index:	dc.w MBlock_Main-MBlock_Index
-		dc.w MBlock_Platform-MBlock_Index
-		dc.w MBlock_StandOn-MBlock_Index
-
 mblock_origX = objoff_30
 mblock_origY = objoff_32
 
+; ===========================================================================
 MBlock_Var:	dc.b $10, 0		; object width, frame number
 		dc.b $20, 1
 		dc.b $20, 2
 		dc.b $40, 3
 		dc.b $30, 4
 ; ===========================================================================
+
+MovingBlock:
+		move.b	obRoutine(a0),d0
+		subq.b	#2,d0
+		bpl.w	MBlock_StandOn
+		beq.w	MBlock_Platform
 
 MBlock_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)
@@ -66,20 +63,9 @@ MBlock_StandOn:	; Routine 4
 		moveq	#0,d1
 		move.b	obActWid(a0),d1
 		jsr	(ExitPlatform).l
-	if FixBugs
-		; MBlock_Move manipulates the stack pointer, potentially
-		; resulting in a crash. To avoid this, don't store data on
-		; the stack. We can use obejct scratch RAM instead.
 		move.w	obX(a0),objoff_38(a0)
-	else
-		move.w	obX(a0),-(sp)
-	endif
 		bsr.w	MBlock_Move
-	if FixBugs
 		move.w	objoff_38(a0),d2
-	else
-		move.w	(sp)+,d2
-	endif
 		jsr	(MvSonicOnPtfm2).l
 
 MBlock_ChkDel:
@@ -88,23 +74,19 @@ MBlock_ChkDel:
 ; ===========================================================================
 
 MBlock_Move:
-		moveq	#0,d0
-		move.b	obSubtype(a0),d0
-		andi.w	#$F,d0
+		moveq	#$F,d0				; get last digit of subtype
+		and.b	obSubtype(a0),d0	; SCE optimization
+		beq.s	MBlock_Type00		; skip if subtype 00
 		add.w	d0,d0
-		move.w	MBlock_TypeIndex(pc,d0.w),d1
-		jmp	MBlock_TypeIndex(pc,d1.w)
+		move.w	MBlock_TypeIndex-2(pc,d0.w),d1
+		jmp		MBlock_TypeIndex(pc,d1.w)
 ; ===========================================================================
-MBlock_TypeIndex:dc.w MBlock_Type00-MBlock_TypeIndex, MBlock_Type01-MBlock_TypeIndex
-		dc.w MBlock_Type02-MBlock_TypeIndex, MBlock_Type03-MBlock_TypeIndex
-		dc.w MBlock_Type02-MBlock_TypeIndex, MBlock_Type05-MBlock_TypeIndex
-		dc.w MBlock_Type06-MBlock_TypeIndex, MBlock_Type07-MBlock_TypeIndex
-		dc.w MBlock_Type08-MBlock_TypeIndex, MBlock_Type02-MBlock_TypeIndex
-		dc.w MBlock_Type0A-MBlock_TypeIndex
-; ===========================================================================
-
-MBlock_Type00:
-		rts	
+MBlock_TypeIndex:
+		dc.w MBlock_Type01-MBlock_TypeIndex, MBlock_Type02-MBlock_TypeIndex
+		dc.w MBlock_Type03-MBlock_TypeIndex, MBlock_Type02-MBlock_TypeIndex
+		dc.w MBlock_Type05-MBlock_TypeIndex, MBlock_Type06-MBlock_TypeIndex
+		dc.w MBlock_Type07-MBlock_TypeIndex, MBlock_Type08-MBlock_TypeIndex
+		dc.w MBlock_Type02-MBlock_TypeIndex, MBlock_Type0A-MBlock_TypeIndex
 ; ===========================================================================
 
 MBlock_Type01:
@@ -119,6 +101,8 @@ loc_FF26:
 		move.w	mblock_origX(a0),d1
 		sub.w	d0,d1
 		move.w	d1,obX(a0)
+
+MBlock_Type00:
 		rts	
 ; ===========================================================================
 

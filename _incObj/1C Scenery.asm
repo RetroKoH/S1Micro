@@ -3,28 +3,24 @@
 ; ---------------------------------------------------------------------------
 
 Scenery:
-		moveq	#0,d0
-		move.b	obRoutine(a0),d0
-		move.w	Scen_Index(pc,d0.w),d1
-		jmp	Scen_Index(pc,d1.w)
-; ===========================================================================
-Scen_Index:	dc.w Scen_Main-Scen_Index
-		dc.w Scen_ChkDel-Scen_Index
-; ===========================================================================
+		tst.b	obRoutine(a0)
+		bne.s	Scen_ChkDel
 
 Scen_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)
-		moveq	#0,d0
-		move.b	obSubtype(a0),d0 ; copy object subtype to d0
-		mulu.w	#$A,d0		; multiply by $A
-		lea	Scen_Values(pc,d0.w),a1
+		lea		Scen_Cannon,a1
+		tst.b	obSubtype(a0)
+		beq.s	.notbridge
+		lea		Scen_Bridge,a1
+
+.notbridge:
 		move.l	(a1)+,obMap(a0)
 		move.w	(a1)+,obGfx(a0)
 		ori.b	#4,obRender(a0)
 		move.b	(a1)+,obFrame(a0)
 		move.b	(a1)+,obActWid(a0)
 		move.b	(a1)+,obPriority(a0)
-		move.b	(a1)+,obColType(a0)
+		move.b	(a1)+,obColType(a0)		; Find a way to remove this cleanly
 
 Scen_ChkDel:	; Routine 2
 		out_of_range.w	DeleteObject
@@ -33,16 +29,14 @@ Scen_ChkDel:	; Routine 2
 ; ---------------------------------------------------------------------------
 ; Variables for object $1C are stored in an array
 ; ---------------------------------------------------------------------------
-Scen_Values:	dc.l Map_Scen                                     ; mappings address
-		dc.w make_art_tile(ArtTile_SLZ_Fireball_Launcher,2,0) ; VRAM setting
-		dc.b 0,	8, 2, 0                                   ; frame, width, priority, collision response
-		dc.l Map_Scen
-		dc.w make_art_tile(ArtTile_SLZ_Fireball_Launcher,2,0)
-		dc.b 0,	8, 2, 0
-		dc.l Map_Scen
-		dc.w make_art_tile(ArtTile_SLZ_Fireball_Launcher,2,0)
-		dc.b 0,	8, 2, 0
+Scen_Cannon:
+		dc.l Map_Scen                                     		; mappings address
+		dc.w make_art_tile(ArtTile_SLZ_Fireball_Launcher,2,0)	; VRAM setting
+		dc.b 0,	8, 2, 0                                  		; frame, width, priority, collision response
+
+Scen_Bridge:
 		dc.l Map_Bri
 		dc.w make_art_tile(ArtTile_GHZ_Bridge,2,0)
 		dc.b 1,	$10, 1,	0
+
 		even

@@ -3,16 +3,10 @@
 ; ---------------------------------------------------------------------------
 
 PowerUp:
-		moveq	#0,d0
 		move.b	obRoutine(a0),d0
-		move.w	Pow_Index(pc,d0.w),d1
-		jsr	Pow_Index(pc,d1.w)
-		bra.w	DisplaySprite
-; ===========================================================================
-Pow_Index:	dc.w Pow_Main-Pow_Index
-		dc.w Pow_Move-Pow_Index
-		dc.w Pow_Delete-Pow_Index
-; ===========================================================================
+		subq.b	#2,d0
+		beq.s	Pow_Move
+		bpl.w	Pow_Delete
 
 Pow_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)
@@ -36,24 +30,32 @@ Pow_Move:	; Routine 2
 		bpl.w	Pow_Checks	; if not, branch
 		bsr.w	SpeedToPos
 		addi.w	#$18,obVelY(a0)	; reduce object speed
-		rts	
+		bra.w	DisplaySprite
 ; ===========================================================================
 
 Pow_Checks:
 		addq.b	#2,obRoutine(a0)
 		move.w	#29,obTimeFrame(a0) ; display icon for half a second
 
-Pow_ChkEggman:
 		move.b	obAnim(a0),d0
-		cmpi.b	#1,d0		; does monitor contain Eggman?
-		bne.s	Pow_ChkSonic
-		rts			; Eggman monitor does nothing
+		add.w	d0,d0
+		move.w	Pow_Types(pc,d0.w),d0
+		jsr		Pow_Types(pc,d0.w)
+		bra.w	DisplaySprite
+; ===========================================================================
+Pow_Types:
+		dc.w Pow_Null-Pow_Types
+		dc.w Pow_Eggman-Pow_Types
+		dc.w Pow_Sonic-Pow_Types
+		dc.w Pow_Shoes-Pow_Types
+		dc.w Pow_Shield-Pow_Types
+		dc.w Pow_Invinc-Pow_Types
+		dc.w Pow_Rings-Pow_Types
+		dc.w Pow_S-Pow_Types
+		dc.w Pow_Goggles-Pow_Types
 ; ===========================================================================
 
-Pow_ChkSonic:
-		cmpi.b	#2,d0		; does monitor contain Sonic?
-		bne.s	Pow_ChkShoes
-
+Pow_Sonic:
 ExtraLife:
 		addq.b	#1,(v_lives).w	; add 1 to the number of lives you have
 		addq.b	#1,(f_lifecount).w ; update the lives counter
@@ -61,10 +63,7 @@ ExtraLife:
 		jmp	(QueueSound1).l	; play extra life music
 ; ===========================================================================
 
-Pow_ChkShoes:
-		cmpi.b	#3,d0		; does monitor contain speed shoes?
-		bne.s	Pow_ChkShield
-
+Pow_Shoes:
 		move.b	#1,(v_shoes).w	; speed up the BG music
 		move.w	#$4B0,(v_player+$34).w	; time limit for the power-up
 		move.w	#$C00,(v_sonspeedmax).w ; change Sonic's top speed
@@ -74,20 +73,14 @@ Pow_ChkShoes:
 		jmp	(QueueSound1).l		; Speed up the music
 ; ===========================================================================
 
-Pow_ChkShield:
-		cmpi.b	#4,d0		; does monitor contain a shield?
-		bne.s	Pow_ChkInvinc
-
+Pow_Shield:
 		move.b	#1,(v_shield).w	; give Sonic a shield
 		move.b	#id_ShieldItem,(v_shieldobj).w ; load shield object ($38)
 		move.w	#sfx_Shield,d0
 		jmp	(QueueSound1).l	; play shield sound
 ; ===========================================================================
 
-Pow_ChkInvinc:
-		cmpi.b	#5,d0		; does monitor contain invincibility?
-		bne.s	Pow_ChkRings
-
+Pow_Invinc:
 		move.b	#1,(v_invinc).w	; make Sonic invincible
 		move.w	#$4B0,(v_player+$32).w ; time limit for the power-up
 		move.b	#id_ShieldItem,(v_starsobj1).w ; load stars object ($3801)
@@ -100,22 +93,21 @@ Pow_ChkInvinc:
 		move.b	#4,(v_starsobj4+obAnim).w
 		tst.b	(f_lockscreen).w ; is boss mode on?
 		bne.s	Pow_NoMusic	; if yes, branch
-		if Revision<>0
-			cmpi.w	#$C,(v_air).w
-			bls.s	Pow_NoMusic
-		endif
+		cmpi.w	#$C,(v_air).w
+		bls.s	Pow_NoMusic
 		move.w	#bgm_Invincible,d0
 		jmp	(QueueSound1).l ; play invincibility music
 ; ===========================================================================
 
+Pow_Null:
+Pow_Eggman:
+Pow_S:
+Pow_Goggles:
 Pow_NoMusic:
-		rts	
+		rts		; these monitors do nothing
 ; ===========================================================================
 
-Pow_ChkRings:
-		cmpi.b	#6,d0		; does monitor contain 10 rings?
-		bne.s	Pow_ChkS
-
+Pow_Rings:
 		addi.w	#10,(v_rings).w	; add 10 rings to the number of rings you have
 		ori.b	#1,(f_ringcount).w ; update the ring counter
 		cmpi.w	#100,(v_rings).w ; check if you have 100 rings
@@ -132,16 +124,7 @@ Pow_RingSound:
 		jmp	(QueueSound1).l	; play ring sound
 ; ===========================================================================
 
-Pow_ChkS:
-		cmpi.b	#7,d0		; does monitor contain 'S'?
-		bne.s	Pow_ChkEnd
-		nop	
-
-Pow_ChkEnd:
-		rts			; 'S' and goggles monitors do nothing
-; ===========================================================================
-
 Pow_Delete:	; Routine 4
 		subq.w	#1,obTimeFrame(a0)
 		bmi.w	DeleteObject	; delete after half a second
-		rts	
+		bra.w	DisplaySprite	

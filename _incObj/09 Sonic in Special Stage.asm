@@ -28,7 +28,7 @@ Obj09_Main:	; Routine 0
 		move.l	#Map_Sonic,obMap(a0)
 		move.w	#make_art_tile(ArtTile_Sonic,0,0),obGfx(a0)
 		move.b	#4,obRender(a0)
-		move.b	#0,obPriority(a0)
+		clr.b	obPriority(a0)
 		move.b	#id_Roll,obAnim(a0)
 		bset	#2,obStatus(a0)
 		bset	#1,obStatus(a0)
@@ -41,18 +41,9 @@ Obj09_ChkDebug:	; Routine 2
 		move.w	#1,(v_debuguse).w ; change Sonic into a ring
 
 Obj09_NoDebug:
-		move.b	#0,objoff_30(a0)
-		moveq	#0,d0
-		move.b	obStatus(a0),d0
-		andi.w	#2,d0
-		move.w	Obj09_Modes(pc,d0.w),d1
-		jsr	Obj09_Modes(pc,d1.w)
-		jsr	(Sonic_LoadGfx).l
-		jmp	(DisplaySprite).l
-; ===========================================================================
-Obj09_Modes:	dc.w Obj09_OnWall-Obj09_Modes
-		dc.w Obj09_InAir-Obj09_Modes
-; ===========================================================================
+		clr.b	objoff_30(a0)
+		btst	#1,obStatus(a0)	; Use current air state to determine Control Mode
+		bne.s	Obj09_InAir
 
 Obj09_OnWall:
 		bsr.w	Obj09_Jump
@@ -75,7 +66,8 @@ Obj09_Display:
 		add.w	(v_ssrotate).w,d0
 		move.w	d0,(v_ssangle).w
 		jsr	(Sonic_Animate).l
-		rts	
+		jsr	(Sonic_LoadGfx).l
+		jmp	(DisplaySprite).l
 
 ; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
 
@@ -579,12 +571,12 @@ Obj09_ChkItems2:
 		bne.s	Obj09_ChkBumper
 		subq.b	#1,objoff_36(a0)
 		bpl.s	loc_1BEA0
-		move.b	#0,objoff_36(a0)
+		clr.b	objoff_36(a0)
 
 loc_1BEA0:
 		subq.b	#1,objoff_37(a0)
 		bpl.s	locret_1BEAC
-		move.b	#0,objoff_37(a0)
+		clr.b	objoff_37(a0)
 
 locret_1BEAC:
 		rts	
@@ -691,14 +683,10 @@ Obj09_RevStage:
 ; ===========================================================================
 
 Obj09_ChkGlass:
-		cmpi.b	#$2D,d0		; is the item a glass block?
-		beq.s	Obj09_Glass	; if yes, branch
-		cmpi.b	#$2E,d0
-		beq.s	Obj09_Glass
-		cmpi.b	#$2F,d0
-		beq.s	Obj09_Glass
+		cmpi.b	#$2D,d0			; is the item a	glass block?
+		blo.s	Obj09_NoGlass
 		cmpi.b	#$30,d0
-		bne.s	Obj09_NoGlass	; if not, branch
+		bhi.s	Obj09_NoGlass	; if not, branch
 
 Obj09_Glass:
 		bsr.w	SS_RemoveCollectedItem

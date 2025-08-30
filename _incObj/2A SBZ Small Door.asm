@@ -3,14 +3,8 @@
 ; ---------------------------------------------------------------------------
 
 AutoDoor:
-		moveq	#0,d0
-		move.b	obRoutine(a0),d0
-		move.w	ADoor_Index(pc,d0.w),d1
-		jmp	ADoor_Index(pc,d1.w)
-; ===========================================================================
-ADoor_Index:	dc.w ADoor_Main-ADoor_Index
-		dc.w ADoor_OpenShut-ADoor_Index
-; ===========================================================================
+		tst.b	obRoutine(a0)
+		bne.s	ADoor_OpenShut
 
 ADoor_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)

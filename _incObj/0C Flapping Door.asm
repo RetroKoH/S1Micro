@@ -2,18 +2,12 @@
 ; Object 0C - flapping door (LZ)
 ; ---------------------------------------------------------------------------
 
-FlapDoor:
-		moveq	#0,d0
-		move.b	obRoutine(a0),d0
-		move.w	Flap_Index(pc,d0.w),d1
-		jmp	Flap_Index(pc,d1.w)
-; ===========================================================================
-Flap_Index:	dc.w Flap_Main-Flap_Index
-		dc.w Flap_OpenClose-Flap_Index
-
 flap_time = objoff_32		; time between opening/closing
 flap_wait = objoff_30		; time until change
-; ===========================================================================
+
+FlapDoor:
+		tst.b	obRoutine(a0)
+		bne.s	Flap_OpenClose
 
 Flap_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)

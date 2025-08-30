@@ -2,18 +2,12 @@
 ; Object 2C - Jaws enemy (LZ)
 ; ---------------------------------------------------------------------------
 
-Jaws:
-		moveq	#0,d0
-		move.b	obRoutine(a0),d0
-		move.w	Jaws_Index(pc,d0.w),d1
-		jmp	Jaws_Index(pc,d1.w)
-; ===========================================================================
-Jaws_Index:	dc.w Jaws_Main-Jaws_Index
-		dc.w Jaws_Turn-Jaws_Index
-
 jaws_timecount = objoff_30
 jaws_timedelay = objoff_32
-; ===========================================================================
+
+Jaws:
+		tst.b	obRoutine(a0)
+		bne.s	Jaws_Turn
 
 Jaws_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)

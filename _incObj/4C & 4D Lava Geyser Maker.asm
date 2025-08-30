@@ -6,14 +6,7 @@ GeyserMaker:
 		moveq	#0,d0
 		move.b	obRoutine(a0),d0
 		move.w	GMake_Index(pc,d0.w),d1
-	if FixBugs
-		; Deletion has been changed to eliminate potential
-		; double-delete and display-and-delete bugs.
 		jmp	GMake_Index(pc,d1.w)
-	else
-		jsr	GMake_Index(pc,d1.w)
-		bra.w	Geyser_ChkDel
-	endif
 ; ===========================================================================
 GMake_Index:	dc.w GMake_Main-GMake_Index
 		dc.w GMake_Wait-GMake_Index
@@ -51,11 +44,7 @@ GMake_Wait:	; Routine 2
 		addq.b	#2,obRoutine(a0) ; if Sonic is within range, goto GMake_ChkType
 
 .cancel:
-	if FixBugs
-		; Deletion has been changed to eliminate potential
-		; double-delete and display-and-delete bugs.
 		out_of_range.w	DeleteObject
-	endif
 		rts	
 ; ===========================================================================
 
@@ -88,36 +77,23 @@ GMake_ChkType:	; Routine 4
 		tst.b	obSubtype(a0)	; is object type 00 (geyser) ?
 		beq.s	GMake_Display	; if yes, branch
 		addq.b	#2,obRoutine(a0)
-	if FixBugs
-		; Deletion has been changed to eliminate potential
-		; double-delete and display-and-delete bugs.
 		out_of_range.w	DeleteObject
-	endif
 		rts	
 ; ===========================================================================
 
 GMake_Display:	; Routine 8
-	if FixBugs
-		; Deletion has been changed to eliminate potential
-		; double-delete and display-and-delete bugs.
 		out_of_range.w	DeleteObject
-	endif
 		lea	(Ani_Geyser).l,a1
 		bsr.w	AnimateSprite
-		bsr.w	DisplaySprite
-		rts	
+		bra.w	DisplaySprite
 ; ===========================================================================
 
 GMake_Delete:	; Routine $A
-		move.b	#0,obAnim(a0)
+		clr.b	obAnim(a0)
 		move.b	#2,obRoutine(a0)
 		tst.b	obSubtype(a0)
 		beq.w	DeleteObject
-	if FixBugs
-		; Deletion has been changed to eliminate potential
-		; double-delete and display-and-delete bugs.
 		out_of_range.w	DeleteObject
-	endif
 		rts	
 
 
@@ -129,16 +105,10 @@ LavaGeyser:
 		moveq	#0,d0
 		move.b	obRoutine(a0),d0
 		move.w	Geyser_Index(pc,d0.w),d1
-	if FixBugs
-		; The call to DisplaySprite has been moved to prevent a
-		; display-and-delete bug.
 		jmp	Geyser_Index(pc,d1.w)
-	else
-		jsr	Geyser_Index(pc,d1.w)
-		bra.w	DisplaySprite
-	endif
 ; ===========================================================================
-Geyser_Index:	dc.w Geyser_Main-Geyser_Index
+Geyser_Index:
+		dc.w Geyser_Main-Geyser_Index
 		dc.w Geyser_Action-Geyser_Index
 		dc.w loc_EFFC-Geyser_Index
 		dc.w Geyser_Delete-Geyser_Index
@@ -204,68 +174,40 @@ Geyser_Main:	; Routine 0
 		addq.b	#2,obRoutine(a1)
 		bset	#4,obGfx(a1)
 		addi.w	#$100,obY(a1)
-		move.b	#0,obPriority(a1)
+		clr.b	obPriority(a1)
 		move.w	objoff_30(a0),objoff_30(a1)
 		move.l	objoff_3C(a0),objoff_3C(a1)
-		move.b	#0,obSubtype(a0)
+		clr.b	obSubtype(a0)
 
 .sound:
 		move.w	#sfx_Burning,d0
 		jsr	(QueueSound2).l	; play flame sound
 
 Geyser_Action:	; Routine 2
-		moveq	#0,d0
-		move.b	obSubtype(a0),d0
-		add.w	d0,d0
-		move.w	Geyser_Types(pc,d0.w),d1
-		jsr	Geyser_Types(pc,d1.w)
-		bsr.w	SpeedToPos
-		lea	(Ani_Geyser).l,a1
-		bsr.w	AnimateSprite
-
-Geyser_ChkDel:
-		out_of_range.w	DeleteObject
-	if FixBugs
-		; Moved to prevent a delete-and-display bug.
-		bra.w	DisplaySprite
-	else
-		rts	
-	endif
-; ===========================================================================
-Geyser_Types:	dc.w Geyser_Type00-Geyser_Types
-		dc.w Geyser_Type01-Geyser_Types
-; ===========================================================================
-
-Geyser_Type00:
 		addi.w	#$18,obVelY(a0)	; increase object's falling speed
 		move.w	objoff_30(a0),d0
 		cmp.w	obY(a0),d0
-		bhs.s	locret_EFDA
+		bhs.s	loc_EFFA
 		addq.b	#4,obRoutine(a0)
 		movea.l	objoff_3C(a0),a1
 		move.b	#3,obAnim(a1)
-
-locret_EFDA:
-		rts	
-; ===========================================================================
-
-Geyser_Type01:
-		addi.w	#$18,obVelY(a0)	; increase object's falling speed
-		move.w	objoff_30(a0),d0
-		cmp.w	obY(a0),d0
-		bhs.s	locret_EFFA
-		addq.b	#4,obRoutine(a0)
-		movea.l	objoff_3C(a0),a1
+		tst.b	obSubtype(a0)
+		beq.s	loc_EFFA
 		move.b	#1,obAnim(a1)
 
-locret_EFFA:
-		rts	
+loc_EFFA:
+		bsr.w	SpeedToPos
+		lea	(Ani_Geyser).l,a1
+		bsr.w	AnimateSprite
+Geyser_ChkDel:
+		out_of_range.w	DeleteObject
+		bra.w	DisplaySprite
 ; ===========================================================================
 
 loc_EFFC:	; Routine 4
 		movea.l	objoff_3C(a0),a1
 		cmpi.b	#6,obRoutine(a1)
-		beq.w	Geyser_Delete
+		beq.w	DeleteObject
 		move.w	obY(a1),d0
 		addi.w	#$60,d0
 		move.w	d0,obY(a0)
@@ -282,19 +224,21 @@ loc_F026:
 		moveq	#$E,d1
 
 loc_F02E:
+; ???NOTE??? This animates the same way the Water Surface does
+; COULD I add a new Sync routine to allow these to animate?
 		subq.b	#1,obTimeFrame(a0)
 		bpl.s	loc_F04C
 		move.b	#7,obTimeFrame(a0)
 		addq.b	#1,obAniFrame(a0)
 		cmpi.b	#2,obAniFrame(a0)
 		blo.s	loc_F04C
-		move.b	#0,obAniFrame(a0)
+		clr.b	obAniFrame(a0)
 
 loc_F04C:
 		move.b	obAniFrame(a0),d0
 		add.b	d1,d0
 		move.b	d0,obFrame(a0)
-		bra.w	Geyser_ChkDel
+		bra.s	Geyser_ChkDel
 ; ===========================================================================
 
 Geyser_Delete:	; Routine 6

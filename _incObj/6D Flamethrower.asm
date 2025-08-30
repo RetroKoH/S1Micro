@@ -3,14 +3,8 @@
 ; ---------------------------------------------------------------------------
 
 Flamethrower:
-		moveq	#0,d0
-		move.b	obRoutine(a0),d0
-		move.w	Flame_Index(pc,d0.w),d1
-		jmp	Flame_Index(pc,d1.w)
-; ===========================================================================
-Flame_Index:	dc.w Flame_Main-Flame_Index
-		dc.w Flame_Action-Flame_Index
-; ===========================================================================
+		tst.b	obRoutine(a0)
+		bne.s	Flame_Action
 
 Flame_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)
@@ -48,7 +42,7 @@ Flame_Action:	; Routine 2
 loc_E57A:
 		lea	(Ani_Flame).l,a1
 		bsr.w	AnimateSprite
-		move.b	#0,obColType(a0)
+		clr.b	obColType(a0)
 		move.b	objoff_36(a0),d0
 		cmp.b	obFrame(a0),d0
 		bne.s	Flame_ChkDel

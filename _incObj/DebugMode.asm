@@ -3,31 +3,25 @@
 ; ---------------------------------------------------------------------------
 
 DebugMode:
-		moveq	#0,d0
-		move.b	(v_debuguse).w,d0
-		move.w	Debug_Index(pc,d0.w),d1
-		jmp	Debug_Index(pc,d1.w)
-; ===========================================================================
-Debug_Index:	dc.w Debug_Main-Debug_Index
-		dc.w Debug_Action-Debug_Index
-; ===========================================================================
+		tst.b	(v_debuguse).w
+		bne.w	Debug_Action
 
 Debug_Main:	; Routine 0
 		addq.b	#2,(v_debuguse).w
 		move.w	(v_limittop2).w,(v_limittopdb).w ; buffer level x-boundary
 		move.w	(v_limitbtm1).w,(v_limitbtmdb).w ; buffer level y-boundary
-		move.w	#0,(v_limittop2).w
+		clr.w	(v_limittop2).w
 		move.w	#$720,(v_limitbtm1).w
 		andi.w	#$7FF,(v_player+obY).w
 		andi.w	#$7FF,(v_screenposy).w
 		andi.w	#$3FF,(v_bgscreenposy).w
-		move.b	#0,obFrame(a0)
+		clr.b	obFrame(a0)
 		move.b	#id_Walk,obAnim(a0)
 		cmpi.b	#id_Special,(v_gamemode).w ; is game mode $10 (special stage)?
 		bne.s	.islevel	; if not, branch
 
-		move.w	#0,(v_ssrotate).w ; stop special stage rotating
-		move.w	#0,(v_ssangle).w ; make special stage "upright"
+		clr.w	(v_ssrotate).w ; stop special stage rotating
+		clr.w	(v_ssangle).w ; make special stage "upright"
 		moveq	#6,d0		; use 6th debug item list
 		bra.s	.selectlist
 ; ===========================================================================
@@ -43,7 +37,7 @@ Debug_Main:	; Routine 0
 		move.w	(a2)+,d6
 		cmp.b	(v_debugitem).w,d6 ; have you gone past the last item?
 		bhi.s	.noreset	; if not, branch
-		move.b	#0,(v_debugitem).w ; back to start of list
+		clr.b	(v_debugitem).w ; back to start of list
 
 .noreset:
 		bsr.w	Debug_ShowItem

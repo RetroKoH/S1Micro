@@ -140,7 +140,7 @@ Mon_Display:	; Routine 8
 
 Mon_BreakOpen:	; Routine 4
 		addq.b	#2,obRoutine(a0)
-		move.b	#0,obColType(a0)
+		clr.b	obColType(a0)
 		bsr.w	FindFreeObj
 		bne.s	Mon_Explode
 		_move.b	#id_PowerUp,obID(a1) ; load monitor contents object
