@@ -2,44 +2,44 @@
 ; Object 82 - Eggman (SBZ2)
 ; ---------------------------------------------------------------------------
 
-ScrapEgg_Create:
-		clr.b	ob2ndRout(a0)
-		addq.b	#2,obRoutine(a0)
-		move.b	#3,obPriority(a0)
-		move.l	#Map_SEgg,obMap(a0)
-		move.w	#make_art_tile(ArtTile_Eggman,0,0),obGfx(a0)
-		move.b	#$84,obRender(a0)
-
 ScrapEggman:
 		moveq	#0,d0
 		move.b	obRoutine(a0),d0
-		jmp	SEgg_Index(pc,d0.w)
+		move.w	SEgg_Index(pc,d0.w),d1
+		jmp		SEgg_Index(pc,d1.w)
 ; ===========================================================================
 SEgg_Index:
-		bra.s SEgg_Main
-		bra.s SEgg_Eggman
-		bra.w SEgg_Switch
+		dc.w SEgg_Main-SEgg_Index
+		dc.w SEgg_Eggman-SEgg_Index
+		dc.w SEgg_Switch-SEgg_Index
 ; ===========================================================================
 
 SEgg_Main:	; Routine 0
 		move.w	#boss_sbz2_x+$110,obX(a0)
 		move.w	#boss_sbz2_y+$94,obY(a0)
-		bsr.s	ScrapEgg_Create
+		bclr	#0,obStatus(a0)
+		clr.b	ob2ndRout(a0)
+		move.b	#2,obRoutine(a0)
+		move.b	#3,obPriority(a0)
+		move.l	#Map_SEgg,obMap(a0)
+		move.w	#make_art_tile(ArtTile_Eggman,0,0),obGfx(a0)
+		move.b	#$84,obRender(a0)
 		move.b	#$20,obActWid(a0)
 
-		jsr	(FindNextFreeObj).l
+		jsr		(FindNextFreeObj).l
 		bne.s	SEgg_Eggman
 		move.l	a0,objoff_34(a1)
-		_move.b	#id_ScrapEggman,obID(a1) ; load switch object
+		_move.b	#id_ScrapEggman,obID(a1)	; load switch object
 		move.w	#boss_sbz2_x+$E0,obX(a1)
 		move.w	#boss_sbz2_y+$AC,obY(a1)
-
-		move.l	a0,-(sp)
-		movea.l	a1,a0
-		bsr.s	ScrapEgg_Create
-		movea.l	(sp)+,a0
-		addq.b	#2,obRoutine(a1)
+		clr.b	ob2ndRout(a1)
+		move.b	#4,obRoutine(a1)
+		move.b	#3,obPriority(a1)
+		move.l	#Map_But,obMap(a1)
+		move.w	#make_art_tile(ArtTile_Eggman_Button,0,0),obGfx(a1)
+		move.b	#$84,obRender(a1)
 		move.b	#$10,obActWid(a1)
+		clr.b	obFrame(a1)
 
 SEgg_Eggman:	; Routine 2
 		moveq	#0,d0

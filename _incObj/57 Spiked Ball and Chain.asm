@@ -12,8 +12,8 @@ sball_speed = objoff_3E		; rate of spin (2 bytes)
 SpikeBall:
 		move.b	obRoutine(a0),d0
 		subq.b	#2,d0
-		bpl.w	SBall_Display
 		beq.w	SBall_Move
+		bpl.w	SBall_Display
 
 SBall_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)

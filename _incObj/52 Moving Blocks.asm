@@ -16,8 +16,8 @@ MBlock_Var:	dc.b $10, 0		; object width, frame number
 MovingBlock:
 		move.b	obRoutine(a0),d0
 		subq.b	#2,d0
-		bpl.w	MBlock_StandOn
 		beq.w	MBlock_Platform
+		bpl.w	MBlock_StandOn
 
 MBlock_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)

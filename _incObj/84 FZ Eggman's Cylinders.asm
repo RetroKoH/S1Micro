@@ -137,7 +137,7 @@ loc_1A5B4:
 		subq.w	#1,objoff_32(a1)
 		clr.w	objoff_30(a1)
 		subq.b	#2,obRoutine(a0)
-		rts	
+		bra.s	locret_1A602	
 ; ===========================================================================
 
 loc_1A5D4:
@@ -154,7 +154,7 @@ loc_1A5E4:
 		clr.b	objoff_29(a0)
 
 locret_1A602:
-		rts	
+		bra.w	loc_1A4EA	
 ; ===========================================================================
 
 loc_1A604:
@@ -175,7 +175,7 @@ loc_1A626:
 		subq.w	#1,objoff_32(a1)
 		clr.w	objoff_30(a1)
 		subq.b	#2,obRoutine(a0)
-		rts	
+		bra.s	locret_1A674	
 ; ===========================================================================
 
 loc_1A646:
@@ -192,4 +192,4 @@ loc_1A656:
 		clr.b	objoff_29(a0)
 
 locret_1A674:
-		rts	
+		bra.w	loc_1A4EA	

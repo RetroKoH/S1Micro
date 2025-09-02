@@ -29,10 +29,15 @@ Smab_Solid:	; Routine 2
 		move.w	obX(a0),d4
 		bsr.w	SolidObject
 		btst	#3,obStatus(a0)	; has Sonic landed on the block?
-		bne.w	RememberState	; if not, branch
-		cmpi.b	#id_Roll,sonicAniFrame(a0) ; is Sonic rolling/jumping?
-		bne.w	RememberState	; if not, branch
+		bne.s	.smash			; if yes, branch
 
+.notspinning:
+		bra.w	RememberState
+; ===========================================================================
+
+.smash:
+		cmpi.b	#id_Roll,sonicAniFrame(a0) ; is Sonic rolling/jumping?
+		bne.s	.notspinning	; if not, branch
 		move.w	hitcount(a0),(v_itembonus).w
 		bset	#2,obStatus(a1)
 		move.w	#$E07,obHeight(a1)	; Height and Width

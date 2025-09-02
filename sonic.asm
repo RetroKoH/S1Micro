@@ -8819,7 +8819,7 @@ Nem_CreditText:	binclude	"artnem/Ending - Credits.nem"
 Nem_EndStH:	binclude	"artnem/Ending - StH Logo.nem"
 		even
 
-		rept $40
+		rept $10
 		dc.b $FF
 		endm
 
@@ -9124,8 +9124,8 @@ ObjPos_End:	binclude	"objpos/ending.bin"
 ObjPos_Null:	dc.b $FF, $FF, 0, 0, 0,	0
 
 
-; Reduced padding from $63C to $80 bytes
-		rept $80
+; Reduced padding from $63C to $10 bytes
+		rept $10
 		dc.b $FF
 		endm
 

@@ -94,8 +94,8 @@ Sto_Action:	; Routine 2
 		and.b	obSubtype(a0),d0	; SCE optimization
 		beq.s	.type00				; skip if subtype 00
 		add.w	d0,d0
-		move.w	.index(pc,d0.w),d1
-		jsr	.index-2(pc,d1.w)
+		move.w	.index-2(pc,d0.w),d1
+		jsr	.index(pc,d1.w)
 
 .type00:
 		move.w	(sp)+,d4

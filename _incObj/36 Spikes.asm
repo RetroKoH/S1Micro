@@ -76,10 +76,10 @@ Spik_Upright:
 		bpl.s	Spik_Display
 
 Spik_Hurt:
-		tst.b	(v_invinc).w	; is Sonic invincible?
-		bne.s	Spik_Display	; if yes, branch
-		tst.w	flashtime(a0)	; Is Sonic flashing after being hurt?
-		bne.s	Spik_Display	; If so, skip getting hurt
+		tst.b	(v_invinc).w			; is Sonic invincible?
+		bne.s	Spik_Display			; if yes, branch
+		tst.w	(v_player+flashtime).w	; Is Sonic flashing after being hurt?
+		bne.s	Spik_Display			; If so, skip getting hurt
 		move.l	a0,-(sp)
 		movea.l	a0,a2
 		lea	(v_player).w,a0
@@ -97,9 +97,8 @@ loc_CF20:
 		movea.l	(sp)+,a0
 
 Spik_Display:
-		bsr.w	DisplaySprite
 		out_of_range.w	DeleteObject,spik_origX(a0)
-		rts	
+		bra.w	DisplaySprite
 ; ===========================================================================
 
 Spik_Type0x:

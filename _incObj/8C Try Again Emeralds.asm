@@ -90,4 +90,4 @@ loc_5B96:
 		move.w	d0,obScreenY(a0)
 
 locret_5BBA:
-		rts	
+		jmp	(DisplaySprite).l	
