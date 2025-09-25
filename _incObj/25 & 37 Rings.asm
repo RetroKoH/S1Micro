@@ -198,8 +198,7 @@ RLoss_Count:	; Routine 0
 .makerings:
 		_move.b	#id_RingLoss,obID(a1) ; load bouncing ring object
 		addq.b	#2,obRoutine(a1)
-		move.b	#8,obHeight(a1)
-		move.b	#8,obWidth(a1)
+		move.w	#$0808,obHeight(a1)	; Height and Width
 		move.w	obX(a0),obX(a1)
 		move.w	obY(a0),obY(a1)
 		move.l	#Map_Ring,obMap(a1)

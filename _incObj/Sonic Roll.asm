@@ -33,8 +33,7 @@ Sonic_ChkRoll:
 
 .roll:
 		bset	#2,obStatus(a0)
-		move.b	#$E,obHeight(a0)
-		move.b	#7,obWidth(a0)
+		move.w	#$0E07,obHeight(a0)	; Height and Width
 		move.b	#id_Roll,obAnim(a0) ; use "rolling" animation
 		addq.w	#5,obY(a0)
 		move.w	#sfx_Roll,d0

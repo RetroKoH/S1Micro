@@ -23,10 +23,8 @@ BossPlasma_Main:	; Routine 0
 		move.l	#Map_PLaunch,obMap(a0)
 		clr.b	obAnim(a0)
 		move.b	#3,obPriority(a0)
-		move.b	#8,obWidth(a0)
-		move.b	#8,obHeight(a0)
-		move.b	#4,obRender(a0)
-		bset	#7,obRender(a0)
+		move.w	#$0808,obHeight(a0)	; Height and Width
+		move.b	#$84,obRender(a0)	; #4 + bit 7 set
 		addq.b	#2,obRoutine(a0)
 
 BossPlasma_Generator:; Routine 2
@@ -86,8 +84,7 @@ BossPlasma_Loop:
 		move.b	#8,obRoutine(a1)
 		move.w	#make_art_tile(ArtTile_FZ_Boss,1,0),obGfx(a1)
 		move.l	#Map_Plasma,obMap(a1)
-		move.b	#$C,obHeight(a1)
-		move.b	#$C,obWidth(a1)
+		move.w	#$0C0C,obHeight(a1)	; Height and Width
 		clr.b	obColType(a1)
 		move.b	#3,obPriority(a1)
 		move.w	#$3E,obSubtype(a1)

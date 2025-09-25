@@ -15,7 +15,7 @@ Newt_Main:	; Routine 0
 		move.b	#4,obRender(a0)
 		move.b	#4,obPriority(a0)
 		move.b	#$14,obActWid(a0)
-		move.w	#$1008,obHeight(a0)			; Height and Width
+		move.w	#$1008,obHeight(a0)	; Height and Width
 
 ; ???NOTE??? This can be trimmed down considerably, both here and in Fixed
 Newt_Action:	; Routine 2

@@ -22,7 +22,7 @@ Moto_Main:	; Routine 0
 		move.b	#$14,obActWid(a0)
 		tst.b	obAnim(a0)	; is object a smoke trail?
 		bne.s	.smoke		; if yes, branch
-		move.w	#$E08,obHeight(a0)			; Height and Width
+		move.w	#$0E08,obHeight(a0)	; Height and Width
 		move.b	#$C,obColType(a0)
 		bsr.w	ObjectFall
 		jsr	(ObjFloorDist).l

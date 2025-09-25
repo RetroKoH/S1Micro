@@ -65,11 +65,7 @@ BossFinal_LoadBoss:
 		move.b	(a3)+,obRoutine(a1)
 		move.b	(a3)+,obAnim(a1)
 		move.b	(a3)+,obPriority(a1)
-		if Revision=0
-		move.b	(a3)+,obWidth(a1)
-		else
-			move.b	(a3)+,obActWid(a1)
-		endif
+		move.b	(a3)+,obActWid(a1)
 		move.b	(a3)+,obHeight(a1)
 		move.b	#4,obRender(a1)
 		bset	#7,obRender(a0)

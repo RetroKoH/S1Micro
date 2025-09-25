@@ -14,7 +14,7 @@ Yad_Main:	; Routine 0
 		move.b	#4,obRender(a0)
 		move.b	#4,obPriority(a0)
 		move.b	#$14,obActWid(a0)
-		move.w	#$1108,obHeight(a0)			; Height and Width
+		move.w	#$1108,obHeight(a0)	; Height and Width
 		move.b	#$CC,obColType(a0)
 		bsr.w	ObjectFall
 		bsr.w	ObjFloorDist

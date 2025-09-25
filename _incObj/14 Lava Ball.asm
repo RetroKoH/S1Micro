@@ -17,7 +17,7 @@ LavaBall:
 
 LBall_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)
-		move.w	#$808,obHeight(a0)				; Height and Width
+		move.w	#$0808,obHeight(a0)				; Height and Width
 		move.l	#Map_Fire,obMap(a0)
 		move.w	#make_art_tile(ArtTile_MZ_Fireball,0,0),obGfx(a0)
 		cmpi.b	#id_SLZ,(v_zone).w	; check if level is SLZ

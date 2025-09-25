@@ -24,8 +24,7 @@ locret_16950:
 ; ===========================================================================
 
 Cat_Main:	; Routine 0
-		move.b	#7,obHeight(a0)
-		move.b	#8,obWidth(a0)
+		move.w	#$0708,obHeight(a0)	; Height and Width
 		jsr	(ObjectFall).l
 		jsr	(ObjFloorDist).l
 		tst.w	d1

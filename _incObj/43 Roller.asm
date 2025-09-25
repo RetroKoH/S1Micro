@@ -7,7 +7,7 @@ Roller:
 		bne.s	Roll_Action
 
 Roll_Main:	; Routine 0
-		move.w	#$E08,obHeight(a0)			; Height and Width
+		move.w	#$0E08,obHeight(a0)	; Height and Width
 		bsr.w	ObjectFall
 		bsr.w	ObjFloorDist
 		tst.w	d1

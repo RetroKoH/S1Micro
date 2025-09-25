@@ -10,7 +10,7 @@ Burrobot:
 
 Burro_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)
-		move.w	#$1308,obHeight(a0)
+		move.w	#$1308,obHeight(a0)	; Height and Width
 		move.l	#Map_Burro,obMap(a0)
 		move.w	#make_art_tile(ArtTile_Burrobot,0,0),obGfx(a0)
 		ori.b	#4,obRender(a0)

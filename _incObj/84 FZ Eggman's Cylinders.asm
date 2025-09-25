@@ -38,10 +38,8 @@ EggmanCylinder_Main:	; Routine
 		move.w	(a1)+,obX(a0)
 		move.w	(a1),obY(a0)
 		move.w	(a1)+,objoff_38(a0)
-		move.b	#$20,obHeight(a0)
-		move.b	#$60,obWidth(a0)
+		move.w	#$6060,obHeight(a0)	; Height and Width
 		move.b	#$20,obActWid(a0)
-		move.b	#$60,obHeight(a0)
 		move.b	#3,obPriority(a0)
 		addq.b	#2,obRoutine(a0)
 

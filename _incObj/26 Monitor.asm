@@ -17,8 +17,7 @@ Mon_Index:	dc.w Mon_Main-Mon_Index
 
 Mon_Main:	; Routine 0
 		addq.b	#2,obRoutine(a0)
-		move.b	#$E,obHeight(a0)
-		move.b	#$E,obWidth(a0)
+		move.w	#$E0E,obHeight(a0)
 		move.l	#Map_Monitor,obMap(a0)
 		move.w	#make_art_tile(ArtTile_Monitor,0,0),obGfx(a0)
 		move.b	#4,obRender(a0)

@@ -52,8 +52,7 @@ Gar_MakeFire:	; Routine 2
 
 Gar_FireBall:	; Routine 4
 		addq.b	#2,obRoutine(a0)
-		move.b	#8,obHeight(a0)
-		move.b	#8,obWidth(a0)
+		move.w	#$0808,obHeight(a0)	; Height and Width
 		move.l	#Map_Gar,obMap(a0)
 		move.w	#make_art_tile(ArtTile_LZ_Gargoyle,0,0),obGfx(a0)
 		ori.b	#4,obRender(a0)
