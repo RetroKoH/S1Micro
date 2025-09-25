@@ -1,4 +1,4 @@
- AS V1.42 Beta [Bld 212] - Source File sonic.asm - Page 1 - 9/25/2025 13:51:35
+ AS V1.42 Beta [Bld 212] - Source File sonic.asm - Page 1 - 9/25/2025 14:7:0
 
 
        1/       0 :                     ;  =========================================================================
@@ -5846,7 +5846,7 @@
     2091/    2E94 : (MACRO)              		locVRAM	ArtTile_Sonic_Team_Font*tile_size
     2091/    2E94 : 23FC 54C0 0000                      move.l  #($40000000+(((ArtTile_Sonic_Team_Font*tile_size)&$3FFF)<<16)+(((ArtTile_Sonic_Team_Font*tile_size)&$C000)>>14)),(vdp_control_port).l
              2E9A : 00C0 0004          
-    2092/    2E9E : 41F9 0005 EFAE      		lea	(Nem_CreditText).l,a0 ; load alphabet
+    2092/    2E9E : 41F9 0005 EFB4      		lea	(Nem_CreditText).l,a0 ; load alphabet
     2093/    2EA4 : 6100 E58E           		bsr.w	NemDec
     2094/    2EA8 : 43F9 00FF 0000      		lea	(v_128x128&$FFFFFF).l,a1
     2095/    2EAE : 41F9 0002 0BD2      		lea	(Eni_JapNames).l,a0 ; load mappings for Japanese credits
@@ -7421,18 +7421,18 @@
     3019/    3FDA :                     ; ---------------------------------------------------------------------------
     3020/    3FDA :                     ; Collision index pointers
     3021/    3FDA :                     ; ---------------------------------------------------------------------------
-    3022/    3FDA : 0006 1944           ColPointers:	dc.l Col_GHZ_1	; MJ: each zone now has two entries
-    3023/    3FDE : 0006 1A24           		dc.l Col_GHZ_2
-    3024/    3FE2 : 0006 1AF4           		dc.l Col_LZ_1
-    3025/    3FE6 : 0006 1B54           		dc.l Col_LZ_2
-    3026/    3FEA : 0006 1BB4           		dc.l Col_MZ_1
-    3027/    3FEE : 0006 1C04           		dc.l Col_MZ_2
-    3028/    3FF2 : 0006 1C54           		dc.l Col_SLZ_1
-    3029/    3FF6 : 0006 1D44           		dc.l Col_SLZ_2
-    3030/    3FFA : 0006 1E44           		dc.l Col_SYZ_1
-    3031/    3FFE : 0006 1F34           		dc.l Col_SYZ_2
-    3032/    4002 : 0006 2024           		dc.l Col_SBZ_1
-    3033/    4006 : 0006 2124           		dc.l Col_SBZ_2
+    3022/    3FDA : 0006 194A           ColPointers:	dc.l Col_GHZ_1	; MJ: each zone now has two entries
+    3023/    3FDE : 0006 1A2A           		dc.l Col_GHZ_2
+    3024/    3FE2 : 0006 1AFA           		dc.l Col_LZ_1
+    3025/    3FE6 : 0006 1B5A           		dc.l Col_LZ_2
+    3026/    3FEA : 0006 1BBA           		dc.l Col_MZ_1
+    3027/    3FEE : 0006 1C08           		dc.l Col_MZ_2
+    3028/    3FF2 : 0006 1C56           		dc.l Col_SLZ_1
+    3029/    3FF6 : 0006 1D46           		dc.l Col_SLZ_2
+    3030/    3FFA : 0006 1E46           		dc.l Col_SYZ_1
+    3031/    3FFE : 0006 1F36           		dc.l Col_SYZ_2
+    3032/    4002 : 0006 2026           		dc.l Col_SBZ_1
+    3033/    4006 : 0006 2126           		dc.l Col_SBZ_2
     3034/    400A : (MACRO)              		zonewarning ColPointers,8
     3034/    400A :                     ._end:
     3035/    400A :                     ;  dc.l Col_GHZ_1 ; Pointers for Ending are missing by default.
@@ -8938,15 +8938,15 @@
     3791/    5098 : 08F8 0002 F754      		bset	#2,(v_fg_scroll_flags).w
     3792/    509E : 6100 2104           		bsr.w	LevelDataLoad
     3793/    50A2 : 6100 1FBC           		bsr.w	LoadTilesFromStart
-    3794/    50A6 : 41F9 0006 1944      		lea	(Col_GHZ_1).l,a0 ; MJ: Set first collision for ending
+    3794/    50A6 : 41F9 0006 194A      		lea	(Col_GHZ_1).l,a0 ; MJ: Set first collision for ending
     3795/    50AC : 43F8 9000           		lea	(v_collision1).w,a1
     3796/    50B0 : 6100 C7DE           		bsr.w	KosDec
-    3797/    50B4 : 41F9 0006 1A24      		lea	(Col_GHZ_2).l,a0 ; MJ: Set second collision for ending
+    3797/    50B4 : 41F9 0006 1A2A      		lea	(Col_GHZ_2).l,a0 ; MJ: Set second collision for ending
     3798/    50BA : 43F8 9300           		lea	(v_collision2).w,a1
     3799/    50BE : 6100 C7D0           		bsr.w	KosDec
     3800/    50C2 : (MACRO)              		enable_ints
     3800/    50C2 : 46FC 2300                           move    #$2300,sr
-    3801/    50C6 : 41F9 0005 E796      		lea	(Kos_EndFlowers).l,a0 ; load extra flower patterns
+    3801/    50C6 : 41F9 0005 E79C      		lea	(Kos_EndFlowers).l,a0 ; load extra flower patterns
     3802/    50CC : 43F9 00FF 1000      		lea	((v_128x128+$1000)&$FFFFFF).l,a1 ; RAM address to buffer the patterns
     3803/    50D2 : 6100 C7BC           		bsr.w	KosDec
     3804/    50D6 : 7002                		moveq	#palid_Sonic,d0
@@ -9899,7 +9899,7 @@
     3994/    5704 : (MACRO)              		locVRAM	ArtTile_Credits_Font*tile_size
     3994/    5704 : 23FC 7400 0002                      move.l  #($40000000+(((ArtTile_Credits_Font*tile_size)&$3FFF)<<16)+(((ArtTile_Credits_Font*tile_size)&$C000)>>14)),(vdp_control_port).l
              570A : 00C0 0004          
-    3995/    570E : 41F9 0005 EFAE      		lea	(Nem_CreditText).l,a0 ; load credits alphabet patterns
+    3995/    570E : 41F9 0005 EFB4      		lea	(Nem_CreditText).l,a0 ; load credits alphabet patterns
     3996/    5714 : 6100 BD1E           		bsr.w	NemDec
     3997/    5718 :                     
     3998/    5718 : (MACRO)              		clearRAM v_palette_fading
@@ -13104,7 +13104,7 @@
     5132/    7210 : 3038 FE10           		move.w	(v_zone).w,d0
     5133/    7214 : ED08                		lsl.b	#6,d0
     5134/    7216 : EA48                		lsr.w	#5,d0
-    5135/    7218 : 41F9 0006 5988      		lea	(Level_Index).l,a0
+    5135/    7218 : 41F9 0006 598A      		lea	(Level_Index).l,a0
     5136/    721E : 3030 0000           		move.w	(a0,d0.w),d0
     5137/    7222 : 41F0 0000           		lea	(a0,d0.w),a0
     5138/    7226 : 43F8 8000           		lea	(v_lvllayout).w,a1
@@ -46947,7 +46947,7 @@
 (1)   38/   14B66 : 1032 0000           		move.b	(a2,d0.w),d0		; MJ: load correct Collision ID based on the Block ID
 (1)   39/   14B6A : 0240 00FF           		andi.w	#$FF,d0			; MJ: clear the left byte
 (1)   40/   14B6E : 67E4                		beq.s	.isblank		; MJ: if collision ID is 00, branch
-(1)   41/   14B70 : 45F9 0005 F844      		lea	(AngleMap).l,a2		; MJ: load angle map data to a2
+(1)   41/   14B70 : 45F9 0005 F84A      		lea	(AngleMap).l,a2		; MJ: load angle map data to a2
 (1)   42/   14B76 : 18B2 0000           		move.b	(a2,d0.w),(a4)		; MJ: collect correct angle based on the collision ID
 (1)   43/   14B7A : E948                		lsl.w	#4,d0			; MJ: multiply collision ID by 10
 (1)   44/   14B7C : 3203                		move.w	d3,d1			; MJ: load X position
@@ -46966,7 +46966,7 @@
 (1)   57/   14B98 :                     .noflip2:
 (1)   58/   14B98 : 0241 000F           		andi.w	#$F,d1			; MJ: get only within 10 (d1 is pixel based on the collision block)
 (1)   59/   14B9C : D240                		add.w	d0,d1			; MJ: add collision ID (x10) (d0 is the collision block being read)
-(1)   60/   14B9E : 45F9 0005 F944      		lea	(CollArray1).l,a2	; MJ: load collision array
+(1)   60/   14B9E : 45F9 0005 F94A      		lea	(CollArray1).l,a2	; MJ: load collision array
 (1)   61/   14BA4 : 1032 1000           		move.b	(a2,d1.w),d0		; MJ: load solid value
 (1)   62/   14BA8 : 4880                		ext.w	d0			; MJ: clear left byte
 (1)   63/   14BAA : BD44                		eor.w	d6,d4			; MJ: set ceiling/wall bits
@@ -47028,7 +47028,7 @@
 (1)  119/   14C0E : 1032 0000           		move.b	(a2,d0.w),d0
 (1)  120/   14C12 : 0240 00FF           		andi.w	#$FF,d0
 (1)  121/   14C16 : 67E4                		beq.s	.isblank2
-(1)  122/   14C18 : 45F9 0005 F844      		lea	(AngleMap).l,a2
+(1)  122/   14C18 : 45F9 0005 F84A      		lea	(AngleMap).l,a2
 (1)  123/   14C1E : 18B2 0000           		move.b	(a2,d0.w),(a4)
 (1)  124/   14C22 : E948                		lsl.w	#4,d0
 (1)  125/   14C24 : 3203                		move.w	d3,d1
@@ -47047,7 +47047,7 @@
 (1)  138/   14C40 :                     .noflip2:
 (1)  139/   14C40 : 0241 000F           		andi.w	#$F,d1
 (1)  140/   14C44 : D240                		add.w	d0,d1
-(1)  141/   14C46 : 45F9 0005 F944      		lea	(CollArray1).l,a2
+(1)  141/   14C46 : 45F9 0005 F94A      		lea	(CollArray1).l,a2
 (1)  142/   14C4C : 1032 1000           		move.b	(a2,d1.w),d0
 (1)  143/   14C50 : 4880                		ext.w	d0
 (1)  144/   14C52 : BD44                		eor.w	d6,d4
@@ -47102,7 +47102,7 @@
 (1)   23/   14CA6 : 1032 0000           		move.b	(a2,d0.w),d0		; MJ: load correct colision ID based on the block ID
 (1)   24/   14CAA : 0240 00FF           		andi.w	#$FF,d0			; MJ: keep within FF
 (1)   25/   14CAE : 67E4                		beq.s	loc_14B1E		; MJ: if it's null, branch
-(1)   26/   14CB0 : 45F9 0005 F844      		lea	(AngleMap).l,a2		; MJ: load angle map data to a2
+(1)   26/   14CB0 : 45F9 0005 F84A      		lea	(AngleMap).l,a2		; MJ: load angle map data to a2
 (1)   27/   14CB6 : 18B2 0000           		move.b	(a2,d0.w),(a4)		; MJ: load angle set location based on collision ID
 (1)   28/   14CBA : E948                		lsl.w	#4,d0			; MJ: multiply by 10
 (1)   29/   14CBC : 3202                		move.w	d2,d1			; MJ: load Y position
@@ -47121,7 +47121,7 @@
 (1)   42/   14CD8 :                     loc_14B62:
 (1)   43/   14CD8 : 0241 000F           		andi.w	#$F,d1
 (1)   44/   14CDC : D240                		add.w	d0,d1
-(1)   45/   14CDE : 45F9 0006 0944      		lea	(CollArray2).l,a2
+(1)   45/   14CDE : 45F9 0006 094A      		lea	(CollArray2).l,a2
 (1)   46/   14CE4 : 1032 1000           		move.b	(a2,d1.w),d0
 (1)   47/   14CE8 : 4880                		ext.w	d0
 (1)   48/   14CEA : BD44                		eor.w	d6,d4
@@ -47183,7 +47183,7 @@
 (1)  104/   14D4E : 1032 0000           		move.b	(a2,d0.w),d0
 (1)  105/   14D52 : 0240 00FF           		andi.w	#$FF,d0
 (1)  106/   14D56 : 67E4                		beq.s	loc_14BC6
-(1)  107/   14D58 : 45F9 0005 F844      		lea	(AngleMap).l,a2
+(1)  107/   14D58 : 45F9 0005 F84A      		lea	(AngleMap).l,a2
 (1)  108/   14D5E : 18B2 0000           		move.b	(a2,d0.w),(a4)
 (1)  109/   14D62 : E948                		lsl.w	#4,d0
 (1)  110/   14D64 : 3202                		move.w	d2,d1
@@ -47202,7 +47202,7 @@
 (1)  123/   14D80 :                     loc_14C0A:
 (1)  124/   14D80 : 0241 000F           		andi.w	#$F,d1
 (1)  125/   14D84 : D240                		add.w	d0,d1
-(1)  126/   14D86 : 45F9 0006 0944      		lea	(CollArray2).l,a2
+(1)  126/   14D86 : 45F9 0006 094A      		lea	(CollArray2).l,a2
 (1)  127/   14D8C : 1032 1000           		move.b	(a2,d1.w),d0
 (1)  128/   14D90 : 4880                		ext.w	d0
 (1)  129/   14D92 : BD44                		eor.w	d6,d4
@@ -47240,8 +47240,8 @@
     7006/   14DC2 :                     ; to process can be found in the J2ME version, in a file called 'blkcol.bct'.
     7007/   14DC2 :                     ; ---------------------------------------------------------------------------
     7008/   14DC2 :                     
-    7009/   14DC2 : =$5F944              RawColBlocks		equ CollArray1
-    7010/   14DC2 : =$5F944              ConvRowColBlocks	equ CollArray1
+    7009/   14DC2 : =$5F94A              RawColBlocks		equ CollArray1
+    7010/   14DC2 : =$5F94A              ConvRowColBlocks	equ CollArray1
     7011/   14DC2 :                     
     7012/   14DC2 :                     ; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
     7013/   14DC2 :                     
@@ -47251,8 +47251,8 @@
     7017/   14DC4 :                     ; ---------------------------------------------------------------------------
     7018/   14DC4 :                     		; The raw format stores the collision data column by column for the normal collision array.
     7019/   14DC4 :                     		; This makes a copy of the data, but stored row by row, for the rotated collision array.
-    7020/   14DC4 : 43F9 0005 F944      		lea	(RawColBlocks).l,a1	; Source location of raw collision block data
-    7021/   14DCA : 45F9 0005 F944      		lea	(ConvRowColBlocks).l,a2	; Destinatation location for row-converted collision block data
+    7020/   14DC4 : 43F9 0005 F94A      		lea	(RawColBlocks).l,a1	; Source location of raw collision block data
+    7021/   14DCA : 45F9 0005 F94A      		lea	(ConvRowColBlocks).l,a2	; Destinatation location for row-converted collision block data
     7022/   14DD0 :                     
     7023/   14DD0 : 363C 00FF           		move.w	#$100-1,d3		; Number of blocks in collision data
     7024/   14DD4 :                     
@@ -47281,11 +47281,11 @@
     7047/   14DFA : 51CB FFD8           		dbf	d3,.blockLoop		; Loop for each block in the raw collision block data
     7048/   14DFE :                     
     7049/   14DFE :                     		; This then converts the collision data into the final collision arrays
-    7050/   14DFE : 43F9 0005 F944      		lea	(ConvRowColBlocks).l,a1
-    7051/   14E04 : 45F9 0006 0944      		lea	(CollArray2).l,a2	; Convert the row-converted collision block data into final rotated collision array
+    7050/   14DFE : 43F9 0005 F94A      		lea	(ConvRowColBlocks).l,a1
+    7051/   14E04 : 45F9 0006 094A      		lea	(CollArray2).l,a2	; Convert the row-converted collision block data into final rotated collision array
     7052/   14E0A : 610C                		bsr.s	.convertArray
-    7053/   14E0C : 43F9 0005 F944      		lea	(RawColBlocks).l,a1
-    7054/   14E12 : 45F9 0005 F944      		lea	(CollArray1).l,a2	; Convert the raw collision block data into final normal collision array
+    7053/   14E0C : 43F9 0005 F94A      		lea	(RawColBlocks).l,a1
+    7054/   14E12 : 45F9 0005 F94A      		lea	(CollArray1).l,a2	; Convert the raw collision block data into final normal collision array
     7055/   14E18 :                     
     7056/   14E18 :                     
     7057/   14E18 :                     .convertArray:
@@ -62112,12 +62112,12 @@
     8125/   1B76E :                     ; Special stage layout pointers
     8126/   1B76E :                     ; ---------------------------------------------------------------------------
     8127/   1B76E :                     SS_LayoutIndex:
-    8128/   1B76E : 0006 2224           		dc.l SS_1
-    8129/   1B772 : 0006 249E           		dc.l SS_2
-    8130/   1B776 : 0006 28B0           		dc.l SS_3
-    8131/   1B77A : 0006 2C0C           		dc.l SS_4
-    8132/   1B77E : 0006 30E6           		dc.l SS_5
-    8133/   1B782 : 0006 3596           		dc.l SS_6
+    8128/   1B76E : 0006 2226           		dc.l SS_1
+    8129/   1B772 : 0006 24A0           		dc.l SS_2
+    8130/   1B776 : 0006 28B2           		dc.l SS_3
+    8131/   1B77A : 0006 2C0E           		dc.l SS_4
+    8132/   1B77E : 0006 30E8           		dc.l SS_5
+    8133/   1B782 : 0006 3598           		dc.l SS_6
     8134/   1B786 : (MACRO)              		even
     8135/   1B786 :                     
     8136/   1B786 :                     ; ---------------------------------------------------------------------------
@@ -63506,7 +63506,7 @@
 (1)   40/   1C154 : 6A30                		bpl.s	AniArt_GHZ_Bigflower ; branch if not 0
 (1)   41/   1C156 :                     
 (1)   42/   1C156 : 11FC 0005 F7B1      		move.b	#6-1,(v_lani0_time).w ; time to display each frame
-(1)   43/   1C15C : 43F9 0006 3888      		lea	(Art_GhzWater).l,a1 ; load waterfall patterns
+(1)   43/   1C15C : 43F9 0006 388A      		lea	(Art_GhzWater).l,a1 ; load waterfall patterns
 (1)   44/   1C162 : 1038 F7B0           		move.b	(v_lani0_frame).w,d0
 (1)   45/   1C166 : 5238 F7B0           		addq.b	#1,(v_lani0_frame).w ; increment frame counter
 (1)   46/   1C16A : 0240 0001           		andi.w	#1,d0		; there are only 2 frames
@@ -63529,7 +63529,7 @@
 (1)   61/   1C18A : 6A30                		bpl.s	AniArt_GHZ_Smallflower
 (1)   62/   1C18C :                     
 (1)   63/   1C18C : 11FC 000F F7B3      		move.b	#$10-1,(v_lani1_time).w
-(1)   64/   1C192 : 43F9 0006 3A88      		lea	(Art_GhzFlower1).l,a1 ; load big flower patterns
+(1)   64/   1C192 : 43F9 0006 3A8A      		lea	(Art_GhzFlower1).l,a1 ; load big flower patterns
 (1)   65/   1C198 : 1038 F7B2           		move.b	(v_lani1_frame).w,d0
 (1)   66/   1C19C : 5238 F7B2           		addq.b	#1,(v_lani1_frame).w
 (1)   67/   1C1A0 : 0240 0001           		andi.w	#1,d0
@@ -63568,7 +63568,7 @@
 (1)   98/   1C1EC : (MACRO)              		locVRAM	ArtTile_GHZ_Small_Flower*tile_size
 (1)   98/   1C1EC : 23FC 6D80 0001                      move.l  #($40000000+(((ArtTile_GHZ_Small_Flower*tile_size)&$3FFF)<<16)+(((ArtTile_GHZ_Small_Flower*tile_size)&$C000)>>14)),(vdp_control_port).l
             1C1F2 : 00C0 0004          
-(1)   99/   1C1F6 : 43F9 0006 3E88      		lea	(Art_GhzFlower2).l,a1 ; load small flower patterns
+(1)   99/   1C1F6 : 43F9 0006 3E8A      		lea	(Art_GhzFlower2).l,a1 ; load small flower patterns
 (1)  100/   1C1FC : 43F1 0000           		lea	(a1,d0.w),a1	; jump to appropriate tile
 (1)  101/   1C200 : 323C 000B           		move.w	#.size-1,d1
 (1)  102/   1C204 : 6100 02B4           		bsr.w	LoadTiles
@@ -63592,7 +63592,7 @@
 (1)  120/   1C212 : 6A38                		bpl.s	AniArt_MZ_Magma	; branch if not 0
 (1)  121/   1C214 :                     
 (1)  122/   1C214 : 11FC 0013 F7B1      		move.b	#$14-1,(v_lani0_time).w ; time to display each frame
-(1)  123/   1C21A : 43F9 0006 4308      		lea	(Art_MzLava1).l,a1 ; load lava surface patterns
+(1)  123/   1C21A : 43F9 0006 430A      		lea	(Art_MzLava1).l,a1 ; load lava surface patterns
 (1)  124/   1C220 : 7000                		moveq	#0,d0
 (1)  125/   1C222 : 1038 F7B0           		move.b	(v_lani0_frame).w,d0
 (1)  126/   1C226 : 5200                		addq.b	#1,d0		; increment frame counter
@@ -63617,7 +63617,7 @@
 (1)  143/   1C252 : 11FC 0001 F7B3      		move.b	#2-1,(v_lani1_time).w ; time between each gfx change
 (1)  144/   1C258 : 7000                		moveq	#0,d0
 (1)  145/   1C25A : 1038 F7B0           		move.b	(v_lani0_frame).w,d0 ; get surface lava frame number
-(1)  146/   1C25E : 49F9 0006 4608      		lea	(Art_MzLava2).l,a4 ; load magma gfx
+(1)  146/   1C25E : 49F9 0006 460A      		lea	(Art_MzLava2).l,a4 ; load magma gfx
 (1)  147/   1C264 : EE58                		ror.w	#7,d0		; multiply frame num by $200
 (1)  148/   1C266 : D8C0                		adda.w	d0,a4		; jump to appropriate tile
 (1)  149/   1C268 : (MACRO)              		locVRAM	ArtTile_MZ_Animated_Magma*tile_size
@@ -63652,7 +63652,7 @@
 (1)  176/   1C2AE : 6A00 0036           		bpl.w	.end		; branch if not 0
 (1)  177/   1C2B2 :                     		
 (1)  178/   1C2B2 : 11FC 0007 F7B5      		move.b	#8-1,(v_lani2_time).w ; time to display each frame
-(1)  179/   1C2B8 : 43F9 0006 4C08      		lea	(Art_MzTorch).l,a1 ; load torch patterns
+(1)  179/   1C2B8 : 43F9 0006 4C0A      		lea	(Art_MzTorch).l,a1 ; load torch patterns
 (1)  180/   1C2BE : 7000                		moveq	#0,d0
 (1)  181/   1C2C0 : 1038 F7B6           		move.b	(v_lani3_frame).w,d0
 (1)  182/   1C2C4 : 5238 F7B6           		addq.b	#1,(v_lani3_frame).w ; increment frame counter
@@ -63688,7 +63688,7 @@
 (1)  210/   1C2F8 : 6A52                		bpl.s	.chk_smokepuff2 ; branch if not 0
 (1)  211/   1C2FA :                     		
 (1)  212/   1C2FA : 11FC 0007 F7B1      		move.b	#8-1,(v_lani0_time).w ; time to display each frame
-(1)  213/   1C300 : 43F9 0006 4F08      		lea	(Art_SbzSmoke).l,a1 ; load smoke patterns
+(1)  213/   1C300 : 43F9 0006 4F0A      		lea	(Art_SbzSmoke).l,a1 ; load smoke patterns
 (1)  214/   1C306 : (MACRO)              		locVRAM	ArtTile_SBZ_Smoke_Puff_1*tile_size
 (1)  214/   1C306 : 23FC 4900 0002                      move.l  #($40000000+(((ArtTile_SBZ_Smoke_Puff_1*tile_size)&$3FFF)<<16)+(((ArtTile_SBZ_Smoke_Puff_1*tile_size)&$C000)>>14)),(vdp_control_port).l
             1C30C : 00C0 0004          
@@ -63709,7 +63709,7 @@
 (1)  229/   1C336 :                     .clearsky:
 (1)  230/   1C336 : 323C 0005           		move.w	#(.size/2)-1,d1
 (1)  231/   1C33A : 6100 017E           		bsr.w	LoadTiles
-(1)  232/   1C33E : 43F9 0006 4F08      		lea	(Art_SbzSmoke).l,a1
+(1)  232/   1C33E : 43F9 0006 4F0A      		lea	(Art_SbzSmoke).l,a1
 (1)  233/   1C344 : 323C 0005           		move.w	#(.size/2)-1,d1
 (1)  234/   1C348 : 6000 0170           		bra.w	LoadTiles	; load blank tiles for no smoke puff
 (1)  235/   1C34C :                     ; ===========================================================================
@@ -63727,7 +63727,7 @@
 (1)  247/   1C35C : 6A3E                		bpl.s	.end		; branch if not 0
 (1)  248/   1C35E :                     		
 (1)  249/   1C35E : 11FC 0007 F7B3      		move.b	#8-1,(v_lani1_time).w ; time to display each frame
-(1)  250/   1C364 : 43F9 0006 4F08      		lea	(Art_SbzSmoke).l,a1 ; load smoke patterns
+(1)  250/   1C364 : 43F9 0006 4F0A      		lea	(Art_SbzSmoke).l,a1 ; load smoke patterns
 (1)  251/   1C36A : (MACRO)              		locVRAM	ArtTile_SBZ_Smoke_Puff_2*tile_size
 (1)  251/   1C36A : 23FC 4A80 0002                      move.l  #($40000000+(((ArtTile_SBZ_Smoke_Puff_2*tile_size)&$3FFF)<<16)+(((ArtTile_SBZ_Smoke_Puff_2*tile_size)&$C000)>>14)),(vdp_control_port).l
             1C370 : 00C0 0004          
@@ -63764,7 +63764,7 @@
 (1)  282/   1C3A2 : 6A4E                		bpl.s	AniArt_Ending_SmallFlower ; branch if not 0
 (1)  283/   1C3A4 :                     		
 (1)  284/   1C3A4 : 11FC 0007 F7B3      		move.b	#8-1,(v_lani1_time).w
-(1)  285/   1C3AA : 43F9 0006 3A88      		lea	(Art_GhzFlower1).l,a1 ; load big flower patterns
+(1)  285/   1C3AA : 43F9 0006 3A8A      		lea	(Art_GhzFlower1).l,a1 ; load big flower patterns
 (1)  286/   1C3B0 : 45F9 00FF 1000      		lea	((v_128x128+$1000)&$FFFFFF).l,a2 ; load 2nd big flower from RAM
 (1)  287/   1C3B6 : 1038 F7B2           		move.b	(v_lani1_frame).w,d0
 (1)  288/   1C3BA : 5238 F7B2           		addq.b	#1,(v_lani1_frame).w ; increment frame counter
@@ -63806,7 +63806,7 @@
 (1)  320/   1C416 : (MACRO)              		locVRAM	ArtTile_GHZ_Small_Flower*tile_size
 (1)  320/   1C416 : 23FC 6D80 0001                      move.l  #($40000000+(((ArtTile_GHZ_Small_Flower*tile_size)&$3FFF)<<16)+(((ArtTile_GHZ_Small_Flower*tile_size)&$C000)>>14)),(vdp_control_port).l
             1C41C : 00C0 0004          
-(1)  321/   1C420 : 43F9 0006 3E88      		lea	(Art_GhzFlower2).l,a1 ; load small flower patterns
+(1)  321/   1C420 : 43F9 0006 3E8A      		lea	(Art_GhzFlower2).l,a1 ; load small flower patterns
 (1)  322/   1C426 : 43F1 0000           		lea	(a1,d0.w),a1	; jump to appropriate tile
 (1)  323/   1C42A : 323C 000B           		move.w	#.size-1,d1
 (1)  324/   1C42E : 6000 008A           		bra.w	LoadTiles
@@ -64078,7 +64078,7 @@
 (1)  570/   1C61A :                     ; loc_1C518:
 (1)  571/   1C61A :                     .loadTiles:
 (1)  572/   1C61A : 0478 01C0 F7BE      		subi.w	#.size*tile_size,(v_gfxbigring).w	; Count-down the 14 tiles we're going to load now
-(1)  573/   1C620 : 43F9 0006 8260      		lea	(Art_BigRing).l,a1 ; load giant ring patterns
+(1)  573/   1C620 : 43F9 0006 8232      		lea	(Art_BigRing).l,a1 ; load giant ring patterns
 (1)  574/   1C626 : 7000                		moveq	#0,d0
 (1)  575/   1C628 : 3038 F7BE           		move.w	(v_gfxbigring).w,d0
 (1)  576/   1C62C : 43F1 0000           		lea	(a1,d0.w),a1
@@ -65855,22 +65855,22 @@
 (1)   22/   1D638 : (MACRO)              	lhead	plcid_MZ,	Nem_MZ,		plcid_MZ2,	Blk16_MZ,	Blk128_MZ,	bgm_MZ,		palid_MZ	; Marble
 (1)   22/   1D638 : 0804 43CE                   dc.l (plcid_MZ<<24)+Nem_MZ
 (1)   22/   1D63C : 0904 3C64                   dc.l (plcid_MZ2<<24)+Blk16_MZ
-(1)   22/   1D640 : 0004 6C12                   dc.l Blk128_MZ
+(1)   22/   1D640 : 0004 6B54                   dc.l Blk128_MZ
 (1)   22/   1D644 : 0083 0505                   dc.b 0, bgm_MZ, palid_MZ, palid_MZ
 (1)   23/   1D648 : (MACRO)              	lhead	plcid_SLZ,	Nem_SLZ,	plcid_SLZ2,	Blk16_SLZ,	Blk128_SLZ,	bgm_SLZ,	palid_SLZ	; Star Light
-(1)   23/   1D648 : 0A04 8836                   dc.l (plcid_SLZ<<24)+Nem_SLZ
-(1)   23/   1D64C : 0B04 81A6                   dc.l (plcid_SLZ2<<24)+Blk16_SLZ
-(1)   23/   1D650 : 0004 C38A                   dc.l Blk128_SLZ
+(1)   23/   1D648 : 0A04 883C                   dc.l (plcid_SLZ<<24)+Nem_SLZ
+(1)   23/   1D64C : 0B04 81AC                   dc.l (plcid_SLZ2<<24)+Blk16_SLZ
+(1)   23/   1D650 : 0004 C390                   dc.l Blk128_SLZ
 (1)   23/   1D654 : 0084 0606                   dc.b 0, bgm_SLZ, palid_SLZ, palid_SLZ
 (1)   24/   1D658 : (MACRO)              	lhead	plcid_SYZ,	Nem_SYZ,	plcid_SYZ2,	Blk16_SYZ,	Blk128_SYZ,	bgm_SYZ,	palid_SYZ	; Spring Yard
-(1)   24/   1D658 : 0C04 E9A8                   dc.l (plcid_SYZ<<24)+Nem_SYZ
-(1)   24/   1D65C : 0D04 E114                   dc.l (plcid_SYZ2<<24)+Blk16_SYZ
-(1)   24/   1D660 : 0005 20D4                   dc.l Blk128_SYZ
+(1)   24/   1D658 : 0C04 E9AE                   dc.l (plcid_SYZ<<24)+Nem_SYZ
+(1)   24/   1D65C : 0D04 E11A                   dc.l (plcid_SYZ2<<24)+Blk16_SYZ
+(1)   24/   1D660 : 0005 20DA                   dc.l Blk128_SYZ
 (1)   24/   1D664 : 0085 0707                   dc.b 0, bgm_SYZ, palid_SYZ, palid_SYZ
 (1)   25/   1D668 : (MACRO)              	lhead	plcid_SBZ,	Nem_SBZ,	plcid_SBZ2,	Blk16_SBZ,	Blk128_SBZ,	bgm_SBZ,	palid_SBZ1	; Scrap Brain
-(1)   25/   1D668 : 0E05 4F74                   dc.l (plcid_SBZ<<24)+Nem_SBZ
-(1)   25/   1D66C : 0F05 4202                   dc.l (plcid_SBZ2<<24)+Blk16_SBZ
-(1)   25/   1D670 : 0005 7720                   dc.l Blk128_SBZ
+(1)   25/   1D668 : 0E05 4F7A                   dc.l (plcid_SBZ<<24)+Nem_SBZ
+(1)   25/   1D66C : 0F05 4208                   dc.l (plcid_SBZ2<<24)+Blk16_SBZ
+(1)   25/   1D670 : 0005 7726                   dc.l Blk128_SBZ
 (1)   25/   1D674 : 0086 0808                   dc.b 0, bgm_SBZ, palid_SBZ1, palid_SBZ1
 (1)   26/   1D678 : (MACRO)              	zonewarning LevelHeaders,$10
 (1)   26/   1D678 :                     ._end:
@@ -66180,7 +66180,7 @@
 (1)  158/   1D86E :                     ; ---------------------------------------------------------------------------
 (1)  159/   1D86E : 0008                PLC_SLZ:	dc.w ((PLC_SLZ2-PLC_SLZ-2)/6)-1
 (1)  160/   1D870 : (MACRO)              		plcm	Nem_SLZ,       ArtTile_Level                    ; SLZ main patterns
-(1)  160/   1D870 : 0004 8836                   dc.l Nem_SLZ
+(1)  160/   1D870 : 0004 883C                   dc.l Nem_SLZ
 (1)  160/   1D874 : 0000                        dc.w (ArtTile_Level)*$20
 (1)  161/   1D876 : (MACRO)              		plcm	Nem_Bomb,      ArtTile_Bomb                     ; bomb enemy
 (1)  161/   1D876 : 0003 7496                   dc.l Nem_Bomb
@@ -66232,7 +66232,7 @@
 (1)  180/   1D8CC :                     ; ---------------------------------------------------------------------------
 (1)  181/   1D8CC : 0004                PLC_SYZ:	dc.w ((PLC_SYZ2-PLC_SYZ-2)/6)-1
 (1)  182/   1D8CE : (MACRO)              		plcm	Nem_SYZ,       ArtTile_Level               ; SYZ main patterns
-(1)  182/   1D8CE : 0004 E9A8                   dc.l Nem_SYZ
+(1)  182/   1D8CE : 0004 E9AE                   dc.l Nem_SYZ
 (1)  182/   1D8D2 : 0000                        dc.w (ArtTile_Level)*$20
 (1)  183/   1D8D4 : (MACRO)              		plcm	Nem_Crabmeat,  ArtTile_Crabmeat            ; crabmeat enemy
 (1)  183/   1D8D4 : 0003 492E                   dc.l Nem_Crabmeat
@@ -66278,7 +66278,7 @@
 (1)  200/   1D91E :                     ; ---------------------------------------------------------------------------
 (1)  201/   1D91E : 000B                PLC_SBZ:	dc.w ((PLC_SBZ2-PLC_SBZ-2)/6)-1
 (1)  202/   1D920 : (MACRO)              		plcm	Nem_SBZ,       ArtTile_Level                   ; SBZ main patterns
-(1)  202/   1D920 : 0005 4F74                   dc.l Nem_SBZ
+(1)  202/   1D920 : 0005 4F7A                   dc.l Nem_SBZ
 (1)  202/   1D924 : 0000                        dc.w (ArtTile_Level)*$20
 (1)  203/   1D926 : (MACRO)              		plcm	Nem_Stomper,   ArtTile_SBZ_Moving_Block_Short  ; moving platform and stomper
 (1)  203/   1D926 : 0003 37A6                   dc.l Nem_Stomper
@@ -66368,13 +66368,13 @@
 (1)  238/   1D9C0 :                     ; ---------------------------------------------------------------------------
 (1)  239/   1D9C0 : 0005                PLC_Boss:	dc.w ((PLC_Bossend-PLC_Boss-2)/6)-1
 (1)  240/   1D9C2 : (MACRO)              		plcm	Nem_Eggman,   ArtTile_Eggman           ; Eggman main patterns
-(1)  240/   1D9C2 : 0005 A070                   dc.l Nem_Eggman
+(1)  240/   1D9C2 : 0005 A076                   dc.l Nem_Eggman
 (1)  240/   1D9C6 : 8000                        dc.w (ArtTile_Eggman)*$20
 (1)  241/   1D9C8 : (MACRO)              		plcm	Nem_Weapons,  ArtTile_Eggman_Weapons   ; Eggman's weapons
-(1)  241/   1D9C8 : 0005 A8D4                   dc.l Nem_Weapons
+(1)  241/   1D9C8 : 0005 A8DA                   dc.l Nem_Weapons
 (1)  241/   1D9CC : 8D80                        dc.w (ArtTile_Eggman_Weapons)*$20
 (1)  242/   1D9CE : (MACRO)              		plcm	Nem_Prison,   ArtTile_Prison_Capsule   ; prison capsule
-(1)  242/   1D9CE : 0005 ABBE                   dc.l Nem_Prison
+(1)  242/   1D9CE : 0005 ABC4                   dc.l Nem_Prison
 (1)  242/   1D9D2 : 93A0                        dc.w (ArtTile_Prison_Capsule)*$20
 (1)  243/   1D9D4 : (MACRO)              		plcm	Nem_Bomb,     ArtTile_Eggman_Spikeball ; bomb enemy (gets overwritten)
 (1)  243/   1D9D4 : 0003 7496                   dc.l Nem_Bomb
@@ -66383,7 +66383,7 @@
 (1)  244/   1D9DA : 0003 2516                   dc.l Nem_SlzSpike
 (1)  244/   1D9DE : A300                        dc.w (ArtTile_Eggman_Spikeball)*$20
 (1)  245/   1D9E0 : (MACRO)              		plcm	Nem_Exhaust,  ArtTile_Eggman_Exhaust   ; exhaust flame
-(1)  245/   1D9E0 : 0005 C956                   dc.l Nem_Exhaust
+(1)  245/   1D9E0 : 0005 C95C                   dc.l Nem_Exhaust
 (1)  245/   1D9E4 : A540                        dc.w (ArtTile_Eggman_Exhaust)*$20
 (1)  246/   1D9E6 :                     PLC_Bossend:
 (1)  247/   1D9E6 :                     ; ---------------------------------------------------------------------------
@@ -66538,13 +66538,13 @@
 (1)  333/   1DAB4 : 0002 E67E                   dc.l Nem_Stalk
 (1)  333/   1DAB8 : 6B00                        dc.w (ArtTile_GHZ_Flower_Stalk)*$20
 (1)  334/   1DABA : (MACRO)              		plcm	Nem_EndFlower, ArtTile_Ending_Flowers   ; flowers
-(1)  334/   1DABA : 0005 ED26                   dc.l Nem_EndFlower
+(1)  334/   1DABA : 0005 ED2C                   dc.l Nem_EndFlower
 (1)  334/   1DABE : 7400                        dc.w (ArtTile_Ending_Flowers)*$20
 (1)  335/   1DAC0 : (MACRO)              		plcm	Nem_EndEm,     ArtTile_Ending_Emeralds  ; emeralds
-(1)  335/   1DAC0 : 0005 CA76                   dc.l Nem_EndEm
+(1)  335/   1DAC0 : 0005 CA7C                   dc.l Nem_EndEm
 (1)  335/   1DAC4 : 78A0                        dc.w (ArtTile_Ending_Emeralds)*$20
 (1)  336/   1DAC6 : (MACRO)              		plcm	Nem_EndSonic,  ArtTile_Ending_Sonic     ; Sonic
-(1)  336/   1DAC6 : 0005 CC74                   dc.l Nem_EndSonic
+(1)  336/   1DAC6 : 0005 CC7A                   dc.l Nem_EndSonic
 (1)  336/   1DACA : 7C20                        dc.w (ArtTile_Ending_Sonic)*$20
 (1)  337/   1DACC : (MACRO)              		plcm	Nem_Rabbit,    ArtTile_Ending_Rabbit    ; rabbit
 (1)  337/   1DACC : 0003 A11A                   dc.l Nem_Rabbit
@@ -66568,7 +66568,7 @@
 (1)  343/   1DAF0 : 0003 A8D6                   dc.l Nem_Squirrel
 (1)  343/   1DAF4 : B660                        dc.w (ArtTile_Ending_Squirrel)*$20
 (1)  344/   1DAF6 : (MACRO)              		plcm	Nem_EndStH,    ArtTile_Ending_STH       ; "SONIC THE HEDGEHOG"
-(1)  344/   1DAF6 : 0005 F5AC                   dc.l Nem_EndStH
+(1)  344/   1DAF6 : 0005 F5B2                   dc.l Nem_EndStH
 (1)  344/   1DAFA : B8A0                        dc.w (ArtTile_Ending_STH)*$20
 (1)  345/   1DAFC :                     PLC_Endingend:
 (1)  346/   1DAFC :                     ; ---------------------------------------------------------------------------
@@ -66576,13 +66576,13 @@
 (1)  348/   1DAFC :                     ; ---------------------------------------------------------------------------
 (1)  349/   1DAFC : 0002                PLC_TryAgain:	dc.w ((PLC_TryAgainend-PLC_TryAgain-2)/6)-1
 (1)  350/   1DAFE : (MACRO)              		plcm	Nem_EndEm,      ArtTile_Try_Again_Emeralds ; emeralds
-(1)  350/   1DAFE : 0005 CA76                   dc.l Nem_EndEm
+(1)  350/   1DAFE : 0005 CA7C                   dc.l Nem_EndEm
 (1)  350/   1DB02 : 78A0                        dc.w (ArtTile_Try_Again_Emeralds)*$20
 (1)  351/   1DB04 : (MACRO)              		plcm	Nem_TryAgain,   ArtTile_Try_Again_Eggman   ; Eggman
-(1)  351/   1DB04 : 0005 DE52                   dc.l Nem_TryAgain
+(1)  351/   1DB04 : 0005 DE58                   dc.l Nem_TryAgain
 (1)  351/   1DB08 : 7C20                        dc.w (ArtTile_Try_Again_Eggman)*$20
 (1)  352/   1DB0A : (MACRO)              		plcm	Nem_CreditText, ArtTile_Credits_Font       ; credits alphabet
-(1)  352/   1DB0A : 0005 EFAE                   dc.l Nem_CreditText
+(1)  352/   1DB0A : 0005 EFB4                   dc.l Nem_CreditText
 (1)  352/   1DB0E : B400                        dc.w (ArtTile_Credits_Font)*$20
 (1)  353/   1DB10 :                     PLC_TryAgainend:
 (1)  354/   1DB10 :                     ; ---------------------------------------------------------------------------
@@ -66593,7 +66593,7 @@
 (1)  358/   1DB12 : 0003 402A                   dc.l Nem_SbzBlock
 (1)  358/   1DB16 : A300                        dc.w (ArtTile_Eggman_Trap_Floor)*$20
 (1)  359/   1DB18 : (MACRO)              		plcm	Nem_Sbz2Eggman, ArtTile_Eggman            ; Eggman
-(1)  359/   1DB18 : 0005 B442                   dc.l Nem_Sbz2Eggman
+(1)  359/   1DB18 : 0005 B448                   dc.l Nem_Sbz2Eggman
 (1)  359/   1DB1C : 8000                        dc.w (ArtTile_Eggman)*$20
 (1)  360/   1DB1E : (MACRO)              		plcm	Nem_LzSwitch,   ArtTile_Eggman_Button-4   ; switch
 (1)  360/   1DB1E : 0003 2F42                   dc.l Nem_LzSwitch
@@ -66604,19 +66604,19 @@
 (1)  364/   1DB24 :                     ; ---------------------------------------------------------------------------
 (1)  365/   1DB24 : 0004                PLC_FZBoss:	dc.w ((PLC_FZBossend-PLC_FZBoss-2)/6)-1
 (1)  366/   1DB26 : (MACRO)              		plcm	Nem_FzEggman,   ArtTile_FZ_Eggman_Fleeing    ; Eggman after boss
-(1)  366/   1DB26 : 0005 C3D6                   dc.l Nem_FzEggman
+(1)  366/   1DB26 : 0005 C3DC                   dc.l Nem_FzEggman
 (1)  366/   1DB2A : 7400                        dc.w (ArtTile_FZ_Eggman_Fleeing)*$20
 (1)  367/   1DB2C : (MACRO)              		plcm	Nem_FzBoss,     ArtTile_FZ_Boss              ; FZ boss
-(1)  367/   1DB2C : 0005 BC6E                   dc.l Nem_FzBoss
+(1)  367/   1DB2C : 0005 BC74                   dc.l Nem_FzBoss
 (1)  367/   1DB30 : 6000                        dc.w (ArtTile_FZ_Boss)*$20
 (1)  368/   1DB32 : (MACRO)              		plcm	Nem_Eggman,     ArtTile_Eggman               ; Eggman main patterns
-(1)  368/   1DB32 : 0005 A070                   dc.l Nem_Eggman
+(1)  368/   1DB32 : 0005 A076                   dc.l Nem_Eggman
 (1)  368/   1DB36 : 8000                        dc.w (ArtTile_Eggman)*$20
 (1)  369/   1DB38 : (MACRO)              		plcm	Nem_Sbz2Eggman, ArtTile_FZ_Eggman_No_Vehicle ; Eggman without ship
-(1)  369/   1DB38 : 0005 B442                   dc.l Nem_Sbz2Eggman
+(1)  369/   1DB38 : 0005 B448                   dc.l Nem_Sbz2Eggman
 (1)  369/   1DB3C : 8E00                        dc.w (ArtTile_FZ_Eggman_No_Vehicle)*$20
 (1)  370/   1DB3E : (MACRO)              		plcm	Nem_Exhaust,    ArtTile_Eggman_Exhaust       ; exhaust flame
-(1)  370/   1DB3E : 0005 C956                   dc.l Nem_Exhaust
+(1)  370/   1DB3E : 0005 C95C                   dc.l Nem_Exhaust
 (1)  370/   1DB42 : A540                        dc.w (ArtTile_Eggman_Exhaust)*$20
 (1)  371/   1DB44 :                     PLC_FZBossend:
 (1)  372/   1DB44 :                     
@@ -70734,78 +70734,72 @@
     8644/   43C64 :                     Blk16_MZ:	binclude	"map16/MZ.eni"
     8645/   443CE : (MACRO)              		even
     8646/   443CE :                     Nem_MZ:		binclude	"artnem/8x8 - MZ.nem"	; MZ primary patterns
-    8647/   46C12 : (MACRO)              		even
-    8651/   46C12 :                     		binclude	"map128/MZ (JP1).kos"
-    8653/   481A6 : (MACRO)              		even
-    8654/   481A6 :                     Blk16_SLZ:	binclude	"map16/SLZ.eni"
-    8655/   48836 : (MACRO)              		even
-    8656/   48836 :                     Nem_SLZ:	binclude	"artnem/8x8 - SLZ.nem"	; SLZ primary patterns
-    8657/   4C38A : (MACRO)              		even
-    8658/   4C38A :                     Blk128_SLZ:	binclude	"map128/SLZ.kos"
-    8659/   4E114 : (MACRO)              		even
-    8660/   4E114 :                     Blk16_SYZ:	binclude	"map16/SYZ.eni"
-    8661/   4E9A8 : (MACRO)              		even
-    8662/   4E9A8 :                     Nem_SYZ:	binclude	"artnem/8x8 - SYZ.nem"	; SYZ primary patterns
-    8663/   520D4 : (MACRO)              		even
-    8664/   520D4 :                     Blk128_SYZ:	binclude	"map128/SYZ.kos"
-    8665/   54202 : (MACRO)              		even
-    8666/   54202 :                     Blk16_SBZ:	binclude	"map16/SBZ.eni"
-    8667/   54F74 : (MACRO)              		even
-    8668/   54F74 :                     Nem_SBZ:	binclude	"artnem/8x8 - SBZ.nem"	; SBZ primary patterns
-    8669/   5771F : (MACRO)              		even
-    8669/   5771F : 00                                          dc.b 0 ;ds.b 1 
-    8673/   57720 :                     		binclude	"map128/SBZ (JP1).kos"
-    8675/   5A070 : (MACRO)              		even
-    8676/   5A070 :                     ; ---------------------------------------------------------------------------
-    8677/   5A070 :                     ; Compressed graphics - bosses and ending sequence
-    8678/   5A070 :                     ; ---------------------------------------------------------------------------
-    8679/   5A070 :                     Nem_Eggman:	binclude	"artnem/Boss - Main.nem"
-    8680/   5A8D4 : (MACRO)              		even
-    8681/   5A8D4 :                     Nem_Weapons:	binclude	"artnem/Boss - Weapons.nem"
-    8682/   5ABBD : (MACRO)              		even
-    8682/   5ABBD : 00                                          dc.b 0 ;ds.b 1 
-    8683/   5ABBE :                     Nem_Prison:	binclude	"artnem/Prison Capsule.nem"
-    8684/   5B441 : (MACRO)              		even
-    8684/   5B441 : 00                                          dc.b 0 ;ds.b 1 
-    8685/   5B442 :                     Nem_Sbz2Eggman:	binclude	"artnem/Boss - Eggman in SBZ2 & FZ.nem"
-    8686/   5BC6D : (MACRO)              		even
-    8686/   5BC6D : 00                                          dc.b 0 ;ds.b 1 
-    8687/   5BC6E :                     Nem_FzBoss:	binclude	"artnem/Boss - Final Zone.nem"
-    8688/   5C3D5 : (MACRO)              		even
-    8688/   5C3D5 : 00                                          dc.b 0 ;ds.b 1 
-    8689/   5C3D6 :                     Nem_FzEggman:	binclude	"artnem/Boss - Eggman after FZ Fight.nem"
-    8690/   5C955 : (MACRO)              		even
-    8690/   5C955 : 00                                          dc.b 0 ;ds.b 1 
-    8691/   5C956 :                     Nem_Exhaust:	binclude	"artnem/Boss - Exhaust Flame.nem"
-    8692/   5CA76 : (MACRO)              		even
-    8693/   5CA76 :                     Nem_EndEm:	binclude	"artnem/Ending - Emeralds.nem"
-    8694/   5CC73 : (MACRO)              		even
-    8694/   5CC73 : 00                                          dc.b 0 ;ds.b 1 
-    8695/   5CC74 :                     Nem_EndSonic:	binclude	"artnem/Ending - Sonic.nem"
-    8696/   5DE52 : (MACRO)              		even
-    8697/   5DE52 :                     Nem_TryAgain:	binclude	"artnem/Ending - Try Again.nem"
-    8698/   5E795 : (MACRO)              		even
-    8698/   5E795 : 00                                          dc.b 0 ;ds.b 1 
-    8699/   5E796 :                     Kos_EndFlowers:	binclude	"artkos/Flowers at Ending.kos" ; ending sequence animated flowers
-    8700/   5ED26 : (MACRO)              		even
-    8701/   5ED26 :                     Nem_EndFlower:	binclude	"artnem/Ending - Flowers.nem"
-    8702/   5EFAD : (MACRO)              		even
-    8702/   5EFAD : 00                                          dc.b 0 ;ds.b 1 
-    8703/   5EFAE :                     Nem_CreditText:	binclude	"artnem/Ending - Credits.nem"
-    8704/   5F5AC : (MACRO)              		even
-    8705/   5F5AC :                     Nem_EndStH:	binclude	"artnem/Ending - StH Logo.nem"
-    8706/   5F833 : (MACRO)              		even
-    8706/   5F833 : 00                                          dc.b 0 ;ds.b 1 
-    8707/   5F834 :                     
-    8708/   5F834 :                     		rept $10
-    8709/   5F834 :                     		dc.b $FF
-    8710/   5F834 :                     		endm
-    8709/   5F834 : FF                  		dc.b $FF
-    8709/   5F835 : FF                  		dc.b $FF
-    8709/   5F836 : FF                  		dc.b $FF
-    8709/   5F837 : FF                  		dc.b $FF
-    8709/   5F838 : FF                  		dc.b $FF
-    8709/   5F839 : FF                  		dc.b $FF
+    8647/   46B54 : (MACRO)              		even
+    8651/   46B54 :                     		binclude	"map128/MZ (JP1).kos"
+    8653/   481AC : (MACRO)              		even
+    8654/   481AC :                     Blk16_SLZ:	binclude	"map16/SLZ.eni"
+    8655/   4883C : (MACRO)              		even
+    8656/   4883C :                     Nem_SLZ:	binclude	"artnem/8x8 - SLZ.nem"	; SLZ primary patterns
+    8657/   4C390 : (MACRO)              		even
+    8658/   4C390 :                     Blk128_SLZ:	binclude	"map128/SLZ.kos"
+    8659/   4E11A : (MACRO)              		even
+    8660/   4E11A :                     Blk16_SYZ:	binclude	"map16/SYZ.eni"
+    8661/   4E9AE : (MACRO)              		even
+    8662/   4E9AE :                     Nem_SYZ:	binclude	"artnem/8x8 - SYZ.nem"	; SYZ primary patterns
+    8663/   520DA : (MACRO)              		even
+    8664/   520DA :                     Blk128_SYZ:	binclude	"map128/SYZ.kos"
+    8665/   54208 : (MACRO)              		even
+    8666/   54208 :                     Blk16_SBZ:	binclude	"map16/SBZ.eni"
+    8667/   54F7A : (MACRO)              		even
+    8668/   54F7A :                     Nem_SBZ:	binclude	"artnem/8x8 - SBZ.nem"	; SBZ primary patterns
+    8669/   57725 : (MACRO)              		even
+    8669/   57725 : 00                                          dc.b 0 ;ds.b 1 
+    8673/   57726 :                     		binclude	"map128/SBZ (JP1).kos"
+    8675/   5A076 : (MACRO)              		even
+    8676/   5A076 :                     ; ---------------------------------------------------------------------------
+    8677/   5A076 :                     ; Compressed graphics - bosses and ending sequence
+    8678/   5A076 :                     ; ---------------------------------------------------------------------------
+    8679/   5A076 :                     Nem_Eggman:	binclude	"artnem/Boss - Main.nem"
+    8680/   5A8DA : (MACRO)              		even
+    8681/   5A8DA :                     Nem_Weapons:	binclude	"artnem/Boss - Weapons.nem"
+    8682/   5ABC3 : (MACRO)              		even
+    8682/   5ABC3 : 00                                          dc.b 0 ;ds.b 1 
+    8683/   5ABC4 :                     Nem_Prison:	binclude	"artnem/Prison Capsule.nem"
+    8684/   5B447 : (MACRO)              		even
+    8684/   5B447 : 00                                          dc.b 0 ;ds.b 1 
+    8685/   5B448 :                     Nem_Sbz2Eggman:	binclude	"artnem/Boss - Eggman in SBZ2 & FZ.nem"
+    8686/   5BC73 : (MACRO)              		even
+    8686/   5BC73 : 00                                          dc.b 0 ;ds.b 1 
+    8687/   5BC74 :                     Nem_FzBoss:	binclude	"artnem/Boss - Final Zone.nem"
+    8688/   5C3DB : (MACRO)              		even
+    8688/   5C3DB : 00                                          dc.b 0 ;ds.b 1 
+    8689/   5C3DC :                     Nem_FzEggman:	binclude	"artnem/Boss - Eggman after FZ Fight.nem"
+    8690/   5C95B : (MACRO)              		even
+    8690/   5C95B : 00                                          dc.b 0 ;ds.b 1 
+    8691/   5C95C :                     Nem_Exhaust:	binclude	"artnem/Boss - Exhaust Flame.nem"
+    8692/   5CA7C : (MACRO)              		even
+    8693/   5CA7C :                     Nem_EndEm:	binclude	"artnem/Ending - Emeralds.nem"
+    8694/   5CC79 : (MACRO)              		even
+    8694/   5CC79 : 00                                          dc.b 0 ;ds.b 1 
+    8695/   5CC7A :                     Nem_EndSonic:	binclude	"artnem/Ending - Sonic.nem"
+    8696/   5DE58 : (MACRO)              		even
+    8697/   5DE58 :                     Nem_TryAgain:	binclude	"artnem/Ending - Try Again.nem"
+    8698/   5E79B : (MACRO)              		even
+    8698/   5E79B : 00                                          dc.b 0 ;ds.b 1 
+    8699/   5E79C :                     Kos_EndFlowers:	binclude	"artkos/Flowers at Ending.kos" ; ending sequence animated flowers
+    8700/   5ED2C : (MACRO)              		even
+    8701/   5ED2C :                     Nem_EndFlower:	binclude	"artnem/Ending - Flowers.nem"
+    8702/   5EFB3 : (MACRO)              		even
+    8702/   5EFB3 : 00                                          dc.b 0 ;ds.b 1 
+    8703/   5EFB4 :                     Nem_CreditText:	binclude	"artnem/Ending - Credits.nem"
+    8704/   5F5B2 : (MACRO)              		even
+    8705/   5F5B2 :                     Nem_EndStH:	binclude	"artnem/Ending - StH Logo.nem"
+    8706/   5F839 : (MACRO)              		even
+    8706/   5F839 : 00                                          dc.b 0 ;ds.b 1 
+    8707/   5F83A :                     
+    8708/   5F83A :                     		rept $10
+    8709/   5F83A :                     		dc.b $FF
+    8710/   5F83A :                     		endm
     8709/   5F83A : FF                  		dc.b $FF
     8709/   5F83B : FF                  		dc.b $FF
     8709/   5F83C : FF                  		dc.b $FF
@@ -70816,169 +70810,175 @@
     8709/   5F841 : FF                  		dc.b $FF
     8709/   5F842 : FF                  		dc.b $FF
     8709/   5F843 : FF                  		dc.b $FF
-    8711/   5F844 :                     
-    8712/   5F844 :                     ; ---------------------------------------------------------------------------
-    8713/   5F844 :                     ; Collision data
-    8714/   5F844 :                     ; ---------------------------------------------------------------------------
-    8715/   5F844 :                     AngleMap:	binclude	"collide/Angle Map.bin"
-    8716/   5F944 : (MACRO)              		even
-    8717/   5F944 :                     CollArray1:	binclude	"collide/Collision Array (Normal).bin"
-    8718/   60944 : (MACRO)              		even
-    8719/   60944 :                     CollArray2:	binclude	"collide/Collision Array (Rotated).bin"
-    8720/   61944 : (MACRO)              		even
-    8721/   61944 :                     Col_GHZ_1:	binclude	"collide/GHZ1.kos"	; GHZ index 1
-    8722/   61A24 : (MACRO)              		even
-    8723/   61A24 :                     Col_GHZ_2:	binclude	"collide/GHZ2.kos"	; GHZ index 2
-    8724/   61AF4 : (MACRO)              		even
-    8725/   61AF4 :                     Col_LZ_1:	binclude	"collide/LZ1.kos"	; LZ index 1
-    8726/   61B54 : (MACRO)              		even
-    8727/   61B54 :                     Col_LZ_2:	binclude	"collide/LZ2.kos"	; LZ index 2
-    8728/   61BB4 : (MACRO)              		even
-    8729/   61BB4 :                     Col_MZ_1:	binclude	"collide/MZ1.kos"	; MZ index 1
-    8730/   61C04 : (MACRO)              		even
-    8731/   61C04 :                     Col_MZ_2:	binclude	"collide/MZ2.kos"	; MZ index 2
-    8732/   61C54 : (MACRO)              		even
-    8733/   61C54 :                     Col_SLZ_1:	binclude	"collide/SLZ1.kos"	; SLZ index 1
-    8734/   61D44 : (MACRO)              		even
-    8735/   61D44 :                     Col_SLZ_2:	binclude	"collide/SLZ2.kos"	; SLZ index 2
-    8736/   61E44 : (MACRO)              		even
-    8737/   61E44 :                     Col_SYZ_1:	binclude	"collide/SYZ1.kos"	; SYZ index 1
-    8738/   61F34 : (MACRO)              		even
-    8739/   61F34 :                     Col_SYZ_2:	binclude	"collide/SYZ2.kos"	; SYZ index 2
-    8740/   62024 : (MACRO)              		even
-    8741/   62024 :                     Col_SBZ_1:	binclude	"collide/SBZ1.kos"	; SBZ index 1
-    8742/   62124 : (MACRO)              		even
-    8743/   62124 :                     Col_SBZ_2:	binclude	"collide/SBZ2.kos"	; SBZ index 2
-    8744/   62224 : (MACRO)              		even
-    8745/   62224 :                     ; ---------------------------------------------------------------------------
-    8746/   62224 :                     ; Special Stage layouts
-    8747/   62224 :                     ; ---------------------------------------------------------------------------
-    8748/   62224 :                     SS_1:		binclude	"sslayout/1.eni"
-    8749/   6249E : (MACRO)              		even
-    8750/   6249E :                     SS_2:		binclude	"sslayout/2.eni"
-    8751/   628B0 : (MACRO)              		even
-    8752/   628B0 :                     SS_3:		binclude	"sslayout/3.eni"
-    8753/   62C0C : (MACRO)              		even
-    8754/   62C0C :                     SS_4:		binclude	"sslayout/4.eni"
-    8755/   630E6 : (MACRO)              		even
-    8761/   630E6 :                     SS_5:		binclude	"sslayout/5 (JP1).eni"
-    8762/   63596 : (MACRO)              			even
-    8763/   63596 :                     SS_6:		binclude	"sslayout/6 (JP1).eni"
-    8765/   63888 : (MACRO)              		even
-    8766/   63888 :                     ; ---------------------------------------------------------------------------
-    8767/   63888 :                     ; Animated uncompressed graphics
-    8768/   63888 :                     ; ---------------------------------------------------------------------------
-    8769/   63888 :                     Art_GhzWater:	binclude	"artunc/GHZ Waterfall.bin"
-    8770/   63A88 : (MACRO)              		even
-    8771/   63A88 :                     Art_GhzFlower1:	binclude	"artunc/GHZ Flower Large.bin"
-    8772/   63E88 : (MACRO)              		even
-    8773/   63E88 :                     Art_GhzFlower2:	binclude	"artunc/GHZ Flower Small.bin"
-    8774/   64308 : (MACRO)              		even
-    8775/   64308 :                     Art_MzLava1:	binclude	"artunc/MZ Lava Surface.bin"
-    8776/   64608 : (MACRO)              		even
-    8777/   64608 :                     Art_MzLava2:	binclude	"artunc/MZ Lava.bin"
-    8778/   64C08 : (MACRO)              		even
-    8779/   64C08 :                     Art_MzTorch:	binclude	"artunc/MZ Background Torch.bin"
-    8780/   64F08 : (MACRO)              		even
-    8781/   64F08 :                     Art_SbzSmoke:	binclude	"artunc/SBZ Background Smoke.bin"
-    8782/   65988 : (MACRO)              		even
-    8783/   65988 :                     
-    8784/   65988 :                     ; ---------------------------------------------------------------------------
-    8785/   65988 :                     ; Level layout index
-    8786/   65988 :                     ; MJ: unused data and BG data have been stripped out
-    8787/   65988 :                     ; ---------------------------------------------------------------------------
-    8788/   65988 :                     Level_Index:
-    8789/   65988 :                     		; GHZ
-    8790/   65988 : 0038                		dc.w Level_GHZ1-Level_Index
-    8791/   6598A : 01D8                		dc.w Level_GHZ2-Level_Index
-    8792/   6598C : 0398                		dc.w Level_GHZ3-Level_Index
-    8793/   6598E : 0038                		dc.w Level_Null-Level_Index
-    8794/   65990 :                     		; LZ
-    8795/   65990 : 0578                		dc.w Level_LZ1-Level_Index
-    8796/   65992 : 0758                		dc.w Level_LZ2-Level_Index
-    8797/   65994 : 08E8                		dc.w Level_LZ3-Level_Index
-    8798/   65996 : 0B88                		dc.w Level_SBZ3-Level_Index
-    8799/   65998 :                     		; MZ
-    8800/   65998 : 0DB8                		dc.w Level_MZ1-Level_Index
-    8801/   6599A : 0F98                		dc.w Level_MZ2-Level_Index
-    8802/   6599C : 1208                		dc.w Level_MZ3-Level_Index
-    8803/   6599E : 0038                		dc.w Level_Null-Level_Index
-    8804/   659A0 :                     		; SLZ
-    8805/   659A0 : 14F8                		dc.w Level_SLZ1-Level_Index
-    8806/   659A2 : 1748                		dc.w Level_SLZ2-Level_Index
-    8807/   659A4 : 1978                		dc.w Level_SLZ3-Level_Index
-    8808/   659A6 : 0038                		dc.w Level_Null-Level_Index
-    8809/   659A8 :                     		; SYZ
-    8810/   659A8 : 1C28                		dc.w Level_SYZ1-Level_Index
-    8811/   659AA : 1E28                		dc.w Level_SYZ2-Level_Index
-    8812/   659AC : 2078                		dc.w Level_SYZ3-Level_Index
-    8813/   659AE : 0038                		dc.w Level_Null-Level_Index
-    8814/   659B0 :                     		; SBZ
-    8815/   659B0 : 2318                		dc.w Level_SBZ1-Level_Index
-    8816/   659B2 : 2578                		dc.w Level_SBZ2-Level_Index
-    8817/   659B4 : 2578                		dc.w Level_SBZ2-Level_Index
-    8818/   659B6 : 0038                		dc.w Level_Null-Level_Index
-    8819/   659B8 : (MACRO)              		zonewarning Level_Index,8
-    8819/   659B8 :                     ._end:
-    8820/   659B8 :                     		; Ending
-    8821/   659B8 : 2808                		dc.w Level_End-Level_Index
-    8822/   659BA : 2808                		dc.w Level_End-Level_Index
-    8823/   659BC : 0038                		dc.w Level_Null-Level_Index
-    8824/   659BE : 0038                		dc.w Level_Null-Level_Index
-    8825/   659C0 :                     
-    8826/   659C0 :                     Level_Null:
-    8827/   659C0 :                     
-    8828/   659C0 :                     Level_GHZ1:	binclude	"levels/ghz1.kos"
-    8829/   65B60 : (MACRO)              		even
-    8830/   65B60 :                     Level_GHZ2:	binclude	"levels/ghz2.kos"
-    8831/   65D20 : (MACRO)              		even
-    8832/   65D20 :                     Level_GHZ3:	binclude	"levels/ghz3.kos"
-    8833/   65F00 : (MACRO)              		even
-    8834/   65F00 :                     
-    8835/   65F00 :                     Level_LZ1:	binclude	"levels/lz1.kos"
-    8836/   660E0 : (MACRO)              		even
-    8837/   660E0 :                     Level_LZ2:	binclude	"levels/lz2.kos"
-    8838/   66270 : (MACRO)              		even
-    8839/   66270 :                     Level_LZ3:	binclude	"levels/lz3.kos"
-    8840/   66510 : (MACRO)              		even
-    8841/   66510 :                     Level_SBZ3:	binclude	"levels/sbz3.kos"
-    8842/   66740 : (MACRO)              		even
-    8843/   66740 :                     
-    8844/   66740 :                     Level_MZ1:	binclude	"levels/mz1.kos"
-    8845/   66920 : (MACRO)              		even
-    8846/   66920 :                     Level_MZ2:	binclude	"levels/mz2.kos"
-    8847/   66B90 : (MACRO)              		even
-    8848/   66B90 :                     Level_MZ3:	binclude	"levels/mz3.kos"
-    8849/   66E80 : (MACRO)              		even
-    8850/   66E80 :                     
-    8851/   66E80 :                     Level_SLZ1:	binclude	"levels/slz1.kos"
-    8852/   670D0 : (MACRO)              		even
-    8853/   670D0 :                     Level_SLZ2:	binclude	"levels/slz2.kos"
-    8854/   67300 : (MACRO)              		even
-    8855/   67300 :                     Level_SLZ3:	binclude	"levels/slz3.kos"
-    8856/   675B0 : (MACRO)              		even
-    8857/   675B0 :                     
-    8858/   675B0 :                     Level_SYZ1:	binclude	"levels/syz1.kos"
-    8859/   677B0 : (MACRO)              		even
-    8860/   677B0 :                     Level_SYZ2:	binclude	"levels/syz2.kos"
-    8861/   67A00 : (MACRO)              		even
-    8862/   67A00 :                     Level_SYZ3:	binclude	"levels/syz3.kos"
-    8863/   67CA0 : (MACRO)              		even
-    8864/   67CA0 :                     
-    8865/   67CA0 :                     Level_SBZ1:	binclude	"levels/sbz1.kos"
-    8866/   67F00 : (MACRO)              		even
-    8867/   67F00 :                     Level_SBZ2:	binclude	"levels/sbz2.kos"
-    8868/   68190 : (MACRO)              		even
-    8869/   68190 :                     
-    8870/   68190 :                     Level_End:	binclude	"levels/ending.kos"
-    8871/   68260 : (MACRO)              		even
-    8872/   68260 :                     
-    8873/   68260 :                     Art_BigRing:	binclude	"artunc/Giant Ring.bin"
-    8874/   68EA0 : (MACRO)              		even
-    8875/   68EA0 :                     
-    8876/   68EA0 : (MACRO)              		align	$100
-    8876/   68EA0 :  (MACRO-2)                   cnop 0,$100
-    8876/   68EA0 :   (MACRO-3)                          org (*-1+($100)-((*-1+(-(0)))#($100)))
+    8709/   5F844 : FF                  		dc.b $FF
+    8709/   5F845 : FF                  		dc.b $FF
+    8709/   5F846 : FF                  		dc.b $FF
+    8709/   5F847 : FF                  		dc.b $FF
+    8709/   5F848 : FF                  		dc.b $FF
+    8709/   5F849 : FF                  		dc.b $FF
+    8711/   5F84A :                     
+    8712/   5F84A :                     ; ---------------------------------------------------------------------------
+    8713/   5F84A :                     ; Collision data
+    8714/   5F84A :                     ; ---------------------------------------------------------------------------
+    8715/   5F84A :                     AngleMap:	binclude	"collide/Angle Map.bin"
+    8716/   5F94A : (MACRO)              		even
+    8717/   5F94A :                     CollArray1:	binclude	"collide/Collision Array (Normal).bin"
+    8718/   6094A : (MACRO)              		even
+    8719/   6094A :                     CollArray2:	binclude	"collide/Collision Array (Rotated).bin"
+    8720/   6194A : (MACRO)              		even
+    8721/   6194A :                     Col_GHZ_1:	binclude	"collide/GHZ1.kos"	; GHZ index 1
+    8722/   61A2A : (MACRO)              		even
+    8723/   61A2A :                     Col_GHZ_2:	binclude	"collide/GHZ2.kos"	; GHZ index 2
+    8724/   61AFA : (MACRO)              		even
+    8725/   61AFA :                     Col_LZ_1:	binclude	"collide/LZ1.kos"	; LZ index 1
+    8726/   61B5A : (MACRO)              		even
+    8727/   61B5A :                     Col_LZ_2:	binclude	"collide/LZ2.kos"	; LZ index 2
+    8728/   61BBA : (MACRO)              		even
+    8729/   61BBA :                     Col_MZ_1:	binclude	"collide/MZ1.kos"	; MZ index 1
+    8730/   61C08 : (MACRO)              		even
+    8731/   61C08 :                     Col_MZ_2:	binclude	"collide/MZ2.kos"	; MZ index 2
+    8732/   61C56 : (MACRO)              		even
+    8733/   61C56 :                     Col_SLZ_1:	binclude	"collide/SLZ1.kos"	; SLZ index 1
+    8734/   61D46 : (MACRO)              		even
+    8735/   61D46 :                     Col_SLZ_2:	binclude	"collide/SLZ2.kos"	; SLZ index 2
+    8736/   61E46 : (MACRO)              		even
+    8737/   61E46 :                     Col_SYZ_1:	binclude	"collide/SYZ1.kos"	; SYZ index 1
+    8738/   61F36 : (MACRO)              		even
+    8739/   61F36 :                     Col_SYZ_2:	binclude	"collide/SYZ2.kos"	; SYZ index 2
+    8740/   62026 : (MACRO)              		even
+    8741/   62026 :                     Col_SBZ_1:	binclude	"collide/SBZ1.kos"	; SBZ index 1
+    8742/   62126 : (MACRO)              		even
+    8743/   62126 :                     Col_SBZ_2:	binclude	"collide/SBZ2.kos"	; SBZ index 2
+    8744/   62226 : (MACRO)              		even
+    8745/   62226 :                     ; ---------------------------------------------------------------------------
+    8746/   62226 :                     ; Special Stage layouts
+    8747/   62226 :                     ; ---------------------------------------------------------------------------
+    8748/   62226 :                     SS_1:		binclude	"sslayout/1.eni"
+    8749/   624A0 : (MACRO)              		even
+    8750/   624A0 :                     SS_2:		binclude	"sslayout/2.eni"
+    8751/   628B2 : (MACRO)              		even
+    8752/   628B2 :                     SS_3:		binclude	"sslayout/3.eni"
+    8753/   62C0E : (MACRO)              		even
+    8754/   62C0E :                     SS_4:		binclude	"sslayout/4.eni"
+    8755/   630E8 : (MACRO)              		even
+    8761/   630E8 :                     SS_5:		binclude	"sslayout/5 (JP1).eni"
+    8762/   63598 : (MACRO)              			even
+    8763/   63598 :                     SS_6:		binclude	"sslayout/6 (JP1).eni"
+    8765/   6388A : (MACRO)              		even
+    8766/   6388A :                     ; ---------------------------------------------------------------------------
+    8767/   6388A :                     ; Animated uncompressed graphics
+    8768/   6388A :                     ; ---------------------------------------------------------------------------
+    8769/   6388A :                     Art_GhzWater:	binclude	"artunc/GHZ Waterfall.bin"
+    8770/   63A8A : (MACRO)              		even
+    8771/   63A8A :                     Art_GhzFlower1:	binclude	"artunc/GHZ Flower Large.bin"
+    8772/   63E8A : (MACRO)              		even
+    8773/   63E8A :                     Art_GhzFlower2:	binclude	"artunc/GHZ Flower Small.bin"
+    8774/   6430A : (MACRO)              		even
+    8775/   6430A :                     Art_MzLava1:	binclude	"artunc/MZ Lava Surface.bin"
+    8776/   6460A : (MACRO)              		even
+    8777/   6460A :                     Art_MzLava2:	binclude	"artunc/MZ Lava.bin"
+    8778/   64C0A : (MACRO)              		even
+    8779/   64C0A :                     Art_MzTorch:	binclude	"artunc/MZ Background Torch.bin"
+    8780/   64F0A : (MACRO)              		even
+    8781/   64F0A :                     Art_SbzSmoke:	binclude	"artunc/SBZ Background Smoke.bin"
+    8782/   6598A : (MACRO)              		even
+    8783/   6598A :                     
+    8784/   6598A :                     ; ---------------------------------------------------------------------------
+    8785/   6598A :                     ; Level layout index
+    8786/   6598A :                     ; MJ: unused data and BG data have been stripped out
+    8787/   6598A :                     ; ---------------------------------------------------------------------------
+    8788/   6598A :                     Level_Index:
+    8789/   6598A :                     		; GHZ
+    8790/   6598A : 0038                		dc.w Level_GHZ1-Level_Index
+    8791/   6598C : 01D8                		dc.w Level_GHZ2-Level_Index
+    8792/   6598E : 0398                		dc.w Level_GHZ3-Level_Index
+    8793/   65990 : 0038                		dc.w Level_Null-Level_Index
+    8794/   65992 :                     		; LZ
+    8795/   65992 : 0578                		dc.w Level_LZ1-Level_Index
+    8796/   65994 : 0758                		dc.w Level_LZ2-Level_Index
+    8797/   65996 : 08E8                		dc.w Level_LZ3-Level_Index
+    8798/   65998 : 0B88                		dc.w Level_SBZ3-Level_Index
+    8799/   6599A :                     		; MZ
+    8800/   6599A : 0DB8                		dc.w Level_MZ1-Level_Index
+    8801/   6599C : 0F8A                		dc.w Level_MZ2-Level_Index
+    8802/   6599E : 11E8                		dc.w Level_MZ3-Level_Index
+    8803/   659A0 : 0038                		dc.w Level_Null-Level_Index
+    8804/   659A2 :                     		; SLZ
+    8805/   659A2 : 14C8                		dc.w Level_SLZ1-Level_Index
+    8806/   659A4 : 1718                		dc.w Level_SLZ2-Level_Index
+    8807/   659A6 : 1948                		dc.w Level_SLZ3-Level_Index
+    8808/   659A8 : 0038                		dc.w Level_Null-Level_Index
+    8809/   659AA :                     		; SYZ
+    8810/   659AA : 1BF8                		dc.w Level_SYZ1-Level_Index
+    8811/   659AC : 1DF8                		dc.w Level_SYZ2-Level_Index
+    8812/   659AE : 2048                		dc.w Level_SYZ3-Level_Index
+    8813/   659B0 : 0038                		dc.w Level_Null-Level_Index
+    8814/   659B2 :                     		; SBZ
+    8815/   659B2 : 22E8                		dc.w Level_SBZ1-Level_Index
+    8816/   659B4 : 2548                		dc.w Level_SBZ2-Level_Index
+    8817/   659B6 : 2548                		dc.w Level_SBZ2-Level_Index
+    8818/   659B8 : 0038                		dc.w Level_Null-Level_Index
+    8819/   659BA : (MACRO)              		zonewarning Level_Index,8
+    8819/   659BA :                     ._end:
+    8820/   659BA :                     		; Ending
+    8821/   659BA : 27D8                		dc.w Level_End-Level_Index
+    8822/   659BC : 27D8                		dc.w Level_End-Level_Index
+    8823/   659BE : 0038                		dc.w Level_Null-Level_Index
+    8824/   659C0 : 0038                		dc.w Level_Null-Level_Index
+    8825/   659C2 :                     
+    8826/   659C2 :                     Level_Null:
+    8827/   659C2 :                     
+    8828/   659C2 :                     Level_GHZ1:	binclude	"levels/ghz1.kos"
+    8829/   65B62 : (MACRO)              		even
+    8830/   65B62 :                     Level_GHZ2:	binclude	"levels/ghz2.kos"
+    8831/   65D22 : (MACRO)              		even
+    8832/   65D22 :                     Level_GHZ3:	binclude	"levels/ghz3.kos"
+    8833/   65F02 : (MACRO)              		even
+    8834/   65F02 :                     
+    8835/   65F02 :                     Level_LZ1:	binclude	"levels/lz1.kos"
+    8836/   660E2 : (MACRO)              		even
+    8837/   660E2 :                     Level_LZ2:	binclude	"levels/lz2.kos"
+    8838/   66272 : (MACRO)              		even
+    8839/   66272 :                     Level_LZ3:	binclude	"levels/lz3.kos"
+    8840/   66512 : (MACRO)              		even
+    8841/   66512 :                     Level_SBZ3:	binclude	"levels/sbz3.kos"
+    8842/   66742 : (MACRO)              		even
+    8843/   66742 :                     
+    8844/   66742 :                     Level_MZ1:	binclude	"levels/mz1.kos"
+    8845/   66914 : (MACRO)              		even
+    8846/   66914 :                     Level_MZ2:	binclude	"levels/mz2.kos"
+    8847/   66B72 : (MACRO)              		even
+    8848/   66B72 :                     Level_MZ3:	binclude	"levels/mz3.kos"
+    8849/   66E52 : (MACRO)              		even
+    8850/   66E52 :                     
+    8851/   66E52 :                     Level_SLZ1:	binclude	"levels/slz1.kos"
+    8852/   670A2 : (MACRO)              		even
+    8853/   670A2 :                     Level_SLZ2:	binclude	"levels/slz2.kos"
+    8854/   672D2 : (MACRO)              		even
+    8855/   672D2 :                     Level_SLZ3:	binclude	"levels/slz3.kos"
+    8856/   67582 : (MACRO)              		even
+    8857/   67582 :                     
+    8858/   67582 :                     Level_SYZ1:	binclude	"levels/syz1.kos"
+    8859/   67782 : (MACRO)              		even
+    8860/   67782 :                     Level_SYZ2:	binclude	"levels/syz2.kos"
+    8861/   679D2 : (MACRO)              		even
+    8862/   679D2 :                     Level_SYZ3:	binclude	"levels/syz3.kos"
+    8863/   67C72 : (MACRO)              		even
+    8864/   67C72 :                     
+    8865/   67C72 :                     Level_SBZ1:	binclude	"levels/sbz1.kos"
+    8866/   67ED2 : (MACRO)              		even
+    8867/   67ED2 :                     Level_SBZ2:	binclude	"levels/sbz2.kos"
+    8868/   68162 : (MACRO)              		even
+    8869/   68162 :                     
+    8870/   68162 :                     Level_End:	binclude	"levels/ending.kos"
+    8871/   68232 : (MACRO)              		even
+    8872/   68232 :                     
+    8873/   68232 :                     Art_BigRing:	binclude	"artunc/Giant Ring.bin"
+    8874/   68E72 : (MACRO)              		even
+    8875/   68E72 :                     
+    8876/   68E72 : (MACRO)              		align	$100
+    8876/   68E72 :  (MACRO-2)                   cnop 0,$100
+    8876/   68E72 :   (MACRO-3)                          org (*-1+($100)-((*-1+(-(0)))#($100)))
     8876/   68F00 :                                             !org (*-1+($100)-((*-1+(-(0)))#($100)))
     8877/   68F00 :                     
     8878/   68F00 :                     ; ---------------------------------------------------------------------------
@@ -100922,7 +100922,7 @@ Uncompressed driver size: 1BC6h bytes.
     9007/   7E978 :                     EndOfRom:
     9008/   7E978 :                     
     9009/   7E978 :                     		END
- AS V1.42 Beta [Bld 212] - Source File sonic.asm - Page 2 - 9/25/2025 13:51:37
+ AS V1.42 Beta [Bld 212] - Source File sonic.asm - Page 2 - 9/25/2025 14:7:0
 
 
   Symbol Table (* = unused):
@@ -100941,7 +100941,7 @@ Uncompressed driver size: 1BC6h bytes.
  AddPLC.loop :                 1598 C |  AddPLC.skip :                 15A0 C |
  AddPoints :                  1C77E C |  AddPoints.belowmax :         1C798 C |
  AddressError :                 3DE C | *AddressSRAM :                    3 - |
- AngleMap :                   5F844 C |  Angle_Data :                  2BFC C |
+ AngleMap :                   5F84A C |  Angle_Data :                  2BFC C |
  AniArt_Ending :              1C39E C | *AniArt_Ending_BigFlower :    1C39E C |
  AniArt_Ending_BigFlower.isframe0 :                                   1C3CC C |
  AniArt_Ending_BigFlower.size :  10 - |  AniArt_Ending_Flower3 :      1C43A C |
@@ -101168,11 +101168,11 @@ Uncompressed driver size: 1BC6h bytes.
  ArtTile_Title_Sonic :          300 - |  ArtTile_Title_Trademark :      510 - |
  ArtTile_Try_Again_Eggman :     3E1 - |  ArtTile_Try_Again_Emeralds :   3C5 - |
 *ArtTile_Warp :                 541 - |  ArtTile_Yadrin :               47B - |
- Art_BigRing :                68260 C |  Art_GhzFlower1 :             63A88 C |
- Art_GhzFlower2 :             63E88 C |  Art_GhzWater :               63888 C |
+ Art_BigRing :                68232 C |  Art_GhzFlower1 :             63A8A C |
+ Art_GhzFlower2 :             63E8A C |  Art_GhzWater :               6388A C |
  Art_Hud :                    1CBBC C |  Art_LivesNums :              1CEBC C |
- Art_MzLava1 :                64308 C |  Art_MzLava2 :                64608 C |
- Art_MzTorch :                64C08 C |  Art_SbzSmoke :               64F08 C |
+ Art_MzLava1 :                6430A C |  Art_MzLava2 :                6460A C |
+ Art_MzTorch :                64C0A C |  Art_SbzSmoke :               64F0A C |
  Art_Sonic :                  21A54 C |  Art_Text :                     5F0 C |
  Art_Text_End :                 B10 C |  AutoDoor :                    8CE8 C |
 *BBall_Main :                 10A4A C |  BBall_Move :                 10AA4 C |
@@ -101219,12 +101219,12 @@ Uncompressed driver size: 1BC6h bytes.
  Bg_Scroll_Y :                 69E8 C |  Bg_Scroll_Y.return :          6A1C C |
  Bg_Scroll_Y.scrollBottom :    6A16 C |  BigSpikeBall :               10A44 C |
  BldSpr_ScrPos :               D7DC C |  Blk128_GHZ :                 3DD4E C |
- Blk128_LZ :                  41AA0 C |  Blk128_MZ :                  46C12 C |
- Blk128_SBZ :                 57720 C |  Blk128_SLZ :                 4C38A C |
- Blk128_SYZ :                 520D4 C |  Blk16_GHZ :                  3AA32 C |
+ Blk128_LZ :                  41AA0 C |  Blk128_MZ :                  46B54 C |
+ Blk128_SBZ :                 57726 C |  Blk128_SLZ :                 4C390 C |
+ Blk128_SYZ :                 520DA C |  Blk16_GHZ :                  3AA32 C |
  Blk16_LZ :                   3FC8E C |  Blk16_MZ :                   43C64 C |
- Blk16_SBZ :                  54202 C |  Blk16_SLZ :                  481A6 C |
- Blk16_SYZ :                  4E114 C |  Bom_Action :                 11A8E C |
+ Blk16_SBZ :                  54208 C |  Blk16_SLZ :                  481AC C |
+ Blk16_SYZ :                  4E11A C |  Bom_Action :                 11A8E C |
  Bom_Action.chksonic :        11B14 C |  Bom_Action.explode :         11B02 C |
  Bom_Action.index :           11AAA C |  Bom_Action.isabove :         11B32 C |
  Bom_Action.isleft :          11B20 C |  Bom_Action.noexplode :       11B12 C |
@@ -101433,20 +101433,20 @@ Uncompressed driver size: 1BC6h bytes.
  ClearScreen :                 12C0 C |  ClearScreen.length :           400 - |
  ClrCRAMLoop :                  26E C |  ClrRAMLoop :                   262 C |
  ClrVSRAMLoop :                 278 C |  ColIndexLoad :                3FB0 C |
- ColPointers :                 3FDA C |  Col_GHZ_1 :                  61944 C |
- Col_GHZ_2 :                  61A24 C |  Col_LZ_1 :                   61AF4 C |
- Col_LZ_2 :                   61B54 C |  Col_MZ_1 :                   61BB4 C |
- Col_MZ_2 :                   61C04 C |  Col_SBZ_1 :                  62024 C |
- Col_SBZ_2 :                  62124 C |  Col_SLZ_1 :                  61C54 C |
- Col_SLZ_2 :                  61D44 C |  Col_SYZ_1 :                  61E44 C |
- Col_SYZ_2 :                  61F34 C |  CollArray1 :                 5F944 C |
- CollArray2 :                 60944 C |  CollapseFloor :               87CC C |
+ ColPointers :                 3FDA C |  Col_GHZ_1 :                  6194A C |
+ Col_GHZ_2 :                  61A2A C |  Col_LZ_1 :                   61AFA C |
+ Col_LZ_2 :                   61B5A C |  Col_MZ_1 :                   61BBA C |
+ Col_MZ_2 :                   61C08 C |  Col_SBZ_1 :                  62026 C |
+ Col_SBZ_2 :                  62126 C |  Col_SLZ_1 :                  61C56 C |
+ Col_SLZ_2 :                  61D46 C |  Col_SYZ_1 :                  61E46 C |
+ Col_SYZ_2 :                  61F36 C |  CollArray1 :                 5F94A C |
+ CollArray2 :                 6094A C |  CollapseFloor :               87CC C |
  CollapseLedge :               86BE C |  CollectRing :                 9EEE C |
  CollectRing.got100 :          9F1C C |  CollectRing.playsnd :         9F28 C |
  ContScrCounter :             1CA1A C |  ContScrItem :                 4D3C C |
  ContScr_Loop :               1CA38 C |  ContSonic :                   4E52 C |
  Cont_GotoLevel :              4D18 C |  Cont_MainLoop :               4CBE C |
- ConvRowColBlocks :           5F944 - |  Conv_Action :                15872 C |
+ ConvRowColBlocks :           5F94A - |  Conv_Action :                15872 C |
  Conv_Action.delete :         15892 C |  Conv_Action.movesonic :      15898 C |
  Conv_Action.notonconveyor :  158D6 C | *Conv_Main :                  15848 C |
  Conv_Main.typeis0 :          15862 C |  ConvertCollisionArray :      14DC2 C |
@@ -101918,7 +101918,7 @@ Uncompressed driver size: 1BC6h bytes.
  Jun_Release.release :        15388 C |  Junction :                   1525A C |
  KillSonic :                  1B1B6 C |  KillSonic.dontdie :          1B20A C |
  KillSonic.sound :            1B204 C |  KosDec :                      1890 C |
- Kos_Done :                    192C C |  Kos_EndFlowers :             5E796 C |
+ Kos_Done :                    192C C |  Kos_EndFlowers :             5E79C C |
  Kos_Loop :                    189C C |  Kos_Loop.chkbit :             18AE C |
  Kos_RLE :                     18B6 C |  Kos_RLE.chkbit :              18CA C |
  Kos_RLE.loop1 :               18DE C |  Kos_RLE.loop2 :               18F0 C |
@@ -102023,21 +102023,21 @@ Uncompressed driver size: 1BC6h bytes.
  Level_ClrRam :                370A C |  Level_ClrRam.length :          120 - |
  Level_Delay :                 3994 C |  Level_DelayLoop :             3998 C |
  Level_Demo :                  3952 C |  Level_DoScroll :              3A1C C |
- Level_End :                  68190 C |  Level_EndDemo :               3A72 C |
+ Level_End :                  68162 C |  Level_EndDemo :               3A72 C |
  Level_FDLoop :                3A9C C |  Level_FadeDemo :              3A8C C |
- Level_GHZ1 :                 659C0 C |  Level_GHZ2 :                 65B60 C |
- Level_GHZ3 :                 65D20 C |  Level_GetBgm :                37EA C |
- Level_Index :                65988 C |  Level_LZ1 :                  65F00 C |
- Level_LZ2 :                  660E0 C |  Level_LZ3 :                  66270 C |
+ Level_GHZ1 :                 659C2 C |  Level_GHZ2 :                 65B62 C |
+ Level_GHZ3 :                 65D22 C |  Level_GetBgm :                37EA C |
+ Level_Index :                6598A C |  Level_LZ1 :                  65F02 C |
+ Level_LZ2 :                  660E2 C |  Level_LZ3 :                  66272 C |
  Level_LoadObj :               38CA C |  Level_LoadPal :               37B6 C |
- Level_MZ1 :                  66740 C |  Level_MZ2 :                  66920 C |
- Level_MZ3 :                  66B90 C |  Level_MainLoop :              39E6 C |
- Level_NoMusicFade :           36BE C |  Level_Null :                 659C0 C |
- Level_PlayBgm :               380A C |  Level_SBZ1 :                 67CA0 C |
- Level_SBZ2 :                 67F00 C |  Level_SBZ3 :                 66510 C |
- Level_SLZ1 :                 66E80 C |  Level_SLZ2 :                 670D0 C |
- Level_SLZ3 :                 67300 C |  Level_SYZ1 :                 675B0 C |
- Level_SYZ2 :                 677B0 C |  Level_SYZ3 :                 67A00 C |
+ Level_MZ1 :                  66742 C |  Level_MZ2 :                  66914 C |
+ Level_MZ3 :                  66B72 C |  Level_MainLoop :              39E6 C |
+ Level_NoMusicFade :           36BE C |  Level_Null :                 659C2 C |
+ Level_PlayBgm :               380A C |  Level_SBZ1 :                 67C72 C |
+ Level_SBZ2 :                 67ED2 C |  Level_SBZ3 :                 66512 C |
+ Level_SLZ1 :                 66E52 C |  Level_SLZ2 :                 670A2 C |
+ Level_SLZ3 :                 672D2 C |  Level_SYZ1 :                 67582 C |
+ Level_SYZ2 :                 67782 C |  Level_SYZ3 :                 679D2 C |
  Level_SkipClr :               38F0 C |  Level_SkipScroll :            3A20 C |
  Level_SkipTtlCard :           384E C |  Level_StartGame :             39E0 C |
  Level_TtlCardLoop :           381E C |  Level_WaterPal :              37DA C |
@@ -104221,15 +104221,15 @@ Uncompressed driver size: 1BC6h bytes.
  Nem_Buzz :                   34E1C C |  Nem_Cater :                  3790C C |
  Nem_Chicken :                3A272 C |  Nem_Chopper :                358AC C |
  Nem_ContSonic :              39C30 C |  Nem_Cork :                   30F44 C |
- Nem_Crabmeat :               3492E C |  Nem_CreditText :             5EFAE C |
- Nem_Cutter :                 335A2 C |  Nem_Eggman :                 5A070 C |
- Nem_Electric :               33EAA C |  Nem_EndEm :                  5CA76 C |
- Nem_EndFlower :              5ED26 C |  Nem_EndSonic :               5CC74 C |
- Nem_EndStH :                 5F5AC C |  Nem_Exhaust :                5C956 C |
+ Nem_Crabmeat :               3492E C |  Nem_CreditText :             5EFB4 C |
+ Nem_Cutter :                 335A2 C |  Nem_Eggman :                 5A076 C |
+ Nem_Electric :               33EAA C |  Nem_EndEm :                  5CA7C C |
+ Nem_EndFlower :              5ED2C C |  Nem_EndSonic :               5CC7A C |
+ Nem_EndStH :                 5F5B2 C |  Nem_Exhaust :                5C95C C |
  Nem_Explode :                387F8 C |  Nem_Fan :                    3265C C |
  Nem_FlamePipe :              34128 C |  Nem_FlapDoor :               2F8D8 C |
- Nem_Flicky :                 3A79C C |  Nem_FzBoss :                 5BC6E C |
- Nem_FzEggman :               5C3D6 C |  Nem_GHZ_1st :                3B346 C |
+ Nem_Flicky :                 3A79C C |  Nem_FzBoss :                 5BC74 C |
+ Nem_FzEggman :               5C3DC C |  Nem_GHZ_1st :                3B346 C |
  Nem_GHZ_2nd :                3C9A6 C |  Nem_GameOver :               38F0E C |
  Nem_Gargoyle :               309E4 C |  Nem_GhzWall1 :               2ED42 C |
  Nem_GhzWall2 :               2EDE0 C |  Nem_Girder :                 34458 C |
@@ -104250,17 +104250,17 @@ Uncompressed driver size: 1BC6h bytes.
  Nem_Newtron :                3654C C |  Nem_Orbinaut :               3772E C |
  Nem_Penguin :                3A3CE C |  Nem_Pig :                    3A666 C |
  Nem_Points :                 38E5E C |  Nem_PplRock :                2EC14 C |
- Nem_Prison :                 5ABBE C |  Nem_Pylon :                  32902 C |
+ Nem_Prison :                 5ABC4 C |  Nem_Pylon :                  32902 C |
  Nem_Rabbit :                 3A11A C |  Nem_ResultEm :               2E500 C |
  Nem_Ring :                   382A4 C |  Nem_Roller :                 35D9E C |
- Nem_SBZ :                    54F74 C |  Nem_SLZ :                    48836 C |
+ Nem_SBZ :                    54F7A C |  Nem_SLZ :                    4883C C |
  Nem_SSBgCloud :              2D8CE C |  Nem_SSBgFish :               2C93E C |
  Nem_SSEmStars :              2DF80 C |  Nem_SSEmerald :              2E264 C |
  Nem_SSGOAL :                 2DDC2 C |  Nem_SSGhost :                2E3CC C |
  Nem_SSGlass :                2E47C C |  Nem_SSRBlock :               2DEB0 C |
  Nem_SSRedWhite :             2DFDE C |  Nem_SSUpDown :               2E070 C |
- Nem_SSWalls :                2BED2 C |  Nem_SYZ :                    4E9A8 C |
- Nem_Sbz2Eggman :             5B442 C |  Nem_SbzBlock :               3402A C |
+ Nem_SSWalls :                2BED2 C |  Nem_SYZ :                    4E9AE C |
+ Nem_Sbz2Eggman :             5B448 C |  Nem_SbzBlock :               3402A C |
  Nem_SbzDoor1 :               342B4 C |  Nem_SbzDoor2 :               3435C C |
  Nem_SbzFloor :               33E52 C |  Nem_SbzWheel1 :              332B2 C |
  Nem_SbzWheel2 :              33306 C |  Nem_Seal :                   3A54A C |
@@ -104277,9 +104277,9 @@ Uncompressed driver size: 1BC6h bytes.
  Nem_SyzSpike1 :              33024 C |  Nem_SyzSpike2 :              32EE0 C |
  Nem_TitleCard :              37A9A C |  Nem_TitleFg :                1E1C4 C |
  Nem_TitleSonic :             1F1D0 C |  Nem_TitleTM :                20B9E C |
- Nem_TrapDoor :               33C74 C |  Nem_TryAgain :               5DE52 C |
+ Nem_TrapDoor :               33C74 C |  Nem_TryAgain :               5DE58 C |
  Nem_VSpring :                391A2 C |  Nem_Water :                  2EE40 C |
- Nem_Weapons :                5A8D4 C |  Nem_Yadrin :                 36B6A C |
+ Nem_Weapons :                5A8DA C |  Nem_Yadrin :                 36B6A C |
  NewPLC :                      15A6 C |  NewPLC.loop :                 15C4 C |
  NewPLC.skip :                 15CC C |  Newt_Action :                 DF2C C |
  Newt_Action.chkdistance :     DF52 C |  Newt_Action.fail :            E092 C |
@@ -104566,7 +104566,7 @@ Uncompressed driver size: 1BC6h bytes.
  RLoss_Count.resetcounter :    9FEA C |  RLoss_Delete :                A078 C |
  RLoss_Index :                 9F3C C |  RLoss_Sparkle :               A06A C |
  RandomNumber :                28D8 C |  RandomNumber.scramble :       28E4 C |
- RawColBlocks :               5F944 - |  ReactToItem :                1AF06 C |
+ RawColBlocks :               5F94A - |  ReactToItem :                1AF06 C |
 *ReactToItem.chktype :        1AFDE C |  ReactToItem.invincible :     1B014 C |
  ReactToItem.loop :           1AF38 C |  ReactToItem.next :           1AF44 C |
  ReactToItem.notducking :     1AF2A C |  ReactToItem.outsidex :       1AFBA C |
@@ -105206,10 +105206,10 @@ Uncompressed driver size: 1BC6h bytes.
  SSR_Index :                   C9B2 C |  SSR_Loop :                    C9E4 C |
  SSR_Main :                    C9D0 C |  SSR_Move :                    CA3A C |
  SSR_RingBonus :               CA86 C |  SSR_Wait :                    CA78 C |
- SSResult :                    C9A4 C |  SS_1 :                       62224 C |
- SS_2 :                       6249E C |  SS_3 :                       628B0 C |
- SS_4 :                       62C0C C |  SS_5 :                       630E6 C |
- SS_6 :                       63596 C |  SS_Ani1Up :                  1B690 C |
+ SSResult :                    C9A4 C |  SS_1 :                       62226 C |
+ SS_2 :                       624A0 C |  SS_3 :                       628B2 C |
+ SS_4 :                       62C0E C |  SS_5 :                       630E8 C |
+ SS_6 :                       63598 C |  SS_Ani1Up :                  1B690 C |
  SS_Ani1UpData :              1B6BA C |  SS_AniBumpData :             1B68A C |
  SS_AniBumper :               1B65A C |  SS_AniEmerData :             1B730 C |
  SS_AniEmeraldSparks :        1B6F6 C |  SS_AniGlassBlock :           1B736 C |
@@ -105782,7 +105782,7 @@ Uncompressed driver size: 1BC6h bytes.
  TCha_Main.chkemerald :        5A10 C |  TCha_Main.chkloop :           5A1A C |
  TCha_Main.loc_5B42 :          5A28 C |  TCha_Main.makeemerald :       59CE C |
  TCha_Main.notgot :            5A24 C |  TCha_Move :                   5A4C C |
-*TIME :                  "13:51:27" - |  TRUE :                           1 - |
+*TIME :                   "14:6:59" - |  TRUE :                           1 - |
  TSon_Animate :                A8F0 C |  TSon_Delay :                  A8CA C |
  TSon_Delay.wait :             A8D8 C |  TSon_Index :                  A88E C |
  TSon_Main :                   A896 C |  TSon_Move :                   A8DA C |
@@ -108208,7 +108208,7 @@ Uncompressed driver size: 1BC6h bytes.
   11884 symbols
    1476 unused symbols
 
- AS V1.42 Beta [Bld 212] - Source File sonic.asm - Page 3 - 9/25/2025 13:51:37
+ AS V1.42 Beta [Bld 212] - Source File sonic.asm - Page 3 - 9/25/2025 14:7:0
 
 
   Defined Macros:
@@ -108283,7 +108283,7 @@ zPCMMetadata                          | zonewarning
 
     132 macros
 
- AS V1.42 Beta [Bld 212] - Source File sonic.asm - Page 4 - 9/25/2025 13:51:37
+ AS V1.42 Beta [Bld 212] - Source File sonic.asm - Page 4 - 9/25/2025 14:7:0
 
 
   Defined Structures/Unions:
@@ -108894,7 +108894,7 @@ SMPS_Track
  24          LoopCounters
  30          GoSubStack
 2 structures
- AS V1.42 Beta [Bld 212] - Source File sonic.asm - Page 5 - 9/25/2025 13:51:37
+ AS V1.42 Beta [Bld 212] - Source File sonic.asm - Page 5 - 9/25/2025 14:7:0
 
 
   Defined Functions:
@@ -108913,7 +108913,7 @@ ramaddr                               | max
 min                                   | roundFloatToInteger                  
 chkop                                 | notZ80                               
 
- AS V1.42 Beta [Bld 212] - Source File sonic.asm - Page 6 - 9/25/2025 13:51:37
+ AS V1.42 Beta [Bld 212] - Source File sonic.asm - Page 6 - 9/25/2025 14:7:0
 
 
   Code Pages:
@@ -108923,7 +108923,7 @@ STANDARD (0 changed characters)
 
 1 code page
 
-10.74 seconds assembly time
+1.61 second assembly time
 
   61948 lines source file
  173316 lines incl. macro expansions
