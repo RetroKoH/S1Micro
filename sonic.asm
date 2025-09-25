@@ -8645,11 +8645,7 @@ Blk16_MZ:	binclude	"map16/MZ.eni"
 		even
 Nem_MZ:		binclude	"artnem/8x8 - MZ.nem"	; MZ primary patterns
 		even
-Blk128_MZ:	if Revision=0
-		binclude	"map128/MZ.kos"
-		else
-		binclude	"map128/MZ (JP1).kos"
-		endif
+Blk128_MZ:	binclude	"map128/MZ.kos"
 		even
 Blk16_SLZ:	binclude	"map16/SLZ.eni"
 		even
@@ -8667,11 +8663,7 @@ Blk16_SBZ:	binclude	"map16/SBZ.eni"
 		even
 Nem_SBZ:	binclude	"artnem/8x8 - SBZ.nem"	; SBZ primary patterns
 		even
-Blk128_SBZ:	if Revision=0
-		binclude	"map128/SBZ.kos"
-		else
-		binclude	"map128/SBZ (JP1).kos"
-		endif
+Blk128_SBZ:		binclude	"map128/SBZ.kos"
 		even
 ; ---------------------------------------------------------------------------
 ; Compressed graphics - bosses and ending sequence
