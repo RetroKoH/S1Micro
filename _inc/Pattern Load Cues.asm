@@ -122,9 +122,6 @@ PLC_LZ2:	dc.w ((PLC_LZ2end-PLC_LZ2-2)/6)-1
 		plcm	Nem_LzDoor2,     ArtTile_LZ_Blocks          ; large horizontal door
 		plcm	Nem_LzWheel,     ArtTile_LZ_Conveyor_Belt   ; wheel
 		plcm	Nem_Gargoyle,    ArtTile_LZ_Gargoyle        ; gargoyle head
-	if Revision=0
-		plcm	Nem_LzSonic,     ArtTile_LZ_Sonic_Drowning  ; Sonic holding his breath
-	endif
 		plcm	Nem_LzPlatfm,    ArtTile_LZ_Rising_Platform ; rising platform
 		plcm	Nem_Orbinaut,    ArtTile_LZ_Orbinaut        ; orbinaut enemy
 		plcm	Nem_Jaws,        ArtTile_Jaws               ; jaws enemy

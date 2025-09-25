@@ -90,7 +90,6 @@ Vectors:	dc.l v_systemstack&$FFFFFF	; Initial stack pointer value
 		dc.l ErrorTrap			; Unused (reserved)
 		dc.l ErrorTrap			; Unused (reserved)
 		dc.l ErrorTrap			; Unused (reserved)
-	if Revision<>2
 		dc.l ErrorTrap			; Unused (reserved)
 		dc.l ErrorTrap			; Unused (reserved)
 		dc.l ErrorTrap			; Unused (reserved)
@@ -99,35 +98,15 @@ Vectors:	dc.l v_systemstack&$FFFFFF	; Initial stack pointer value
 		dc.l ErrorTrap			; Unused (reserved)
 		dc.l ErrorTrap			; Unused (reserved)
 		dc.l ErrorTrap			; Unused (reserved)
-	else
-loc_E0:
-		; Relocated code from Spik_Hurt. REVXB was a nasty hex-edit.
-		move.l	obY(a0),d3
-		move.w	obVelY(a0),d0
-		ext.l	d0
-		asl.l	#8,d0
-		jmp	(loc_D5A2).l
 
-		dc.w ErrorTrap
-		dc.l ErrorTrap
-		dc.l ErrorTrap
-		dc.l ErrorTrap
-	endif
 		dc.b "SEGA MEGA DRIVE " ; Hardware system ID (Console name)
 		dc.b "(C)SEGA 1991.APR" ; Copyright holder and release date (generally year)
 		dc.b "SONIC THE               HEDGEHOG                " ; Domestic name
 		dc.b "SONIC THE               HEDGEHOG                " ; International name
-		if Revision=0
-		dc.b "GM 00001009-00"   ; Serial/version number (Rev 0)
-		else
-			dc.b "GM 00004049-01" ; Serial/version number (Rev non-0)
-		endif
+		dc.b "GM 00004049-01" ; Serial/version number (Rev non-0)
+
 Checksum:
-		if Revision=0
-		dc.w $264A	; Hardcoded to make it easier to check for ROM correctness
-		else
 		dc.w $AFC7
-		endif
 		dc.b "J               " ; I/O support
 		dc.l StartOfRom		; Start address of ROM
 RomEndLoc:	dc.l EndOfRom-1		; End address of ROM
@@ -1035,21 +1014,11 @@ ClearScreen:
 		fillVRAM	0, vram_fg, vram_fg+plane_size_64x32 ; clear foreground namespace
 		fillVRAM	0, vram_bg, vram_bg+plane_size_64x32 ; clear background namespace
 
-		if Revision=0
-		move.l	#0,(v_scrposy_vdp).w
-		move.l	#0,(v_scrposx_vdp).w
-		else
 		clr.l	(v_scrposy_vdp).w
 		clr.l	(v_scrposx_vdp).w
-		endif
 
-	if FixBugs
 		clearRAM v_spritetablebuffer,v_spritetablebuffer_end
 		clearRAM v_hscrolltablebuffer,v_hscrolltablebuffer_end_padded
-	else
-		clearRAM v_spritetablebuffer,v_spritetablebuffer_end+4 ; Clears too much RAM, clearing the first 4 bytes of v_palette_water.
-		clearRAM v_hscrolltablebuffer,v_hscrolltablebuffer_end_padded+4 ; Clears too much RAM, clearing the first 4 bytes of v_objspace.
-	endif
 
 		rts	
 ; End of function ClearScreen
@@ -2197,15 +2166,8 @@ Tit_LoadText:
 		bsr.w	QueueSound2	; play title screen music
 		move.b	#0,(f_debugmode).w ; disable debug mode
 		move.w	#376,(v_demolength).w ; run title screen for 376 frames
-		
-	if FixBugs
+
 		clearRAM v_sonicteam,v_sonicteam+object_size
-	else
-		; Bug: this only clears half of the "SONIC TEAM PRESENTS" slot.
-		; This is responsible for why the "PRESS START BUTTON" text doesn't
-		; show up, as the routine ID isn't reset.
-		clearRAM v_sonicteam,v_sonicteam+object_size/2
-	endif
 
 		move.b	#id_TitleSonic,(v_titlesonic).w ; load big Sonic object
 		move.b	#id_PSBTM,(v_pressstart).w ; load "PRESS START BUTTON" object
@@ -2395,9 +2357,6 @@ LevSel_Level_SS:
 		move.w	d0,(v_rings).w	; clear rings
 		move.l	d0,(v_time).w	; clear time
 		move.l	d0,(v_score).w	; clear score
-		if Revision<>0
-			move.l	#5000,(v_scorelife).w ; extra life is awarded at 50000 points
-		endif
 		rts	
 ; ===========================================================================
 
@@ -2417,9 +2376,6 @@ PlayLevel:
 		move.l	d0,(v_emldlist).w ; clear emeralds
 		move.l	d0,(v_emldlist+4).w ; clear emeralds
 		move.b	d0,(v_continues).w ; clear continues
-		if Revision<>0
-			move.l	#5000,(v_scorelife).w ; extra life is awarded at 50000 points
-		endif
 		move.b	#bgm_Fade,d0
 		bsr.w	QueueSound2 ; fade out music
 		rts	
@@ -2427,28 +2383,7 @@ PlayLevel:
 ; ---------------------------------------------------------------------------
 ; Level select - level pointers
 ; ---------------------------------------------------------------------------
-LevSel_Ptrs:	if Revision=0
-		; old level order
-		dc.b id_GHZ, 0
-		dc.b id_GHZ, 1
-		dc.b id_GHZ, 2
-		dc.b id_LZ, 0
-		dc.b id_LZ, 1
-		dc.b id_LZ, 2
-		dc.b id_MZ, 0
-		dc.b id_MZ, 1
-		dc.b id_MZ, 2
-		dc.b id_SLZ, 0
-		dc.b id_SLZ, 1
-		dc.b id_SLZ, 2
-		dc.b id_SYZ, 0
-		dc.b id_SYZ, 1
-		dc.b id_SYZ, 2
-		dc.b id_SBZ, 0
-		dc.b id_SBZ, 1
-		dc.b id_LZ, 3		; Scrap Brain Zone 3
-		dc.b id_SBZ, 2		; Final Zone
-		else
+LevSel_Ptrs:
 		; correct level order
 		dc.b id_GHZ, 0
 		dc.b id_GHZ, 1
@@ -2469,20 +2404,13 @@ LevSel_Ptrs:	if Revision=0
 		dc.b id_SBZ, 1
 		dc.b id_LZ, 3
 		dc.b id_SBZ, 2
-		endif
 		dc.b id_SS, 0		; Special Stage
 		dc.w $8000		; Sound Test
 		even
 ; ---------------------------------------------------------------------------
 ; Level select codes
 ; ---------------------------------------------------------------------------
-LevSelCode_J:	if Revision=0
-		dc.b btnUp,btnDn,btnL,btnR,0,$FF
-		else
-		dc.b btnUp,btnDn,btnDn,btnDn,btnL,btnR,0,$FF
-		endif
-		even
-
+LevSelCode_J:
 LevSelCode_US:	dc.b btnUp,btnDn,btnL,btnR,0,$FF
 		even
 ; ===========================================================================
@@ -2541,9 +2469,6 @@ Demo_Level:
 		move.w	d0,(v_rings).w	; clear rings
 		move.l	d0,(v_time).w	; clear time
 		move.l	d0,(v_score).w	; clear score
-		if Revision<>0
-			move.l	#5000,(v_scorelife).w ; extra life is awarded at 50000 points
-		endif
 		rts	
 ; ===========================================================================
 ; ---------------------------------------------------------------------------
@@ -2997,10 +2922,8 @@ Level_MainLoop:
 		bsr.w	MoveSonicInDemo
 		bsr.w	LZWaterFeatures
 		jsr	(ExecuteObjects).l
-		if Revision<>0
-			tst.w	(f_restart).w
-			bne	GM_Level
-		endif
+		tst.w	(f_restart).w
+		bne	GM_Level
 		tst.w	(v_debuguse).w	; is debug mode being used?
 		bne.s	Level_DoScroll	; if yes, branch
 		cmpi.b	#6,(v_player+obRoutine).w ; has Sonic just died?
@@ -3020,10 +2943,6 @@ Level_SkipScroll:
 
 		cmpi.b	#id_Demo,(v_gamemode).w
 		beq.s	Level_ChkDemo	; if mode is 8 (demo), branch
-		if Revision=0
-		tst.w	(f_restart).w	; is the level set to restart?
-		bne.w	GM_Level	; if yes, branch
-		endif
 		cmpi.b	#id_Level,(v_gamemode).w
 		beq.w	Level_MainLoop	; if mode is $C (level), branch
 		rts	
@@ -8339,47 +8258,14 @@ Map_HUD:	include	"_maps/HUD.asm"
 
 AddPoints:
 		move.b	#1,(f_scorecount).w ; set score counter to update
-
-		if Revision=0
-		lea	(v_scorecopy).w,a2
-		lea	(v_score).w,a3
+		lea		(v_score).w,a3
 		add.l	d0,(a3)		; add d0*10 to the score
 		move.l	#999999,d1
 		cmp.l	(a3),d1		; is score below 999999?
 		bhi.w	.belowmax	; if yes, branch
 		move.l	d1,(a3)		; reset score to 999999
-		move.l	d1,(a2)
 
 .belowmax:
-		move.l	(a3),d0
-		cmp.l	(a2),d0
-		blo.w	.locret_1C6B6
-		move.l	d0,(a2)
-
-		else
-
-			lea	(v_score).w,a3
-			add.l	d0,(a3)
-			move.l	#999999,d1
-			cmp.l	(a3),d1 ; is score below 999999?
-			bhi.s	.belowmax ; if yes, branch
-			move.l	d1,(a3) ; reset score to 999999
-.belowmax:
-			move.l	(a3),d0
-			cmp.l	(v_scorelife).w,d0 ; has Sonic got 50000+ points?
-			blo.s	.noextralife ; if not, branch
-
-			addi.l	#5000,(v_scorelife).w ; increase requirement by 50000
-			tst.b	(v_megadrive).w
-			bmi.s	.noextralife ; branch if Mega Drive is Japanese
-			addq.b	#1,(v_lives).w ; give extra life
-			addq.b	#1,(f_lifecount).w
-			move.w	#bgm_ExtraLife,d0
-			jmp	(QueueSound1).l
-		endif
-
-.locret_1C6B6:
-.noextralife:
 		rts	
 ; End of function AddPoints
 
@@ -9047,19 +8933,11 @@ ObjPos_GHZ2:	binclude	"objpos/ghz2.bin"
 		even
 ObjPos_GHZ3:	binclude	"objpos/ghz3.bin"
 		even
-ObjPos_LZ1:	if Revision=0
-		binclude	"objpos/lz1.bin"
-		else
-		binclude	"objpos/lz1 (JP1).bin"
-		endif
+ObjPos_LZ1:		binclude	"objpos/lz1.bin"
 		even
-ObjPos_LZ2:	binclude	"objpos/lz2.bin"
+ObjPos_LZ2:		binclude	"objpos/lz2.bin"
 		even
-ObjPos_LZ3:	if Revision=0
-		binclude	"objpos/lz3.bin"
-		else
-		binclude	"objpos/lz3 (JP1).bin"
-		endif
+ObjPos_LZ3:		binclude	"objpos/lz3.bin"
 		even
 ObjPos_SBZ3:	binclude	"objpos/sbz3.bin"
 		even
@@ -9077,9 +8955,9 @@ ObjPos_LZ3pf2:	binclude	"objpos/lz3pf2.bin"
 		even
 ObjPos_MZ1:		binclude	"objpos/mz1.bin"
 		even
-ObjPos_MZ2:	binclude	"objpos/mz2.bin"
+ObjPos_MZ2:		binclude	"objpos/mz2.bin"
 		even
-ObjPos_MZ3:	binclude	"objpos/mz3.bin"
+ObjPos_MZ3:		binclude	"objpos/mz3.bin"
 		even
 ObjPos_SLZ1:	binclude	"objpos/slz1.bin"
 		even
@@ -9091,21 +8969,13 @@ ObjPos_SYZ1:	binclude	"objpos/syz1.bin"
 		even
 ObjPos_SYZ2:	binclude	"objpos/syz2.bin"
 		even
-ObjPos_SYZ3:	if Revision=0
-		binclude	"objpos/syz3.bin"
-		else
-		binclude	"objpos/syz3 (JP1).bin"
-		endif
+ObjPos_SYZ3:	binclude	"objpos/syz3.bin"
 		even
-ObjPos_SBZ1:	if Revision=0
-		binclude	"objpos/sbz1.bin"
-		else
-		binclude	"objpos/sbz1 (JP1).bin"
-		endif
+ObjPos_SBZ1:	binclude	"objpos/sbz1.bin"
 		even
 ObjPos_SBZ2:	binclude	"objpos/sbz2.bin"
 		even
-ObjPos_FZ:	binclude	"objpos/fz.bin"
+ObjPos_FZ:		binclude	"objpos/fz.bin"
 		even
 ObjPos_SBZ1pf1:	binclude	"objpos/sbz1pf1.bin"
 		even
@@ -9119,7 +8989,7 @@ ObjPos_SBZ1pf5:	binclude	"objpos/sbz1pf5.bin"
 		even
 ObjPos_SBZ1pf6:	binclude	"objpos/sbz1pf6.bin"
 		even
-ObjPos_End:	binclude	"objpos/ending.bin"
+ObjPos_End:		binclude	"objpos/ending.bin"
 		even
 ObjPos_Null:	dc.b $FF, $FF, 0, 0, 0,	0
 
